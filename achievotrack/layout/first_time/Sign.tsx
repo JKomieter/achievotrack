@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import axios from 'axios';
 import SignUp from './SignUp';
@@ -15,45 +15,60 @@ export default function Sign({
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [checked, setChecked] = useState(true);
+    const [err, setErr] = useState('');
     const apiUrl = process.env.DEV_BACKEND_URL as string;
 
     const handleSignUp = async () => {
-        console.log("apiUrl", apiUrl);
+        if (!email || !username || !password || !confirmPassword) return setErr('All fields are required');
         setIsLoading(true);
-        try {
-            if (!email || !username || !password || !confirmPassword) return
-            if (password !== confirmPassword) return
-            const res = await axios.post(`${apiUrl}/signup`, {
-                email: email.toLocaleLowerCase(),
-                username,
-                password,
-            })
+        if (password !== confirmPassword) {
             setIsLoading(false);
-            if (!res.data.user) return
-            await AsyncStorage.setItem('user_email', res.data.user.email);
-            await AsyncStorage.setItem('username', res.data.username);
-            setStage(3);
-        } catch (error) {
-            console.log(error);
+            return setErr('Passwords do not match');
+        } 
+        const res = await axios.post(`${apiUrl}/signup`, {
+            email: email.toLocaleLowerCase(),
+            username,
+            password,
+        })
+        if (!res.data.user) {
             setIsLoading(false);
-        }
+            return setErr(res.data.message);
+        };
+        await AsyncStorage.setItem('userEmail', res.data.user.email);
+        await AsyncStorage.setItem('userName', res.data.username);
+        await AsyncStorage.setItem('userId', res.data.userId);
+        setStage(3);
+        setIsLoading(false);
     };
+
+    useEffect(() => {
+        if (err) {
+            setTimeout(() => {
+                setErr('');
+            }, 3000);
+        }
+    }, [err]);
 
     return (
         <>
-            <SignUp 
-            isLoading={isLoading} 
-            handleSignUp={handleSignUp} 
-            styles={styles}
-            email={email}
-            setEmail={setEmail}
-            username={username}
-            setUsername={setUsername}
-            password={password}
-            setPassword={setPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
-             />
+            <SignUp
+                isLoading={isLoading}
+                handleSignUp={handleSignUp}
+                styles={styles}
+                email={email}
+                setEmail={setEmail}
+                username={username}
+                setUsername={setUsername}
+                password={password}
+                setPassword={setPassword}
+                confirmPassword={confirmPassword}
+                setConfirmPassword={setConfirmPassword}
+                checked={checked}
+                setChecked={setChecked}
+                err={err}
+                setErr={setErr}
+            />
             {/* ToDo: SignIn be implemented */}
         </>
     )
@@ -67,9 +82,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 10,
     },
-    img: {
+    imgContainer: {
+        padding: 7,
         width: '100%',
         height: 200,
+    },
+    img: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 25,
+        shadowColor: '#171717',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 3,
     },
     title: {
         fontSize: 22,
@@ -127,4 +152,9 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
     },
+    error: {
+        color: 'red',
+        fontSize: 13,
+        fontWeight: 'bold',
+    }
 });

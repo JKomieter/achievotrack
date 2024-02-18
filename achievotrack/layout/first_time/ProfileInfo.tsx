@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text } from '@/components/Themed'
-import { StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Avatar } from 'react-native-paper';
 import { FontAwesome6 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Majors, Minors, Year } from '@/constants/courses';
+import axios from 'axios';
 
 
 export default function ProfileInfo({
@@ -13,24 +14,40 @@ export default function ProfileInfo({
 }: {
     setStage: React.Dispatch<React.SetStateAction<number>>
 }) {
-    const [username, setUsername] = React.useState('');
-    const [openMajor, setOpenMajor] = React.useState(false);
-    const [openMinor, setOpenMinor] = React.useState(false);
-    const [openYear, setOpenYear] = React.useState(false);
-    const [majors, setMajors] = React.useState(Majors);
-    const [minors, setMinors] = React.useState(Minors);
-    const [years, setYears] = React.useState(Year);
-    const [major, setMajor] = React.useState(null);
-    const [minor, setMinor] = React.useState('');
-    const [year, setYear] = React.useState('');
+    const [username, setUsername] = useState('');
+    const [openMajor, setOpenMajor] = useState(false);
+    const [openMinor, setOpenMinor] = useState(false);
+    const [openYear, setOpenYear] = useState(false);
+    const [_, setMajors] = useState(Majors);
+    const [__, setMinors] = useState(Minors);
+    const [___, setYears] = useState(Year);
+    const [major, setMajor] = useState(null);
+    const [minor, setMinor] = useState('');
+    const [year, setYear] = useState('');
+    const [err, setErr] = useState("");
+    const apiUrl = process.env.DEV_BACKEND_URL as string;
 
-    React.useEffect(() => {
+    useEffect(() => {
         const getUsername = async () => {
             const username = await AsyncStorage.getItem('username');
             if (username) setUsername(username);
         }
         getUsername();
     }, []);
+
+    const handleContinue = async () => {
+        if (!major || !minor || !year) return;
+        const userId = await AsyncStorage.getItem('userId');
+        const res = await axios.post(`${apiUrl}/addAcademicDetails`, {
+            major,
+            minor,
+            year,
+            userId
+        })
+        console.log(res.data);
+        if (res.data.message) return "setStage(2)";
+        setErr("Something went wrong. Please try again.")
+    };
 
     return (
         <View style={styles.container}>
@@ -62,7 +79,7 @@ export default function ProfileInfo({
                     items={Minors}
                     setOpen={setOpenMinor}
                     setValue={setMinor}
-                    setItems={setMajors}
+                    setItems={setMinors}
                     style={styles.input}
                     placeholder="Select your Minor"
                 />
@@ -77,6 +94,10 @@ export default function ProfileInfo({
                     placeholder="Select your Year"
                 />
             </View>
+            {err.length > 0 && <Text style={styles.error}>{err}</Text>}
+            <TouchableOpacity style={styles.button} onPress={() => handleContinue()}>
+                <Text style={styles.btnText}>Continue</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -123,6 +144,7 @@ const styles = StyleSheet.create({
         gap: 15,
         flexDirection: 'column',
         marginTop: 30,
+        zIndex: 1000,
     },
     input: {
         width: '100%',
@@ -136,4 +158,31 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 3,
     },
+    dropdown: {
+        zIndex: 1000,
+    },
+    button: {
+        backgroundColor: '#D12323',
+        padding: 13,
+        borderRadius: 20,
+        width: '85%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 40,
+        shadowColor: '#171717',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+    },
+    btnText: {
+        color: 'white',
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    error: {
+        color: 'red',
+        fontSize: 13,
+        fontWeight: 'bold',
+    }
 })
