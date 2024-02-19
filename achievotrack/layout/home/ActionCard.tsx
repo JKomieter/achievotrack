@@ -1,29 +1,32 @@
 import React from 'react'
 import { View, Text } from '@/components/Themed'
 import { StyleSheet, TouchableOpacity } from 'react-native'
+import { useRouter } from 'expo-router'
+
 
 export default function ActionCard({
     title,
     iconName,
-    index
+    index,
+    link
 }: {
     title: string,
     iconName: any,
-    index: number
+    index: number,
+    link: `${string}:${string}`
 }) {
     const bg = index % 2 === 0 ? "#fff" : "#f2d9d9"
     const shadowOpacity = index % 2 === 0 ? 0.3 : 0.0
-
-    // Todo: Add onPress event
+    const router = useRouter()
 
     return (
-        <TouchableOpacity>
-            <View style={{ ...styles.container, backgroundColor: bg, shadowOpacity}}>
-                {iconName}
-                <Text style={styles.title}>
-                    {title}
-                </Text>
-            </View>
+        <TouchableOpacity onPress={() => router.push(link)}>
+                <View style={{ ...styles.container, backgroundColor: bg, shadowOpacity }}>
+                    {iconName}
+                    <Text style={styles.title}>
+                        {title}
+                    </Text>
+                </View>
         </TouchableOpacity>
     )
 }

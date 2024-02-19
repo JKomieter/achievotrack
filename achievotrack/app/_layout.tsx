@@ -55,6 +55,8 @@ function RootLayoutNav() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="schedule" options={{ presentation: 'fullScreenModal' }} />
+          <Stack.Screen name="editSchedule" options={{ presentation: 'modal', title: "Edit Schedule" }} />
         </Stack>
       </PaperProvider>
     </ThemeProvider>

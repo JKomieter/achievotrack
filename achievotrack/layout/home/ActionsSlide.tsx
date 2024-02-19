@@ -7,45 +7,53 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 export default function Actions() {
   const actions = [
     {
-      title: "Reminder",
-      icon: <FontAwesome5 name="bell" size={22} color="black" />
+      title: "Schedule",
+      icon: <FontAwesome5 name="bell" size={22} color="black" />,
+      link: "/schedule"
     },
     {
       title: "Stats",
-      icon: <FontAwesome5 name="chart-bar" size={22} color="black" />
+      icon: <FontAwesome5 name="chart-bar" size={22} color="black" />,
+      link: "/stats"
     },
     {
       title: "Resources",
-      icon: <MaterialCommunityIcons name="bookshelf" size={24} color="black" />
+      icon: <MaterialCommunityIcons name="bookshelf" size={24} color="black" />,
+      link: "/resources"
     },
     {
       title: "Career",
-      icon: <FontAwesome5 name="briefcase" size={22} color="black" />
+      icon: <FontAwesome5 name="briefcase" size={22} color="black" />,
+      link: "/career"
     },
     {
       title: "Settings",
-      icon: <FontAwesome5 name="cog" size={22} color="black" />
+      icon: <FontAwesome5 name="cog" size={22} color="black" />,
+      link: "/settings"
     },
     {
       title: "Support",
-      icon: <FontAwesome5 name="headset" size={22} color="black" />
+      icon: <FontAwesome5 name="headset" size={22} color="black" />,
+      link: "/support"
     },
     {
       title: "Feedback",
-      icon: <FontAwesome5 name="comment" size={22} color="black" />
+      icon: <FontAwesome5 name="comment" size={22} color="black" />,
+      link: "/feedback"
     },
     {
       title: "About",
-      icon: <FontAwesome5 name="info" size={22} color="black" />
+      icon: <FontAwesome5 name="info" size={22} color="black" />,
+      link: "/about"
     }
-  ]
+  ] as Record<string, any>[]
 
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} scrollEventThrottle={16}>
       {
         actions.map((action, index) => (
-          <ActionCard title={action.title} iconName={action.icon} index={index} key={index} />
+          <ActionCard title={action.title} iconName={action.icon} index={index} link={action.link} key={index} />
         ))
       }
     </ScrollView>
