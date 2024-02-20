@@ -2,13 +2,20 @@ import React from 'react'
 import { View } from '@/components/Themed'
 import { StyleSheet } from 'react-native'
 import ScheduleCard from './ScheduleCard'
+import { Schedule } from '@/libs/types'
 
-export default function ScheduleList() {
+export default function ScheduleList({
+    schedules
+}: {
+    schedules: Schedule[]
+}) {
+    if (!schedules) return
+
     return (
         <View style={styles.container}>
-            <ScheduleCard />
-            <ScheduleCard />
-            <ScheduleCard />
+            {schedules?.length > 0 && schedules?.map((sch) => (
+                <ScheduleCard key={sch.title} schedule={sch} />
+            ))}
         </View>
     )
 }

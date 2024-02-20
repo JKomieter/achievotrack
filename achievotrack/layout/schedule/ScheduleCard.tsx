@@ -3,28 +3,50 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import useScheduleStore from '@/store/editScheduleStore';
+import { Action, Schedule, ScheduleType } from '@/libs/types';
+import { formatDate, convertTo12HourFormat } from '@/utils/formatDate';
 
-export default function ScheduleCard() {
+export default function ScheduleCard({
+    schedule
+}: {
+    schedule: Schedule
+}) {
     const router = useRouter()
+    const { setDetails } = useScheduleStore();
+
+    const openEdit = () => {
+        setDetails(
+            schedule.title,
+            schedule.date,
+            { hours: schedule.start_time.hours, minutes: schedule.start_time.minutes },
+            { hours: schedule.stop_time.hours, minutes: schedule.stop_time.hours },
+            ScheduleType.HOMEWORK,
+            Action.EDIT
+        );
+        router.push("/editSchedule")
+    }
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Study for Physics Test</Text>
+                <Text style={styles.title}>{schedule.title}</Text>
                 <FontAwesome5 name="brain" size={22} color="#d38989" />
             </View>
             <View style={styles.info}>
                 <View style={styles.left}>
-                    <Text style={styles.date}>Date: 2024-10-10</Text>
-                    <Text style={styles.date}>Time: 3:00PM - 4:00PM</Text>
-                    <Text style={styles.date}>Course: Physics</Text>
+                    <Text style={styles.date}>Date: {formatDate(schedule.date)}</Text>
+                    <Text style={styles.date}>Time: {convertTo12HourFormat(schedule.start_time)} - {convertTo12HourFormat(schedule.stop_time)}</Text>
+                    <TouchableOpacity style={styles.startBtn}>
+                        <Text style={{...styles.actionTxt, color: '#fff'}}>Start</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.actions}>
-                    <TouchableOpacity style={styles.actionBtn} onPress={() => router.push("/editSchedule")}>
+                    <TouchableOpacity style={styles.actionBtn} onPress={() => openEdit()}>
                         <Text style={styles.actionTxt}>Edit</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.actionBtn}>
-                        <Text style={styles.actionTxt}>Start</Text>
+                        <Text style={styles.actionTxt}>Delete</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -102,5 +124,15 @@ const styles = StyleSheet.create({
         color: "#000000",
         fontSize: 14,
         fontWeight: "700"
+    },
+    startBtn: {
+        backgroundColor: "#d12323",
+        paddingVertical: 6,
+        paddingHorizontal: 18,
+        borderRadius: 20,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minWidth: 80,
     }
 })

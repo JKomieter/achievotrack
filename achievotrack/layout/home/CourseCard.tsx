@@ -1,6 +1,6 @@
 import { View, Text } from '@/components/Themed'
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { Image } from 'expo-image'
 import { Avatar } from 'react-native-paper'
 import CourseUpdates from './CourseUpdates'
@@ -31,14 +31,14 @@ export default function CourseCard() {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => goToCourse()}>
+            <Pressable onPress={() => goToCourse()}>
                 <View style={styles.imgContainer}>
                     <Image source={require('../../assets/images/placeholder.jpg')} style={{ width: "100%", height: "100%" }} contentFit='cover' />
                     <Status />
                 </View>
                 <CourseTitle />
                 <CourseUpdates />
-            </TouchableOpacity>
+            </Pressable>
         </View>
     )
 }

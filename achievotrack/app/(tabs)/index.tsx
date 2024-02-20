@@ -3,7 +3,7 @@ import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
 import Courses from '@/layout/home/Courses';
 import QuickActons from '@/layout/home/QuickActons';
-import Schedule from '@/layout/home/Schedule';
+import Schedule from '@/layout/schedule/Schedule';
 import { ScrollView } from 'react-native';
 
 export default function TabOneScreen() {
