@@ -18,3 +18,16 @@ export interface Schedule {
     stop_time: { hours: number, minutes: number };
     scheduleType: string;
 }
+
+export interface MarketItem {
+    title: string,
+    description: string,
+    price: number,
+    sellerName: string,
+    type: string,
+    subject: 'string',
+    createdAt: Date,
+    sellerEmail: string,
+    sellerNumber: number,
+    imageSrc: string[]
+}

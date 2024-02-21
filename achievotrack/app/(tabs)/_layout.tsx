@@ -10,6 +10,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import FirstTime from '@/layout/first_time/FirstTime';
 import { View, Text } from '@/components/Themed';
 import { Avatar } from 'react-native-paper';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -23,6 +26,7 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const [username, setUsername] = useState<string | null>(null);
   const [firstTime, setFirstTime] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const checkFirstTime = async () => {
@@ -87,8 +91,23 @@ export default function TabLayout() {
       <Tabs.Screen
         name="market"
         options={{
-          title: 'Market',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: '',
+          tabBarIcon: ({ color }) => <FontAwesome name="shopping-bag" size={24} color='black' />,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()} style={{marginLeft: '10%'}}>
+              <FontAwesome6 name="arrow-left" size={22} color="black" />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity style={{ marginRight: '10%' }}>
+              <Entypo name="shopping-cart" size={24} color="black" />
+            </TouchableOpacity>
+          ),
+          headerTitle: () => (
+            <View>
+              <Text style={{ fontSize: 20, fontWeight: '300' }}>AcheivoMart</Text>
+            </View>
+          )
         }}
       />
       <Tabs.Screen
