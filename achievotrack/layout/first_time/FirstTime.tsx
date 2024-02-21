@@ -13,7 +13,7 @@ export default function FirstTime() {
   const stages = {
     1: <GetStarted setStage={setStage} />,
     2: <Sign setStage={setStage} />,
-    3: <FillProfle setStage={setStage} />,
+    3: <FillProfle />,
   } as Record<number, JSX.Element>;
 
   return (

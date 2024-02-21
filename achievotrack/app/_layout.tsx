@@ -11,7 +11,7 @@ import { PaperProvider } from 'react-native-paper';
 import { useColorScheme } from '@/components/useColorScheme';
 import { TouchableOpacity } from 'react-native';
 import { View, Text } from '@/components/Themed';
-import useScheduleStore from '@/store/editScheduleStore';
+import useScheduleStore from '@/store/useScheduleStore';
 import { Action, ScheduleType } from '@/libs/types';
 
 export {

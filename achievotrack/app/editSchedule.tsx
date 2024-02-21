@@ -1,40 +1,45 @@
 import { View, Text } from '@/components/Themed'
 import React, { useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import useEditScheduleStore from '@/store/editScheduleStore'
+import useEditScheduleStore from '@/store/useScheduleStore'
 import Schedule from '@/libs/scheduleLibs';
 import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
 import { useRouter } from 'expo-router';
 import { Dropdown } from 'react-native-element-dropdown';
 import { ScheduleType } from '@/libs/types';
+import { ActivityIndicator } from 'react-native-paper';
+import getSchedules from '@/utils/getSchedules';
 
 
 export default function EditSchedule() {
-  const { title, date, start_time, stop_time, scheduleType, action } = useEditScheduleStore();
+  const { title, date, start_time, stop_time, action, id, scheduleType } = useEditScheduleStore();
   const [title_, setTitle] = useState(title);
-  const [date_, setDate] = useState(date)
+  const [date_, setDate] = useState(date);
   const [start_time_, setStartTime] = useState(start_time);
   const [stop_time_, setStopTime] = useState(stop_time);
-  const [scheduleType_, setScheduleType] = useState<{ label: ScheduleType; value: string }>({ label: ScheduleType.HOMEWORK, value: '' });
+  const [scheduleType_, setScheduleType] = useState<{ label: ScheduleType; value: string } | null>({label: scheduleType, value: scheduleType});
   const [visibleStartTime, setVisibleStartTime] = useState(false)
   const [visibleStopTime, setVisibleStopTime] = useState(false)
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = getSchedules();
   const scheduleTypes = [
-    { label: ScheduleType.HOMEWORK, value: ScheduleType.HOMEWORK.toString()},
-    { label: ScheduleType.EXAM, value: ScheduleType.EXAM.toString()},
-    { label: ScheduleType.QUIZ, value: ScheduleType.QUIZ.toString()},
-    { label: ScheduleType.PROJECT, value: ScheduleType.PROJECT.toString()}
+    { label: ScheduleType.HOMEWORK, value: ScheduleType.HOMEWORK.toString() },
+    { label: ScheduleType.EXAM, value: ScheduleType.EXAM.toString() },
+    { label: ScheduleType.QUIZ, value: ScheduleType.QUIZ.toString() },
+    { label: ScheduleType.PROJECT, value: ScheduleType.PROJECT.toString() }
   ]
   const router = useRouter();
+  console.log('scheduleType: ', scheduleType)
 
   const onDismissStartTime = React.useCallback(() => {
     setVisibleStartTime(false)
   }, [setVisibleStartTime])
 
   const onConfirmStartTime = React.useCallback(
-    ({ hours, minutes }: {hours: number, minutes: number}) => {
+    ({ hours, minutes }: { hours: number, minutes: number }) => {
       setVisibleStartTime(false);
-      setStartTime({hours, minutes})
+      setStartTime({ hours, minutes })
     },
     [setVisibleStartTime]
   );
@@ -64,9 +69,19 @@ export default function EditSchedule() {
   );
 
   const handleSchedule = async () => {
-    const schedule = new Schedule(title_, date_, start_time_, stop_time_, scheduleType_.value, action);
-    const response = await schedule.set();
-    console.log(response)
+    setIsLoading(true)
+    console.log(scheduleType_?.value)
+    try {
+      const schedule = new Schedule(id, title_, date_, start_time_, stop_time_, scheduleType_?.value?.toLowerCase() as string, action);
+      const response = await schedule.set();
+      mutate();
+      console.log(response);
+      setIsLoading(false);
+      router.back();
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -79,11 +94,11 @@ export default function EditSchedule() {
         <Text style={styles.label}>Schedule Type</Text>
         <Dropdown
           data={scheduleTypes}
-          placeholder='Homework'
+          placeholder=''
           value={scheduleType_}
           style={{ ...styles.input, paddingVertical: 8 }}
-          onChange={(item) => setScheduleType(item)} 
-          labelField={'label'} 
+          onChange={(item) => setScheduleType({ label: item.label, value: item.value })}
+          labelField={'label'}
           valueField={'label'} />
       </View>
       <View style={styles.inputContainer}>
@@ -106,7 +121,7 @@ export default function EditSchedule() {
       </View>
       <View style={styles.actions}>
         <TouchableOpacity style={styles.actionBtn} onPress={() => handleSchedule()}>
-          <Text style={styles.actionTxt}>Save</Text>
+          {isLoading ? <ActivityIndicator size='small' color='#fff' /> : <Text style={styles.actionTxt}>Save</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionBtn} onPress={() => router.back()}>
           <Text style={styles.actionTxt}>Cancel</Text>

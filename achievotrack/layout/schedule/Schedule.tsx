@@ -2,12 +2,15 @@ import React from 'react'
 import { View, Text } from '@/components/Themed'
 import { StyleSheet } from 'react-native'
 import ScheduleList from './ScheduleList'
+import getSchedules from '@/utils/getSchedules'
 
 export default function Schedule() {
+  const { data, isLoading } = getSchedules()
+
   return (
     <View style={styles.container}>
           <Text style={styles.title}>Your Schedule</Text>
-          <ScheduleList />
+          <ScheduleList schedules={data} />
     </View>
   )
 }

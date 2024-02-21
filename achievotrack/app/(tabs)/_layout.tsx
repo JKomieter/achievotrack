@@ -21,22 +21,24 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const [username, setUsername] = useState('');
-  const [firstTime, setFirstTime] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
+  const [firstTime, setFirstTime] = useState(true);
 
   useEffect(() => {
     const checkFirstTime = async () => {
-      const firstTime = await AsyncStorage.getItem('first_time');
-      const username = await AsyncStorage.getItem('username');
-      if (firstTime === null) {
-        setFirstTime(true);
+      const first_time = await AsyncStorage.getItem('firstTime');
+      const user_name = await AsyncStorage.getItem('userName');
+      console.log(first_time, 'firstTime')
+      if (first_time) {
+        setFirstTime(false);
+        setUsername(user_name);
       }
     };
 
     checkFirstTime();
-  }, []);
+  }, [AsyncStorage]);
 
-  // if (firstTime) return <FirstTime />;
+  if (firstTime) return <FirstTime />;
 
   return (
     <Tabs

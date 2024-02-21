@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { View, Text } from '@/components/Themed'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { Avatar } from 'react-native-paper';
+import { ActivityIndicator, Avatar } from 'react-native-paper';
 import { FontAwesome6 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Dropdown } from 'react-native-element-dropdown';
 import { Majors, Minors, Year } from '@/constants/courses';
 import axios from 'axios';
 
@@ -15,16 +15,11 @@ export default function ProfileInfo({
     setStage: React.Dispatch<React.SetStateAction<number>>
 }) {
     const [username, setUsername] = useState('');
-    const [openMajor, setOpenMajor] = useState(false);
-    const [openMinor, setOpenMinor] = useState(false);
-    const [openYear, setOpenYear] = useState(false);
-    const [_, setMajors] = useState(Majors);
-    const [__, setMinors] = useState(Minors);
-    const [___, setYears] = useState(Year);
-    const [major, setMajor] = useState(null);
-    const [minor, setMinor] = useState('');
-    const [year, setYear] = useState('');
+    const [major, setMajor] = useState<string | null>(null);
+    const [minor, setMinor] = useState<string | null>(null);
+    const [year, setYear] = useState<string | null>(null);
     const [err, setErr] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const apiUrl = process.env.DEV_BACKEND_URL as string;
 
     useEffect(() => {
@@ -35,8 +30,10 @@ export default function ProfileInfo({
         getUsername();
     }, []);
 
-    const handleContinue = async () => {
-        if (!major || !minor || !year) return;
+    const handleContinue = useCallback(async () => {
+        setIsLoading(true);
+        console.log(major, minor, year);
+        if (!major || !minor || !year) return console.log("All fields are required");
         const userId = await AsyncStorage.getItem('userId');
         const res = await axios.post(`${apiUrl}/addAcademicDetails`, {
             major,
@@ -45,9 +42,10 @@ export default function ProfileInfo({
             userId
         })
         console.log(res.data);
-        if (res.data.message) return "setStage(2)";
+        setIsLoading(false);
+        if (res.status === 200) return setStage(2);
         setErr("Something went wrong. Please try again.")
-    };
+    }, [major, minor, year]);
 
     return (
         <View style={styles.container}>
@@ -63,40 +61,38 @@ export default function ProfileInfo({
                 <Text style={styles.username}>Choose your major and minor</Text>
             </View>
             <View style={styles.form}>
-                <DropDownPicker
-                    open={openMajor}
+                <Dropdown
                     value={major}
-                    items={Majors}
-                    setOpen={setOpenMajor}
-                    setValue={setMajor}
-                    setItems={setMajors}
+                    data={Majors}
+                    onChange={(item) => setMajor(item.value)}
                     style={styles.input}
-                    placeholder="Select your Major"
-                />
-                <DropDownPicker
-                    open={openMinor}
+                    placeholder="Select your Major" 
+                    labelField={'label'} 
+                    valueField={'label'}                
+                    />
+                <Dropdown
                     value={minor}
-                    items={Minors}
-                    setOpen={setOpenMinor}
-                    setValue={setMinor}
-                    setItems={setMinors}
+                    data={Minors}
+                    onChange={(item) => setMinor(item.value)}
                     style={styles.input}
                     placeholder="Select your Minor"
+                    labelField={'label'}
+                    valueField={'label'} 
                 />
-                <DropDownPicker
-                    open={openYear}
+                <Dropdown
                     value={year}
-                    items={Year}
-                    setOpen={setOpenYear}
-                    setValue={setYear}
-                    setItems={setYears}
+                    data={Year}
+                    onChange={(item) => setYear(item.value)}
                     style={styles.input}
                     placeholder="Select your Year"
+                    labelField={'label'}
+                    valueField={'label'} 
                 />
             </View>
             {err.length > 0 && <Text style={styles.error}>{err}</Text>}
             <TouchableOpacity style={styles.button} onPress={() => handleContinue()}>
-                <Text style={styles.btnText}>Continue</Text>
+                { isLoading ? <ActivityIndicator animating={true} color="white" /> : 
+                <Text style={styles.btnText}>Continue</Text>}
             </TouchableOpacity>
         </View>
     )

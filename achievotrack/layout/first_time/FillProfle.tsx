@@ -1,19 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ProfileInfo from './ProfileInfo';
+import LoadingScreen from './LoadingScreen';
 
-export default function FillProfle({
-    setStage
-}: {
-    setStage: React.Dispatch<React.SetStateAction<number>>
-}) {;
+export default function FillProfle() {;
+    const [stage, setStage] = useState(1);
+
     const stages = {
         1: <ProfileInfo setStage={setStage} />,
-        2: <></>
+        2: <LoadingScreen />
     } as Record<number, JSX.Element>;
 
     return (
         <>
-            {stages[1]}
+            {stages[stage]}
         </>
     )
 }

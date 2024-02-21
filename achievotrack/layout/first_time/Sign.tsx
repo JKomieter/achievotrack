@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import axios from 'axios';
 import SignUp from './SignUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import userDetailsStore from '@/store/userDetailsStore';
 
 
 export default function Sign({
@@ -17,6 +18,7 @@ export default function Sign({
     const [confirmPassword, setConfirmPassword] = useState('');
     const [checked, setChecked] = useState(true);
     const [err, setErr] = useState('');
+    const { setUserDetails } = userDetailsStore();
     const apiUrl = process.env.DEV_BACKEND_URL as string;
 
     const handleSignUp = async () => {
@@ -31,15 +33,15 @@ export default function Sign({
             username,
             password,
         })
+        setIsLoading(false);
         if (!res.data.user) {
-            setIsLoading(false);
             return setErr(res.data.message);
         };
+        setUserDetails(res.data.username, res.data.email, res.data.user.userId)
         await AsyncStorage.setItem('userEmail', res.data.user.email);
         await AsyncStorage.setItem('userName', res.data.username);
         await AsyncStorage.setItem('userId', res.data.userId);
         setStage(3);
-        setIsLoading(false);
     };
 
     useEffect(() => {

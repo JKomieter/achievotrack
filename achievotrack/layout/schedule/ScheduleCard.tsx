@@ -3,7 +3,7 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import useScheduleStore from '@/store/editScheduleStore';
+import useScheduleStore from '@/store/useScheduleStore';
 import { Action, Schedule, ScheduleType } from '@/libs/types';
 import { formatDate, convertTo12HourFormat } from '@/utils/formatDate';
 
@@ -13,17 +13,37 @@ export default function ScheduleCard({
     schedule: Schedule
 }) {
     const router = useRouter()
-    const { setDetails } = useScheduleStore();
+    const { setDetails, setId } = useScheduleStore();
 
     const openEdit = () => {
+        let scheduleType: ScheduleType = ScheduleType.HOMEWORK; 
+        switch (schedule.scheduleType.toLowerCase()) {
+            case 'homework':
+                scheduleType = ScheduleType.HOMEWORK
+                break;
+            case 'exam':
+                scheduleType = ScheduleType.EXAM
+                break;
+            case 'quiz':
+                scheduleType = ScheduleType.QUIZ
+                break;
+            case 'project':
+                scheduleType = ScheduleType.QUIZ
+                break;
+            default:
+                scheduleType = ScheduleType.HOMEWORK; 
+                break;
+        }
+
         setDetails(
             schedule.title,
             schedule.date,
             { hours: schedule.start_time.hours, minutes: schedule.start_time.minutes },
             { hours: schedule.stop_time.hours, minutes: schedule.stop_time.hours },
-            ScheduleType.HOMEWORK,
+            scheduleType,
             Action.EDIT
         );
+        setId(schedule.id)
         router.push("/editSchedule")
     }
 

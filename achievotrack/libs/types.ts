@@ -11,6 +11,7 @@ export enum ScheduleType {
 }
 
 export interface Schedule {
+    id: string;
     title: string;
     date: Date;
     start_time: { hours: number, minutes: number };
