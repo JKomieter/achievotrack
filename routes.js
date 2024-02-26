@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {signup, addAcademicDetails} = require('./controllers/userController');
 const {addSchedule, updateSchedule, getSchedules} = require("./controllers/scheduleController");
+const { addItem, getItems, getCart, addItemToCart } = require('./controllers/marketController');
 
 router.post('/signup', signup);
 
@@ -10,6 +11,14 @@ router.post('/addSchedule', addSchedule);
 
 router.post('/updateSchedule', updateSchedule);
 
-router.get('/getSchedules', getSchedules)
+router.get('/getSchedules', getSchedules);
+
+router.post('/addItem', addItem);
+
+router.get('/getItems', getItems);
+
+router.get('/getCart', getCart);
+
+router.post('/addItemToCart', addItemToCart)
 
 module.exports = router;
