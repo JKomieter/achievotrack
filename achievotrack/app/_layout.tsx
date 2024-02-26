@@ -9,12 +9,12 @@ import { useEffect } from 'react';
 import { Avatar, PaperProvider } from 'react-native-paper';
 
 import { useColorScheme } from '@/components/useColorScheme';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Alert } from 'react-native';
 import { View, Text } from '@/components/Themed';
 import useScheduleStore from '@/store/useScheduleStore';
 import { Action, ScheduleType } from '@/libs/types';
 import getCart from '@/utils/getCart';
-// import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -64,53 +64,53 @@ function RootLayoutNav() {
     setDetails("", new Date, { hours: 0, minutes: 0 }, { hours: 0, minutes: 0 }, ScheduleType.HOMEWORK, Action.ADD);
   }
 
-  // const requestUserPermission = async () => {
-  //   const authStatus = await messaging().requestPermission();
-  //   const enabled =
-  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-  //   if (enabled) {
-  //     console.log('Authorization status:', authStatus);
-  //   }
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
 
-  //   return enabled
-  // }
+    return enabled
+  }
 
-  // useEffect(() => {
-  //   const checkPermission = async () => {
-  //     const isEnabled = await requestUserPermission();
-  //     if (isEnabled) {
-  //       messaging().getToken().then((token) => {
-  //         console.log(token);
-  //       });
-  //     } else {
-  //       console.log('User denied permission or failed to grant permission');
-  //     }
-  //   };
-  //   checkPermission();
-  //   // when user interacts with notification on quit state
-  //   messaging()
-  //   .getInitialNotification()
-  //   .then(async (remoteMessage) => {
-  //     if (remoteMessage) console.log("notification caused app to open from quit state")
-  //   })
+  useEffect(() => {
+    const checkPermission = async () => {
+      const isEnabled = await requestUserPermission();
+      if (isEnabled) {
+        messaging().getToken().then((token) => {
+          console.log(token);
+        });
+      } else {
+        console.log('User denied permission or failed to grant permission');
+      }
+    };
+    checkPermission();
+    // when user interacts with notification on quit state
+    messaging()
+    .getInitialNotification()
+    .then(async (remoteMessage) => {
+      if (remoteMessage) console.log("notification caused app to open from quit state")
+    })
 
-  //   // When the application is running, but in the background.
-  //   messaging().onNotificationOpenedApp(async (remoteMessage) => {
-  //     console.log('Notification caused the app to open from background status', remoteMessage.notification);
-  //   })
+    // When the application is running, but in the background.
+    messaging().onNotificationOpenedApp(async (remoteMessage) => {
+      console.log('Notification caused the app to open from background status', remoteMessage.notification);
+    })
 
-  //   messaging().setBackgroundMessageHandler(async remoteMessage => {
-  //     console.log('Message handled in the background!', remoteMessage);
-  //   });
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
 
-  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
-  //     Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-  //   });
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
 
-  //   return unsubscribe;
-  // }, [])
+    return unsubscribe;
+  }, [])
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

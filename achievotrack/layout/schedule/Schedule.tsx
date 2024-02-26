@@ -3,14 +3,16 @@ import { View, Text } from '@/components/Themed'
 import { StyleSheet } from 'react-native'
 import ScheduleList from './ScheduleList'
 import getSchedules from '@/utils/getSchedules'
+import NoSchedule from './NoSchedule'
 
 export default function Schedule() {
   const { data, isLoading } = getSchedules()
+  const hasSchedule = data !== undefined && data.length > 0
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Schedule</Text>
-      {isLoading ? <Text>Loading...</Text> : <ScheduleList schedules={data} />}
+      {hasSchedule ? <ScheduleList schedules={data} /> : <NoSchedule />}
     </View>
   )
 }

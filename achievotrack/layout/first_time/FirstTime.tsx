@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Text, View } from '@/components/Themed';
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { View } from '@/components/Themed';
+import { StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GetStarted from './GetStarted';
 import Sign from './Sign';
