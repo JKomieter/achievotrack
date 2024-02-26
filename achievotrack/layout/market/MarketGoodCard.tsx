@@ -2,23 +2,56 @@ import { View, Text } from '@/components/Themed'
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image'
+import { useRouter } from 'expo-router'
+import { MarketItem } from '@/libs/types'
+import viewDetailsStore from '@/store/viewDetailsStore'
 
-export default function MarketGoodCard() {
-  return (
-    <View style={styles.container}>
-        <View style={styles.imgContainer}>
-              <Image source={require('../../assets/images/placeholder.jpg')} style={{ width: "100%", height: "100%" }} contentFit='cover' />
+export default function MarketGoodCard({
+    item
+}: {
+    item: MarketItem
+}) {
+    if (!item || !item.images) {
+        return null; 
+    }
+
+    const router = useRouter();
+    const { setViewDetails } = viewDetailsStore()
+
+    const openDetails = () => {
+        setViewDetails(
+            item.id,
+            item.title,
+            item.description,
+            item.images,
+            item.sellerId,
+            item.sellerName,
+            item.sellerEmail,
+            item.sellerPhone.toString(),
+            item.price,
+            item.category,
+            item.createdAt
+        )
+        router.push('/itemDetails');
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.imgContainer}>
+                {item?.images?.length > 0 &&
+                    <Image source={{ uri: item?.images[0] || '' }} style={{ width: "100%", height: "100%" }} contentFit='cover' placeholder='' />
+                }
+            </View>
+            <View style={styles.info}>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.desc}>T{item.description.slice(0, 40)}...</Text>
+                <Text style={styles.price}>${item.price}</Text>
+                <TouchableOpacity style={styles.btn} onPress={() => openDetails()}>
+                    <Text style={styles.btnText}>View Details</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-        <View style={styles.info}>
-            <Text style={styles.title}>Mathematics textbook</Text>
-            <Text style={styles.desc}>This is a mathematics text book for sophomores</Text>
-            <Text style={styles.price}>$15.00</Text>
-            <TouchableOpacity style={styles.btn}>
-                <Text style={styles.btnText}>View Details</Text>
-            </TouchableOpacity>
-        </View>
-    </View>
-  )
+    )
 }
 
 
@@ -60,7 +93,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         paddingVertical: 10,
         paddingHorizontal: 25,
-        backgroundColor: '#d12323',
+        backgroundColor: '#848383',
         width: '100%'
     },
     btnText: {

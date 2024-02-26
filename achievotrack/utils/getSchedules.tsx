@@ -1,8 +1,7 @@
 import useSWR from 'swr'
 import fetcher from './fetcher';
 import { Schedule } from '@/libs/types';
-import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUserId } from './useUserId';
 
 export default function getSchedules() {
     const apiUrl = process.env.DEV_BACKEND_URL;
@@ -13,20 +12,7 @@ export default function getSchedules() {
     return { scheduleStats, data, error, mutate, isLoading }
 }
 
-export const useUserId = () => {
-    const [userId, setUserId] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchUserId = async () => {
-            const id = await AsyncStorage.getItem('userId');
-            setUserId(id);
-        };
-
-        fetchUserId();
-    }, []);
-
-    return userId;
-};
 
 const groupSchedules = (schedules: Schedule[]) => {
     let numHomeworks = 0;

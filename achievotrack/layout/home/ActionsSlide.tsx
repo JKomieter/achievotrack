@@ -13,7 +13,7 @@ export default function Actions() {
     },
     {
       title: "Stats",
-      icon: <FontAwesome5 name="chart-bar" size={22} color="black" />,
+      icon: <FontAwesome5 name="chart-bar" size={22} color="#fff" />,
       link: "/stats"
     },
     {
@@ -23,7 +23,7 @@ export default function Actions() {
     },
     {
       title: "Career",
-      icon: <FontAwesome5 name="briefcase" size={22} color="black" />,
+      icon: <FontAwesome5 name="briefcase" size={22} color="#fff" />,
       link: "/career"
     },
     {
@@ -33,7 +33,7 @@ export default function Actions() {
     },
     {
       title: "Support",
-      icon: <FontAwesome5 name="headset" size={22} color="black" />,
+      icon: <FontAwesome5 name="headset" size={22} color="#fff" />,
       link: "/support"
     },
     {
@@ -43,7 +43,7 @@ export default function Actions() {
     },
     {
       title: "About",
-      icon: <FontAwesome5 name="info" size={22} color="black" />,
+      icon: <FontAwesome5 name="info" size={22} color="#fff" />,
       link: "/about"
     }
   ] as Record<string, any>[]

@@ -20,14 +20,15 @@ export interface Schedule {
 }
 
 export interface MarketItem {
+    id: string,
     title: string,
     description: string,
     price: number,
     sellerName: string,
-    type: string,
-    subject: 'string',
+    category: 'string',
     createdAt: Date,
+    sellerId: string,
     sellerEmail: string,
-    sellerNumber: number,
-    imageSrc: string[]
+    sellerPhone: number,
+    images: string[],
 }

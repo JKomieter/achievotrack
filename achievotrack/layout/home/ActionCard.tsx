@@ -15,7 +15,7 @@ export default function ActionCard({
     index: number,
     link: `${string}:${string}`
 }) {
-    const bg = index % 2 === 0 ? "#fff" : "#f2d9d9"
+    const bg = index % 2 === 0 ? "#fff" : "#848383"
     const shadowOpacity = index % 2 === 0 ? 0.3 : 0.0
     const router = useRouter()
 
@@ -23,7 +23,7 @@ export default function ActionCard({
         <TouchableOpacity onPress={() => router.push(link)}>
                 <View style={{ ...styles.container, backgroundColor: bg, shadowOpacity }}>
                     {iconName}
-                    <Text style={styles.title}>
+                <Text style={{ ...styles.title, color: index % 2 ? '#ffff' : '#6c6b6b'}}>
                         {title}
                     </Text>
                 </View>
@@ -34,8 +34,8 @@ export default function ActionCard({
 
 const styles = StyleSheet.create({
     container: {
-        width: 80,
-        height: 80,
+        width: 100,
+        height: 100,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -54,6 +54,5 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 14,
         fontWeight: "500",
-        color: "#6c6b6b"
     }
 })

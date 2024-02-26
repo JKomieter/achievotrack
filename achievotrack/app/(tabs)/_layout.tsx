@@ -13,6 +13,8 @@ import { Avatar } from 'react-native-paper';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { Foundation } from '@expo/vector-icons';
+import getCart from '@/utils/getCart';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -27,6 +29,8 @@ export default function TabLayout() {
   const [username, setUsername] = useState<string | null>(null);
   const [firstTime, setFirstTime] = useState(true);
   const router = useRouter();
+  const { data } = getCart()
+
 
   useEffect(() => {
     const checkFirstTime = async () => {
@@ -55,22 +59,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          // headerRight: () => (
-          //   <Link href="/modal" asChild>
-          //     <Pressable>
-          //       {({ pressed }) => (
-          //         <FontAwesome
-          //           name="info-circle"
-          //           size={25}
-          //           color={Colors[colorScheme ?? 'light'].text}
-          //           style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-          //         />
-          //       )}
-          //     </Pressable>
-          //   </Link>
-          // )
+          title: "",
+          tabBarIcon: () => <Foundation name="home" size={30} color="black" />,
           headerTitle: () => (
             <View>
               <Text style={{ fontSize: 20, fontWeight: '300' }}>Welcome back, {username || 'Alicia'}!</Text>
@@ -92,7 +82,7 @@ export default function TabLayout() {
         name="market"
         options={{
           title: '',
-          tabBarIcon: ({ color }) => <FontAwesome name="shopping-bag" size={24} color='black' />,
+          tabBarIcon: ({ color }) => <FontAwesome name="shopping-bag" size={24} color={color} />,
           headerLeft: () => (
             <TouchableOpacity onPress={() => router.back()} style={{marginLeft: '10%'}}>
               <FontAwesome6 name="arrow-left" size={22} color="black" />
@@ -100,6 +90,11 @@ export default function TabLayout() {
           ),
           headerRight: () => (
             <TouchableOpacity style={{ marginRight: '10%' }}>
+              <View style={{width: 20, height: 20, borderRadius: 50, backgroundColor: "#d12323", position: 'absolute', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', left: 11 , bottom: 13}}>
+                <Text style={{color: '#fff', fontSize: 11, fontWeight: '600'}}>
+                  {data?.length || 0}
+                </Text>
+              </View>
               <Entypo name="shopping-cart" size={24} color="black" />
             </TouchableOpacity>
           ),

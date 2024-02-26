@@ -27,7 +27,7 @@ export default function CourseUpdates() {
                     <Text style={styles.assg}>{grade}%</Text>
                 </View>
                 <View style={styles.rem}>
-                    <FontAwesome name="bell" size={24} color="#d12323" />
+                    <FontAwesome name="bell" size={24} color="#fff" />
                     <Text style={styles.remNum}>{rem}</Text>
                 </View>
             </View>
@@ -84,11 +84,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 1,
-        backgroundColor: "#f2d9d9"
+        backgroundColor: "#848383"
     },
     remNum: {
         fontSize: 13,
         fontWeight: "500",
-        color: "#000000"
+        color: "#fff"
     }
 })

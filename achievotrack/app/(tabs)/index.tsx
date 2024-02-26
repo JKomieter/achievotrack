@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native';
 export default function TabOneScreen() {
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView style={{flex: 1, height: '100%'}} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Courses />
         <QuickActons />

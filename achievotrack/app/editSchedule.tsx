@@ -17,7 +17,7 @@ export default function EditSchedule() {
   const [date_, setDate] = useState(date);
   const [start_time_, setStartTime] = useState(start_time);
   const [stop_time_, setStopTime] = useState(stop_time);
-  const [scheduleType_, setScheduleType] = useState<{ label: ScheduleType; value: string } | null>({label: scheduleType, value: scheduleType});
+  const [scheduleType_, setScheduleType] = useState<{ label: ScheduleType; value: string } | null>({ label: scheduleType, value: scheduleType });
   const [visibleStartTime, setVisibleStartTime] = useState(false)
   const [visibleStopTime, setVisibleStopTime] = useState(false)
   const [open, setOpen] = useState(false);
@@ -87,34 +87,30 @@ export default function EditSchedule() {
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Title</Text>
-        <TextInput value={title_} onChangeText={setTitle} style={styles.input} />
+        <TextInput value={title_} onChangeText={setTitle} style={styles.input} placeholder='Title' />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Schedule Type</Text>
         <Dropdown
           data={scheduleTypes}
-          placeholder=''
+          placeholder='Schedule Type'
           value={scheduleType_}
-          style={{ ...styles.input, paddingVertical: 8 }}
+          style={{ ...styles.input, paddingVertical: 16 }}
           onChange={(item) => setScheduleType({ label: item.label, value: item.value })}
           labelField={'label'}
-          valueField={'label'} />
+          valueField={'label'}
+        />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Date</Text>
-        <TextInput style={styles.input} onPressIn={() => setOpen(true)} value={new Date(date_).toDateString()} />
+        <TextInput style={styles.input} onPressIn={() => setOpen(true)} value={new Date(date_).toDateString()} placeholder='Date' />
         <DatePickerModal visible={open} date={new Date(date_)} mode='single' locale='en' onDismiss={onDismissSingle}
           onConfirm={onConfirmSingle} />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Start Time</Text>
-        <TextInput style={styles.input} onPressIn={() => setVisibleStartTime(true)} value={`${start_time_.hours || '--'}:${start_time_.minutes || '--'}`} />
-        <TimePickerModal locale='en' visible={visibleStartTime} hours={start_time_.hours} minutes={start_time_.minutes} onDismiss={onDismissStartTime}
+        <TextInput style={styles.input} onPressIn={() => setVisibleStartTime(true)} value={`${start_time_.hours || 'Start'}${start_time_.hours ? ':' : ' '}${start_time_.minutes || 'Time'}`} placeholder='Start Time' />
+        <TimePickerModal visible={visibleStartTime} hours={start_time_.hours} minutes={start_time_.minutes} onDismiss={onDismissStartTime}
           onConfirm={onConfirmStartTime} />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Stop Time</Text>
         <TextInput style={styles.input} onPressIn={() => setVisibleStopTime(true)} value={`${stop_time_.hours || '--'}:${stop_time_.minutes || '--'}`} />
         <TimePickerModal visible={visibleStopTime} hours={stop_time_.hours} minutes={stop_time_.minutes} onDismiss={onDismissStopTime}
           onConfirm={onConfirmStopTime} />
@@ -123,7 +119,7 @@ export default function EditSchedule() {
         <TouchableOpacity style={styles.actionBtn} onPress={() => handleSchedule()}>
           {isLoading ? <ActivityIndicator size='small' color='#fff' /> : <Text style={styles.actionTxt}>Save</Text>}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionBtn} onPress={() => router.back()}>
+        <TouchableOpacity style={{ ...styles.actionBtn, backgroundColor: '#d12323' }} onPress={() => router.back()}>
           <Text style={styles.actionTxt}>Cancel</Text>
         </TouchableOpacity>
       </View>
@@ -135,7 +131,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: 20,
     flexDirection: 'column',
     paddingVertical: 20
   },
@@ -149,10 +145,10 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    padding: 13,
-    borderRadius: 20,
+    padding: 20,
+    borderRadius: 30,
     backgroundColor: 'white',
-    fontSize: 16,
+    fontSize: 18,
     shadowColor: '#171717',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
@@ -168,10 +164,14 @@ const styles = StyleSheet.create({
     width: '90%'
   },
   actionBtn: {
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    backgroundColor: '#d12323',
+    borderRadius: 30,
+    paddingVertical: 20,
+    paddingHorizontal: 35,
+    backgroundColor: '#848383',
+    minWidth: 150,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   actionTxt: {
     color: '#fff',

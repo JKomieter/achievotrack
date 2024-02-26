@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 import axios from 'axios';
 import SignUp from './SignUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -53,7 +53,7 @@ export default function Sign({
     }, [err]);
 
     return (
-        <>
+        <ScrollView style={{flex: 1, width: '100%'}}>
             <SignUp
                 isLoading={isLoading}
                 handleSignUp={handleSignUp}
@@ -72,7 +72,7 @@ export default function Sign({
                 setErr={setErr}
             />
             {/* ToDo: SignIn be implemented */}
-        </>
+        </ScrollView>
     )
 }
 
@@ -81,13 +81,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         gap: 10,
+        flex: 1
     },
     imgContainer: {
         padding: 7,
         width: '100%',
-        height: 200,
+        height: 300,
     },
     img: {
         width: '100%',
@@ -107,14 +108,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '85%',
+        width: '90%',
         gap: 10,
         flexDirection: 'column',
     },
     input: {
         width: '100%',
-        padding: 10,
-        borderRadius: 20,
+        padding: 18,
+        borderRadius: 25,
         backgroundColor: 'white',
         fontSize: 16,
         shadowColor: '#171717',
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
     },
     checkbox: {
-        width: '85%',
+        width: '90%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -137,9 +138,9 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#D12323',
-        padding: 13,
-        borderRadius: 20,
-        width: '85%',
+        padding: 20,
+        borderRadius: 25,
+        width: '90%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

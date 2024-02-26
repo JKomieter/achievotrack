@@ -3,6 +3,7 @@ import { View, Text } from '@/components/Themed'
 import { ActivityIndicator, TextInput, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image';
 import { Checkbox } from 'react-native-paper';
+import { ScrollView } from 'native-base';
 
 
 export default function SignUp({
