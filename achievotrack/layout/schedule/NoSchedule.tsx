@@ -2,8 +2,11 @@ import { View, Text } from '@/components/Themed'
 import { Image } from 'expo-image'
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
+import { useRouter } from 'expo-router'
 
 export default function NoSchedule() {
+    const router = useRouter();
+
     return (
         <View style={styles.container}>
             <View style={styles.box} >
@@ -14,7 +17,7 @@ export default function NoSchedule() {
                     <Text style={styles.desc}>
                         Add your schedules to keep track of your activities
                     </Text>
-                    <TouchableOpacity style={styles.startBtn}>
+                    <TouchableOpacity style={styles.startBtn} onPress={() => router.push('/schedule')}>
                         <Text style={{ color: 'white', fontWeight: '600', fontSize: 16 }}>Add Schedule</Text>
                     </TouchableOpacity>
                 </View>

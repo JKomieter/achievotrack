@@ -2,7 +2,7 @@ const router = require('express').Router();
 const {signup, addAcademicDetails} = require('./controllers/userController');
 const {addSchedule, updateSchedule, getSchedules} = require("./controllers/scheduleController");
 const { addItem, getItems, getCart, addItemToCart } = require('./controllers/marketController');
-const { addCourse } = require('./controllers/courseController')
+const { addCourse, getCourses, getCourse } = require('./controllers/courseController')
 
 router.post('/signup', signup);
 
@@ -23,5 +23,9 @@ router.get('/getCart', getCart);
 router.post('/addItemToCart', addItemToCart);
 
 router.post('/addCourse', addCourse);
+
+router.get('/getCourses', getCourses);
+
+router.get('/getCourse', getCourse);
 
 module.exports = router;

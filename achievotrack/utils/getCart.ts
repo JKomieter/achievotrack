@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { useUserId } from "./useUserId";
+import { useUserId } from "../hooks/useUserId";
 import fetcher from "./fetcher";
 
 

@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 import fetcher from './fetcher';
 import { Schedule } from '@/libs/types';
-import { useUserId } from './useUserId';
+import { useUserId } from '../hooks/useUserId';
 
 export default function getSchedules() {
     const apiUrl = process.env.DEV_BACKEND_URL;
@@ -9,10 +9,8 @@ export default function getSchedules() {
     const { data, error, isLoading, mutate } = useSWR(userId ? `${apiUrl}/getSchedules?userId=${userId}` : null, fetcher);
     const scheduleStats = data ? groupSchedules(data) : null;
     console.log('Schedules: ', data)
-    return { scheduleStats, data, error, mutate, isLoading }
+    return { scheduleStats, data, error, mutate, isLoading };
 }
-
-
 
 const groupSchedules = (schedules: Schedule[]) => {
     let numHomeworks = 0;

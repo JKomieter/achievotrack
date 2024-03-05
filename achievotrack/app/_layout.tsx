@@ -14,7 +14,7 @@ import { View, Text } from '@/components/Themed';
 import useScheduleStore from '@/store/useScheduleStore';
 import { Action, ScheduleType } from '@/libs/types';
 import getCart from '@/utils/getCart';
-import messaging from '@react-native-firebase/messaging';
+// import { usePushNotifications } from '@/utils/usePushNotifications';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -57,60 +57,15 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const router = useRouter();
   const { setDetails, action } = useScheduleStore();
-  const { data } = getCart()
+  const { data } = getCart();
+  // const { expoPushToken, notification } = usePushNotifications();
+
+  // console.log(expoPushToken)
 
   const openScheduleAdd = () => {
     router.push("/editSchedule");
     setDetails("", new Date, { hours: 0, minutes: 0 }, { hours: 0, minutes: 0 }, ScheduleType.HOMEWORK, Action.ADD);
   }
-
-  const requestUserPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-    }
-
-    return enabled
-  }
-
-  useEffect(() => {
-    const checkPermission = async () => {
-      const isEnabled = await requestUserPermission();
-      if (isEnabled) {
-        messaging().getToken().then((token) => {
-          console.log(token);
-        });
-      } else {
-        console.log('User denied permission or failed to grant permission');
-      }
-    };
-    checkPermission();
-    // when user interacts with notification on quit state
-    messaging()
-    .getInitialNotification()
-    .then(async (remoteMessage) => {
-      if (remoteMessage) console.log("notification caused app to open from quit state")
-    })
-
-    // When the application is running, but in the background.
-    messaging().onNotificationOpenedApp(async (remoteMessage) => {
-      console.log('Notification caused the app to open from background status', remoteMessage.notification);
-    })
-
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-    });
-
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
-  }, [])
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -171,7 +126,7 @@ function RootLayoutNav() {
               </View>
             )
           }} />
-          <Stack.Screen name="sell" options={{ 
+          <Stack.Screen name="sell" options={{
             presentation: 'fullScreenModal',
             headerLeft: () => (
               <TouchableOpacity onPress={() => router.back()}>
@@ -188,7 +143,25 @@ function RootLayoutNav() {
                 <Text style={{ fontSize: 20, fontWeight: '300' }}>Sell Resources</Text>
               </View>
             )
-             }} />
+          }} />
+          <Stack.Screen name="addCourse" options={{
+            presentation: 'fullScreenModal',
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>Add Course</Text>
+              </View>
+            ),
+            headerRight: () => (
+              <TouchableOpacity style={{ marginRight: '0.0%' }}>
+                <Avatar.Image size={33} source={require('@/assets/images/placeholder.jpg')} />
+              </TouchableOpacity>
+            ),
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesome6 name="arrow-left" size={22} color="black" />
+              </TouchableOpacity>
+            ),
+          }} />
         </Stack>
       </PaperProvider>
     </ThemeProvider>

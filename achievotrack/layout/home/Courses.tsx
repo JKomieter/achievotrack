@@ -2,16 +2,23 @@ import React from 'react'
 import { View, Text } from '@/components/Themed'
 import { StyleSheet } from 'react-native'
 import CoursesSlide from './CoursesSlide'
+import getCourses from '@/utils/getCourses';
+import NoCourses from './NoCourses';
 
 export default function Courses() {
-  return (
-    <View style={styles.container}>
-        <Text style={styles.title}>Your Courses</Text>
-        <View style={styles.slide}>
-            <CoursesSlide /> 
+    const { data, isLoading, mutate } = getCourses();
+    const hasCourses = data !== undefined
+    
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Your Courses</Text>
+            <View style={styles.slide}>
+                {
+                    hasCourses ? <CoursesSlide /> : <NoCourses />
+                }
+            </View>
         </View>
-    </View>
-  )
+    )
 }
 
 const styles = StyleSheet.create({

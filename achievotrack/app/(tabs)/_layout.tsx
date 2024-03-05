@@ -46,7 +46,7 @@ export default function TabLayout() {
     checkFirstTime();
   }, [AsyncStorage]);
 
-  if (firstTime) return <FirstTime />;
+  // if (firstTime) return <FirstTime />;
 
   return (
     <Tabs
@@ -59,7 +59,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "",
+          title: '',
           tabBarIcon: () => <Foundation name="home" size={30} color="black" />,
           headerTitle: () => (
             <View>
@@ -67,7 +67,7 @@ export default function TabLayout() {
             </View>
           ),
           headerRight: () => (
-            <TouchableOpacity style={{marginRight: '24%'}}>
+            <TouchableOpacity style={{marginRight: '22%'}}>
               <Avatar.Image size={33} source={require('@/assets/images/placeholder.jpg')} />
             </TouchableOpacity>
           ),

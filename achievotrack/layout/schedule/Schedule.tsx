@@ -7,7 +7,7 @@ import NoSchedule from './NoSchedule'
 
 export default function Schedule() {
   const { data, isLoading } = getSchedules()
-  const hasSchedule = data !== undefined && data.length > 0
+  const hasSchedule =( data !== undefined && data.length > 0) || isLoading;
 
   return (
     <View style={styles.container}>
@@ -19,9 +19,10 @@ export default function Schedule() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 18,
+    marginTop: 35,
     width: '100%',
     flex: 1,
+    paddingBottom: 20
   },
   title: {
     paddingLeft: 16,

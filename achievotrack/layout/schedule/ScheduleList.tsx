@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "column",
         gap: 10,
-        marginHorizontal: 16
+        marginHorizontal: 16,
+        marginBottom: 16
     }
 })

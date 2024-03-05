@@ -1,8 +1,13 @@
 import { Text, View } from '@/components/Themed'
 import React from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import SellHero from './SellHero'
 
-export default function SellRules() {
+export default function SellRules({
+    setStage
+}: {
+    setStage: React.Dispatch<React.SetStateAction<number>>
+}) {
     const rules = [
         {
             num: 1,
@@ -12,65 +17,43 @@ export default function SellRules() {
         {
             num: 2,
             title: 'Set a price',
-            desc: 'Please describe the condition of your item accurately, including any flaws or damage.'
+            desc: 'Please set a fair price for your item based on its condition, market value, and other relevant factors.'
         },
     ]
 
 
     return (
         <View style={styles.container}>
-            {/* <FlatList
-                data={rules}
-                renderItem={({ item }) => {
-                    return (
-                        <View style={styles.rule}>
-                            <View style={styles.numCircle}>
-                                <Text style={styles.num}>{item.num}</Text>
-                            </View>
-                            <View style={styles.content}>
-                                <Text style={styles.title}>{item.title}</Text>
-                                <Text style={styles.desc}>{item.desc}</Text>
-                            </View>
-                        </View>
-                    )
-                }}
-                keyExtractor={item => item.num.toString()}
-            /> */}
-
+            <ScrollView>
+            <SellHero />
             {
                 rules.map((rule) => (
-                        <View style={styles.rule} key={rule.num}>
-                            <View style={styles.numCircle}>
-                                <Text style={styles.num}>{rule.num}</Text>
-                            </View>
-                            <View style={styles.content}>
-                                <Text style={styles.title}>{rule.title}</Text>
-                                <Text style={styles.desc}>{rule.desc}</Text>
-                            </View>
+                    <View style={styles.rule} key={rule.num}>
+                        <View style={styles.content}>
+                            <Text style={styles.title}>{rule.title}</Text>
+                            <Text style={styles.desc}>{rule.desc}</Text>
                         </View>
-                    ))
+                    </View>
+                ))
             }
+            <View style={styles.sellBtnContainer}>
+                <TouchableOpacity style={styles.sellBtn} onPress={() => setStage(2)}>
+                    <Text style={styles.sellBtnText}>List an item</Text>
+                </TouchableOpacity>
+        </View>
+            </ScrollView>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        gap: 20,
-        paddingLeft: 10,
-        paddingRight: 10
+        flex: 1,
     },
     rule: {
         display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        gap: 10,
-        marginBottom: 15
+        marginBottom: 15,
+        paddingHorizontal: 10,
     },
     numCircle: {
         backgroundColor: '#848383',
@@ -99,7 +82,33 @@ const styles = StyleSheet.create({
     desc: {
         fontSize: 16,
         color: '#848383',
-        marginTop: -5
+        marginTop: -5,
+        fontWeight: '300'
+    },
+    sellBtnContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 30,
+        paddingHorizontal: 10,
+        // position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        backgroundColor: 'transparent',
+    },
+    sellBtn: {
+        backgroundColor: '#d12323',
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 30,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    sellBtnText: {
+        color: '#ffffff',
+        fontWeight: '700',
+        fontSize: 16
     }
-
 })
