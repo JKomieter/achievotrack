@@ -116,7 +116,7 @@ export default function Listing() {
                             withDarkTheme
                             withShadow
                             autoFocus
-                            containerStyle={{ ...styles.input, padding: 12 }}
+                            containerStyle={{ ...styles.input, backgroundColor: '#f2f2f2'}}
                         />
                         <Dropdown
                             data={categories}
@@ -192,14 +192,13 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '100%',
-        padding: 20,
-        borderRadius: 30,
-        backgroundColor: 'white',
-        fontSize: 18,
-        shadowColor: '#171717',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
+        height: 60,
+        borderRadius: 25,
+        backgroundColor: '#f2f2f2',
+        paddingHorizontal: 20,
+        fontSize: 16,
+        fontWeight: '300',
+        color: '#000000',
         marginBottom: 15
     },
     actions: {

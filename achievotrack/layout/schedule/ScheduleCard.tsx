@@ -6,6 +6,9 @@ import { useRouter } from 'expo-router';
 import useScheduleStore from '@/store/useScheduleStore';
 import { Action, Schedule, ScheduleType } from '@/libs/types';
 import { formatDate, convertTo12HourFormat } from '@/utils/formatDate';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import getSchedules from '@/utils/getSchedules';
 
 export default function ScheduleCard({
     schedule
@@ -14,6 +17,7 @@ export default function ScheduleCard({
 }) {
     const router = useRouter()
     const { setDetails, setId } = useScheduleStore();
+    const { mutate } = getSchedules()
 
     const openEdit = () => {
         let scheduleType: ScheduleType = ScheduleType.HOMEWORK; 
@@ -47,6 +51,17 @@ export default function ScheduleCard({
         router.push("/editSchedule")
     }
 
+    const deleteSchedule = async () => {
+        try {
+            const apiUrl = process.env.DEV_BACKEND_URL;
+            const userId = await AsyncStorage.getItem('userId');
+            await axios.post(`${apiUrl}/deleteSchedule`, { scheduleId: schedule.id, userId });
+            mutate()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -65,7 +80,7 @@ export default function ScheduleCard({
                     <TouchableOpacity style={styles.actionBtn} onPress={() => openEdit()}>
                         <Text style={styles.actionTxt}>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionBtn}>
+                    <TouchableOpacity style={styles.actionBtn} onPress={() => deleteSchedule()}>
                         <Text style={styles.actionTxt}>Delete</Text>
                     </TouchableOpacity>
                 </View>
