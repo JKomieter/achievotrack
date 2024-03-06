@@ -1,5 +1,5 @@
 const { auth, db } = require("../config/firebase");
-const { doc, addDoc, collection, getDocs, getDoc, updateDoc } = require("firebase/firestore");
+const { doc, addDoc, collection, getDocs, getDoc, updateDoc, deleteDoc } = require("firebase/firestore");
 
 module.exports.addSchedule = async (req, res) => {
     console.log('adding...')
@@ -59,6 +59,22 @@ module.exports.getSchedules = async (req, res) => {
         }
         console.log(schedules)
         res.json(schedules)
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ error: error.message })
+    }
+}
+
+module.exports.deleteSchedule = async (req, res) => {
+    console.log('deleting...')
+    try {
+        const { scheduleId, userId } = req.body;
+        const userCollection = collection(db, 'users');
+        const userDoc = doc(userCollection, userId);
+        const scheduleCollection = collection(userDoc, 'schedules');
+        const scheduleDoc = doc(scheduleCollection, scheduleId);
+        await deleteDoc(scheduleDoc);
+        res.status(200).json({message: "Successfully deleted schedule"})
     } catch (error) {
         console.log(error);
         res.status(400).json({ error: error.message })

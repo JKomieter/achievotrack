@@ -1,24 +1,45 @@
 const { collection, addDoc, doc, getDocs, getDoc } = require('firebase/firestore');
-const { db } = require("../config/firebase");
+const { db, storage } = require("../config/firebase");
+const nodeFetch = require('node-fetch');
+require('dotenv').config()
+const { createApi } = require('unsplash-js');
+const { ref } = require('firebase/storage');
 
+const unsplash = createApi({
+    accessKey: process.env.UNSPLASH_ACCESS_KEY,
+    fetch: nodeFetch,
+});
 const usersCollection = collection(db, 'users');
-const courseCollection = doc(usersCollection, 'courses');
+
 
 module.exports.addCourse = async (req, res) => {
     try {
-        const { courseName, instructor, syllabus, schedule, credits } = req.body;
+        const {
+            course,
+            instructor,
+            syllabus,
+            schedules,
+            userId
+        } = req.body;
+        // const splashes = await unsplash.search.getPhotos({
+        //     query: course.name,
+        //     page: 1,
+        //     perPage: 1
+        // });
+        // const imageUrl = splashes
+        const syllabusRef = syllabusRef = ref(storage, `syllabus/${course.name}`);
+        await uploadString(cont, syllabus, '');
+        const userDoc = doc(usersCollection, userId);
+        const courseCollection = collection(userDoc, 'courses');
         await addDoc(
             courseCollection, {
-                courseName,
-                instructor,
-                syllabus,
-                schedule,
-                credits,   
+                course,
+                schedules,
             }
-        );        
+        );
 
         res.status(200).json({ message: 'Succesfully added course' })
-    } catch (error) { 
+    } catch (error) {
         console.log(error);
         res.status(400).json({ error: "Something went wrong" })
     }
