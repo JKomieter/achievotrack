@@ -14,7 +14,7 @@ import { View, Text } from '@/components/Themed';
 import useScheduleStore from '@/store/useScheduleStore';
 import { Action, ScheduleType } from '@/libs/types';
 import getCart from '@/utils/getCart';
-// import { usePushNotifications } from '@/utils/usePushNotifications';
+import useGoToCourseStore from '@/store/useGoToCourseStore';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -58,13 +58,11 @@ function RootLayoutNav() {
   const router = useRouter();
   const { setDetails, action } = useScheduleStore();
   const { data } = getCart();
-  // const { expoPushToken, notification } = usePushNotifications();
-
-  // console.log(expoPushToken)
+  const { courseName } = useGoToCourseStore()
 
   const openScheduleAdd = () => {
     router.push("/editSchedule");
-    setDetails("", new Date, { hours: 0, minutes: 0 }, { hours: 0, minutes: 0 }, ScheduleType.HOMEWORK, Action.ADD);
+    setDetails("", new Date, { hours: 0, minutes: 0 }, { hours: 0, minutes: 0 }, ScheduleType.HOMEWORK, "", Action.ADD);
   }
 
   return (
@@ -162,6 +160,19 @@ function RootLayoutNav() {
               </TouchableOpacity>
             ),
           }} />
+          <Stack.Screen name="course" options={{ 
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>{courseName}</Text>
+              </View>
+            ),
+            presentation: 'fullScreenModal',
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesome6 name="arrow-left" size={22} color="black" />
+              </TouchableOpacity>
+            ),
+           }} />
         </Stack>
       </PaperProvider>
     </ThemeProvider>

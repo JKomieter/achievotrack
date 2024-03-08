@@ -6,7 +6,7 @@ import getCourses from '@/utils/getCourses';
 import NoCourses from './NoCourses';
 
 export default function Courses() {
-    const { data, isLoading, mutate } = getCourses();
+    const { data, isLoading } = getCourses();
     const hasCourses = data !== undefined
     
     return (
@@ -14,7 +14,7 @@ export default function Courses() {
             <Text style={styles.title}>Your Courses</Text>
             <View style={styles.slide}>
                 {
-                    hasCourses ? <CoursesSlide /> : <NoCourses />
+                    hasCourses ? <CoursesSlide data={data} /> : <NoCourses />
                 }
             </View>
         </View>

@@ -33,35 +33,39 @@ export default function AddCourse() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-
+  
   const handleAddCourse = useCallback(async () => {
-    console.log(course, instructor, syllabus, schedules);
-    
     if (!course?.name || !course?.description || !course?.credit || !instructor?.name || !instructor?.email || !syllabus || !schedules.length) {
       return setError('All fields are required');
     }
-    setIsLoading(true);
-    const apiUrl = process.env.DEV_BACKEND_URL;
-    const userId = await AsyncStorage.getItem('userId');
-    const data = {
-      course,
-      instructor,
-      syllabus,
-      schedules,
-      userId
-    }
-    const res = await axios.post(`${apiUrl}/addCourse`, data);
-    if (res.status !== 200) {
+    try {
+      setIsLoading(true);
+      const apiUrl = process.env.DEV_BACKEND_URL;
+      const userId = await AsyncStorage.getItem('userId');
+      const data = {
+        course,
+        instructor,
+        syllabus,
+        schedules,
+        userId
+      }
+      const res = await axios.post(`${apiUrl}/addCourse`, data);
+      if (res.status !== 200) {
+        setError('Something went wrong');
+        setIsLoading(false);
+        return;
+      }
+      mutate();
+      setTimeout(() => {
+        setIsLoading(false);
+        router.back()
+      }, 2000)
+    } catch (error) {
       setError('Something went wrong');
-      setIsLoading(false);
-      return;
+    } finally {
+      setIsLoading(false)
     }
-    mutate();
-    setTimeout(() => {
-      setIsLoading(false);
-      router.back()
-    }, 2000)
-  }, []);
+  }, [course, instructor, syllabus, schedules])
 
   useEffect(() => {
     if (error) {

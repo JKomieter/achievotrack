@@ -14,7 +14,7 @@ export default function ScheduleList({
     return (
         <View style={styles.container}>
             {schedules?.length > 0 && schedules?.map((sch) => (
-                <ScheduleCard key={sch.title} schedule={sch} />
+                <ScheduleCard key={sch.task} schedule={sch} />
             ))}
         </View>
     )

@@ -40,11 +40,12 @@ export default function ScheduleCard({
         }
 
         setDetails(
-            schedule.title,
+            schedule.task,
             schedule.date,
             { hours: schedule.start_time.hours, minutes: schedule.start_time.minutes },
             { hours: schedule.stop_time.hours, minutes: schedule.stop_time.hours },
             scheduleType,
+            schedule.courseId as string,
             Action.EDIT
         );
         setId(schedule.id)
@@ -55,7 +56,7 @@ export default function ScheduleCard({
         try {
             const apiUrl = process.env.DEV_BACKEND_URL;
             const userId = await AsyncStorage.getItem('userId');
-            await axios.post(`${apiUrl}/deleteSchedule`, { scheduleId: schedule.id, userId });
+            await axios.post(`${apiUrl}/deleteSchedule`, { scheduleId: schedule.id, userId, courseId: schedule.courseId });
             mutate()
         } catch (error) {
             console.log(error)
@@ -65,7 +66,7 @@ export default function ScheduleCard({
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>{schedule.title}</Text>
+                <Text style={styles.title}>{schedule.task}</Text>
                 <FontAwesome5 name="brain" size={22} color="#d38989" />
             </View>
             <View style={styles.info}>

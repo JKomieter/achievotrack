@@ -1,19 +1,23 @@
 import { View, Text } from '@/components/Themed'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import useEditScheduleStore from '@/store/useScheduleStore'
+import useScheduleStore from '@/store/useScheduleStore'
 import Schedule from '@/libs/scheduleLibs';
 import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
 import { useRouter } from 'expo-router';
 import { Dropdown } from 'react-native-element-dropdown';
-import { ScheduleType } from '@/libs/types';
+import { Course, ScheduleType } from '@/libs/types';
 import { ActivityIndicator } from 'react-native-paper';
 import getSchedules from '@/utils/getSchedules';
+import getCourses from '@/utils/getCourses';
 
 
 export default function EditSchedule() {
-  const { title, date, start_time, stop_time, action, id, scheduleType } = useEditScheduleStore();
-  const [title_, setTitle] = useState(title);
+  const { data } = getCourses();
+  const courses = data?.map((course: Course) => ({ label: course.course.name, value: course.id }))
+  const [course, setCourse] = useState<{ label: string, value: string } | null>(courses[0])
+  const { title, date, start_time, stop_time, action, id, scheduleType } = useScheduleStore();
+  const [task, setTask] = useState(title);
   const [date_, setDate] = useState(date);
   const [start_time_, setStartTime] = useState(start_time);
   const [stop_time_, setStopTime] = useState(stop_time);
@@ -22,6 +26,7 @@ export default function EditSchedule() {
   const [visibleStopTime, setVisibleStopTime] = useState(false)
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [err, setErr] = useState('');
   const { mutate } = getSchedules();
   const scheduleTypes = [
     { label: ScheduleType.HOMEWORK, value: ScheduleType.HOMEWORK.toString() },
@@ -30,8 +35,6 @@ export default function EditSchedule() {
     { label: ScheduleType.PROJECT, value: ScheduleType.PROJECT.toString() }
   ]
   const router = useRouter();
-  console.log('scheduleType: ', scheduleType)
-
   const onDismissStartTime = React.useCallback(() => {
     setVisibleStartTime(false)
   }, [setVisibleStartTime])
@@ -67,27 +70,46 @@ export default function EditSchedule() {
     },
     [setOpen, setDate]
   );
-
+  console.log("the action is :", action)
   const handleSchedule = async () => {
+    if (!task || !start_time_ || !stop_time_ || !course) return setErr('Missing fields')
     setIsLoading(true)
-    console.log(scheduleType_?.value)
     try {
-      const schedule = new Schedule(id, title_, date_, start_time_, stop_time_, scheduleType_?.value?.toLowerCase() as string, action);
-      const response = await schedule.set();
+      const schedule = new Schedule(id, task, date_, start_time_, stop_time_, scheduleType_?.value?.toLowerCase() as string, course?.value as string, action);
+      await schedule.set();
       mutate();
-      console.log(response);
       setIsLoading(false);
       router.back();
     } catch (error) {
       console.log(error);
       setIsLoading(false)
+      setErr('Something went wrong')
     }
-  }
+  };
+
+  useEffect(() => {
+    if (err) {
+      setTimeout(() => {
+        setErr('');
+      }, 3000)
+    }
+  }, [err])
 
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <TextInput value={title_} onChangeText={setTitle} style={styles.input} placeholder='Title' />
+        <TextInput value={task} onChangeText={setTask} style={styles.input} placeholder='Task' />
+      </View>
+      <View style={styles.inputContainer}>
+        <Dropdown
+          data={courses}
+          placeholder='Course'
+          value={course}
+          style={{ ...styles.input, paddingVertical: 16 }}
+          onChange={(item) => setCourse({ label: item.label, value: item.value })}
+          labelField={'label'}
+          valueField={'label'}
+        />
       </View>
       <View style={styles.inputContainer}>
         <Dropdown
@@ -111,10 +133,11 @@ export default function EditSchedule() {
           onConfirm={onConfirmStartTime} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} onPressIn={() => setVisibleStopTime(true)} value={`${stop_time_.hours || '--'}:${stop_time_.minutes || '--'}`} />
+        <TextInput style={styles.input} onPressIn={() => setVisibleStopTime(true)} value={`${stop_time_.hours || 'Stop'}${stop_time_.hours ? ':' : ' '}${stop_time_.minutes || 'Time'}`} />
         <TimePickerModal visible={visibleStopTime} hours={stop_time_.hours} minutes={stop_time_.minutes} onDismiss={onDismissStopTime}
           onConfirm={onConfirmStopTime} />
       </View>
+      {err.length > 0 && <Text style={{ color: 'red', fontSize: 14 }}>{err}</Text>}
       <View style={styles.actions}>
         <TouchableOpacity style={styles.actionBtn} onPress={() => handleSchedule()}>
           {isLoading ? <ActivityIndicator size='small' color='#fff' /> : <Text style={styles.actionTxt}>Save</Text>}

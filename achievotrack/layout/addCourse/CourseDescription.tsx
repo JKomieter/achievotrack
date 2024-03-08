@@ -1,8 +1,8 @@
 import { View, Text } from '@/components/Themed'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
-import DocumentPicker, { types, DocumentPickerResponse } from 'react-native-document-picker';
+import DocumentPicker, { types } from 'react-native-document-picker';
 import * as FileSystem from 'expo-file-system';
 
 export default function CourseDescription({
@@ -11,10 +11,10 @@ export default function CourseDescription({
     course,
     setCourse
 }: {
-    syllabus: {name: string, base64String: string} | null,
-    setSyllabus: React.Dispatch<React.SetStateAction<{name: string, base64String: string} | null>>,
-    course: {name: string, description: string, credit: string} | null,
-    setCourse: React.Dispatch<React.SetStateAction<{name: string, description: string, credit: string} | null>>
+    syllabus: { name: string, base64String: string } | null,
+    setSyllabus: React.Dispatch<React.SetStateAction<{ name: string, base64String: string } | null>>,
+    course: { name: string, description: string, credit: string } | null,
+    setCourse: React.Dispatch<React.SetStateAction<{ name: string, description: string, credit: string } | null>>
 }) {
 
     const handleDocumentSelection = useCallback(async () => {
@@ -25,7 +25,7 @@ export default function CourseDescription({
             });
             const fileUri = response[0].uri;
             const base64String = await FileSystem.readAsStringAsync(fileUri, { encoding: 'base64' });
-            setSyllabus({name: response[0].name as string, base64String});
+            setSyllabus({ name: response[0].name as string, base64String });
         } catch (error) {
             console.log(error);
         }

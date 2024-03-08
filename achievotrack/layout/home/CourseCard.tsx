@@ -1,9 +1,12 @@
 import { View, Text } from '@/components/Themed'
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image'
 import { Avatar } from 'react-native-paper'
 import CourseUpdates from './CourseUpdates'
+import { Course } from '@/libs/types'
+import { useRouter } from 'expo-router'
+import useGoToCourseStore from '@/store/useGoToCourseStore'
 
 const Status = () => {
     return (
@@ -13,32 +16,45 @@ const Status = () => {
     )
 }
 
-const CourseTitle = () => {
+const CourseTitle = ({
+    name
+}: {
+    name: string
+}) => {
+    console.log(name)
     return (
         <View style={styles.titleContainer}>
             <View>
                 <Avatar.Image size={30} source={require('@/assets/images/placeholder.jpg')} />
             </View>
-            <Text style={styles.coursename}>Philosophy</Text>
+            <Text style={styles.coursename}>{name}</Text>
         </View>
     )
 }
 
-export default function CourseCard() {
-    const goToCourse = () => {
-        console.log("Going to course")
-    }
+export default function CourseCard({
+    course
+}:{
+    course: Course
+}) {
+    const router = useRouter();
+    const { setCourseId } = useGoToCourseStore()
 
+    const goToCourse = () => {
+        setCourseId(course.id)
+        router.push('/course');
+    }
+    
     return (
         <View style={styles.container}>
-            <Pressable onPress={() => goToCourse()}>
+            <TouchableOpacity onPress={() => goToCourse()}>
                 <View style={styles.imgContainer}>
                     <Image source={require('../../assets/images/placeholder.jpg')} style={{ width: "100%", height: "100%" }} contentFit='cover' />
                     <Status />
                 </View>
-                <CourseTitle />
+                <CourseTitle name={course.course.name} />
                 <CourseUpdates />
-            </Pressable>
+            </TouchableOpacity>
         </View>
     )
 }

@@ -9,6 +9,7 @@ interface scheduleStore {
     scheduleType: ScheduleType,
     action: Action,
     id: string,
+    courseId: string
     setId: (id: string) => void,
     setDetails: (
         title: string,
@@ -16,6 +17,7 @@ interface scheduleStore {
         start_time: { hours: number, minutes: number },
         stop_time: { hours: number, minutes: number },
         scheduleType: ScheduleType,
+        courseId: string,
         action: Action
     ) => void
 }
@@ -28,8 +30,9 @@ const useScheduleStore = create<scheduleStore>((set) => ({
     scheduleType: ScheduleType.HOMEWORK,
     action: Action.ADD,
     id: "",
+    courseId: "",
     setId: (id) => set({id}),
-    setDetails: (title, date, start_time, stop_time, scheduleType, action) => set({ title, date, start_time, stop_time, scheduleType, action })
+    setDetails: (title, date, start_time, stop_time, scheduleType, courseId, action) => set({ title, date, start_time, stop_time, scheduleType, courseId, action })
 }))
 
 export default useScheduleStore;
