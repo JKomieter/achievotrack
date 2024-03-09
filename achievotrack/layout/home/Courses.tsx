@@ -7,7 +7,7 @@ import NoCourses from './NoCourses';
 
 export default function Courses() {
     const { data, isLoading } = getCourses();
-    const hasCourses = data !== undefined
+    const hasCourses = data?.length > 0
     
     return (
         <View style={styles.container}>

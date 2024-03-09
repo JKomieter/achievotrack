@@ -41,7 +41,7 @@ export interface Course {
     credit: string;
     instructor: { name: string, email: string };
     syllabus: { name: string, base64String: string };
-    schedules: CourseScheduleProps[];
+    schedules: Schedule[];
     grades?: {
         homeworks: number[],
         quizzes: number[],
@@ -52,5 +52,15 @@ export interface Course {
         name: string,
         description: string,
         credit: string
+    }
+    stats?: {
+        avgHomeworkGrade: number,
+        avgExamsGrade: number,
+        avgQuizGrade: number,
+        avgProjectGrade: number,
+        averageScore: number,
+        highestScore: number,
+        lowestScore: number,
+        currentGrade: string,
     }
 }

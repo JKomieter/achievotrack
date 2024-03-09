@@ -12,7 +12,7 @@ export default function CoursesSlide({
     return (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} scrollEventThrottle={16}>
             {
-                data.map((course) => (
+                data && data?.map((course) => (
                     <CourseCard key={course.id} course={course} />
                 ))
             }

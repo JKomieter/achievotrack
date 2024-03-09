@@ -4,9 +4,10 @@ import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image'
 import { Avatar } from 'react-native-paper'
 import CourseUpdates from './CourseUpdates'
-import { Course } from '@/libs/types'
+import { Course, Schedule } from '@/libs/types'
 import { useRouter } from 'expo-router'
 import useGoToCourseStore from '@/store/useGoToCourseStore'
+import { formatDate } from '@/utils/formatDate'
 
 const Status = () => {
     return (
@@ -21,13 +22,12 @@ const CourseTitle = ({
 }: {
     name: string
 }) => {
-    console.log(name)
     return (
         <View style={styles.titleContainer}>
             <View>
                 <Avatar.Image size={30} source={require('@/assets/images/placeholder.jpg')} />
             </View>
-            <Text style={styles.coursename}>{name}</Text>
+            <Text style={styles.coursename}>{name.slice(0, 13)}</Text>
         </View>
     )
 }
@@ -44,6 +44,23 @@ export default function CourseCard({
         setCourseId(course.id)
         router.push('/course');
     }
+
+    function getClosestSchedule(schedules: Schedule[]): string | undefined {
+        if (schedules.length === 0) {
+            return '2024-10-10';
+        }
+
+        schedules.sort((a, b) => {
+            const aDate = new Date(a.date).getTime();
+            const bDate = new Date(b.date).getTime();
+            return aDate - bDate; // sort in ascending order
+        });
+        
+        let deadline = formatDate(new Date(schedules[0].date));
+        
+        console.log('deadline', deadline);
+        return deadline || '2024-10-10';
+    }
     
     return (
         <View style={styles.container}>
@@ -53,7 +70,7 @@ export default function CourseCard({
                     <Status />
                 </View>
                 <CourseTitle name={course.course.name} />
-                <CourseUpdates />
+                <CourseUpdates due={course.schedules.length} currentGrade={course?.stats?.currentGrade} deadline={getClosestSchedule(course?.schedules)} />
             </TouchableOpacity>
         </View>
     )

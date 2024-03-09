@@ -11,7 +11,7 @@ export default function MarketGoods({
     items: MarketItem[]
 }) {
     const router = useRouter();
-
+    
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.top}>

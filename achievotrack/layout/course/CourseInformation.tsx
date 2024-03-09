@@ -1,7 +1,7 @@
 import { Text, View } from '@/components/Themed'
 import { Course } from '@/libs/types'
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Pressable, StyleSheet, TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 
 export default function CourseInformation({
@@ -19,7 +19,12 @@ export default function CourseInformation({
                         <Feather name='edit' size={24} color='black' />
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.instructor}>Instructor: {course?.instructor?.name}, <Text style={styles.email}>{course?.instructor?.email}</Text></Text>
+                <View style={styles.inst}>
+                    <Text style={styles.instructor}>Instructor: {course?.instructor?.name}, </Text>
+                    <Pressable>
+                        <Text style={styles.email}>{course?.instructor?.email}</Text>
+                    </Pressable>
+                </View>
                 <Text style={styles.instructor}>Description: {course?.course?.description}</Text>
             </View>
         </View>
@@ -39,7 +44,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     box: {
-        height: 170,
+        height: 180,
         width: '100%',
         borderRadius: 25,
         shadowColor: '#171717',
@@ -61,6 +66,12 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 16,
         fontWeight: '500',
+        alignItems: 'flex-end'
+    },
+    inst: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row'
     },
     instructor: {
         fontSize: 16,

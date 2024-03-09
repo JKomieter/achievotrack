@@ -1,7 +1,6 @@
 import { View, Text } from '@/components/Themed'
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import useScheduleStore from '@/store/useScheduleStore';
 import { Action, Schedule, ScheduleType } from '@/libs/types';
@@ -9,6 +8,9 @@ import { formatDate, convertTo12HourFormat } from '@/utils/formatDate';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getSchedules from '@/utils/getSchedules';
+import { MaterialCommunityIcons, FontAwesome6, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+
+
 
 export default function ScheduleCard({
     schedule
@@ -19,8 +21,15 @@ export default function ScheduleCard({
     const { setDetails, setId } = useScheduleStore();
     const { mutate } = getSchedules()
 
+    const taskIcon = {
+        'homework': <MaterialCommunityIcons name="notebook-edit-outline" size={24} color="black" />,
+        'exam': <FontAwesome6 name="graduation-cap" size={24} color="black" />,
+        'quiz': <MaterialIcons name="quiz" size={24} color="black" />,
+        'project': <FontAwesome name="gear" size={24} color="black" />
+    } as Record<string, React.JSX.Element>
+
     const openEdit = () => {
-        let scheduleType: ScheduleType = ScheduleType.HOMEWORK; 
+        let scheduleType: ScheduleType = ScheduleType.HOMEWORK;
         switch (schedule.scheduleType.toLowerCase()) {
             case 'homework':
                 scheduleType = ScheduleType.HOMEWORK
@@ -35,7 +44,7 @@ export default function ScheduleCard({
                 scheduleType = ScheduleType.QUIZ
                 break;
             default:
-                scheduleType = ScheduleType.HOMEWORK; 
+                scheduleType = ScheduleType.HOMEWORK;
                 break;
         }
 
@@ -67,14 +76,14 @@ export default function ScheduleCard({
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.title}>{schedule.task}</Text>
-                <FontAwesome5 name="brain" size={22} color="#d38989" />
+                {taskIcon[schedule.scheduleType]}
             </View>
             <View style={styles.info}>
                 <View style={styles.left}>
                     <Text style={styles.date}>Date: {formatDate(schedule.date)}</Text>
                     <Text style={styles.date}>Time: {convertTo12HourFormat(schedule.start_time)} - {convertTo12HourFormat(schedule.stop_time)}</Text>
                     <TouchableOpacity style={styles.startBtn}>
-                        <Text style={{...styles.actionTxt, color: '#fff'}}>Start</Text>
+                        <Text style={{ ...styles.actionTxt, color: '#fff' }}>Start</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.actions}>

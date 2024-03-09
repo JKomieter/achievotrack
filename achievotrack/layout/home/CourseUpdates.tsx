@@ -5,17 +5,20 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-export default function CourseUpdates() {
-    const [assg, setAssg] = useState(3);
-    const [grade, setGrade] = useState(90);
-    const [rem, setRem] = useState(2);
-    const [deadline, setDeadline] = useState("2024-10-10");
-
+export default function CourseUpdates({
+    due,
+    currentGrade,
+    deadline
+}: {
+    due: number,
+    currentGrade: string | undefined,
+    deadline: string | undefined
+}) {
 
     return (
         <View style={styles.container}>
             <View style={styles.topInfo}>
-                <Text style={styles.assg}>Assignments Due: {assg}</Text>
+                <Text style={styles.assg}>Tasks due: {due}</Text>
                 <View style={styles.deadline}>
                     <Ionicons name="timer-sharp" size={20} color="#d12323" />
                     <Text style={styles.assg}>{deadline}</Text>
@@ -24,11 +27,11 @@ export default function CourseUpdates() {
             <View style={styles.bottomInfo}>
                 <View style={styles.grade}>
                     <FontAwesome6 name="medal" size={24} color="green" />
-                    <Text style={styles.assg}>{grade}%</Text>
+                    <Text style={styles.assg}>{currentGrade}</Text>
                 </View>
                 <View style={styles.rem}>
                     <FontAwesome name="bell" size={24} color="#fff" />
-                    <Text style={styles.remNum}>{rem}</Text>
+                    <Text style={styles.remNum}>{2}</Text>
                 </View>
             </View>
         </View>
@@ -52,7 +55,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     assg: {
-        fontSize: 13,
+        fontSize: 15,
         fontWeight: "500",
         color: "#666565"
     },

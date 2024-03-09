@@ -37,7 +37,7 @@ module.exports.getItems = async (req, res) => {
             }
         })
         console.log(items)
-        res.status(200).json(items)
+        res.status(200).json(items || [])
     } catch (error) {
         console.log(error);
         res.status(400).json({ error: "Something went wrong" })

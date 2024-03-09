@@ -7,7 +7,7 @@ import { StyleSheet } from 'react-native'
 
 export default function market() {
   const { data, isLoading } = getItems();
-
+  
   return (
     <View style={styles.container}>
         <SearchSection />

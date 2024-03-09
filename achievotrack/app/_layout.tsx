@@ -172,6 +172,11 @@ function RootLayoutNav() {
                 <FontAwesome6 name="arrow-left" size={22} color="black" />
               </TouchableOpacity>
             ),
+            headerRight: () => (
+              <TouchableOpacity>
+                <Entypo name="menu" size={22} color="black" />
+              </TouchableOpacity>
+            )
            }} />
         </Stack>
       </PaperProvider>
