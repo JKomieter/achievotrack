@@ -1,5 +1,5 @@
 import { View, Text } from '@/components/Themed'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image'
 import { Avatar } from 'react-native-paper'
@@ -8,11 +8,23 @@ import { Course, Schedule } from '@/libs/types'
 import { useRouter } from 'expo-router'
 import useGoToCourseStore from '@/store/useGoToCourseStore'
 import { formatDate } from '@/utils/formatDate'
+import fetchPhoto from '@/utils/getPhoto'
 
-const Status = () => {
+
+const Status = ({
+    avgScore
+}: {
+    avgScore: number | undefined
+}) => {
+    const bgColor = (score: number) => {
+        if (score >= 85) return 'green';
+        if (score >= 70) return 'yellow';
+        return 'red';
+    }
+
     return (
         <View style={styles.statusContainer}>
-            <View style={styles.status}></View>
+            <View style={{ ...styles.status, backgroundColor: bgColor(avgScore as number) }}></View>
         </View>
     )
 }
@@ -34,18 +46,19 @@ const CourseTitle = ({
 
 export default function CourseCard({
     course
-}:{
+}: {
     course: Course
 }) {
     const router = useRouter();
-    const { setCourseId } = useGoToCourseStore()
+    const { setCourseId } = useGoToCourseStore();
+    const [courseImage, setCourseImage] = useState('')
 
     const goToCourse = () => {
         setCourseId(course.id)
         router.push('/course');
     }
 
-    function getClosestSchedule(schedules: Schedule[]): string | undefined {
+    function getClosestSchedule(schedules: Schedule[]): string {
         if (schedules.length === 0) {
             return '2024-10-10';
         }
@@ -55,19 +68,31 @@ export default function CourseCard({
             const bDate = new Date(b.date).getTime();
             return aDate - bDate; // sort in ascending order
         });
-        
+
         let deadline = formatDate(new Date(schedules[0].date));
-        
-        console.log('deadline', deadline);
         return deadline || '2024-10-10';
     }
-    
+
+    useEffect(() => {
+        fetchPhoto(course.course.name)
+            .then((res) => {
+                if ('photos' in res) {
+                    setCourseImage(res.photos[0]?.src?.large)
+                } else {
+                    console.error("Error fetching photo: ", res.error);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching photo: ", error);
+            });
+    }, [])
+
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => goToCourse()}>
                 <View style={styles.imgContainer}>
-                    <Image source={require('../../assets/images/placeholder.jpg')} style={{ width: "100%", height: "100%" }} contentFit='cover' />
-                    <Status />
+                    <Image source={{ uri: courseImage }} style={{ width: "100%", height: "100%" }} contentFit='cover' />
+                    <Status avgScore={course.stats?.averageScore} />
                 </View>
                 <CourseTitle name={course.course.name} />
                 <CourseUpdates due={course.schedules.length} currentGrade={course?.stats?.currentGrade} deadline={getClosestSchedule(course?.schedules)} />
@@ -111,7 +136,7 @@ const styles = StyleSheet.create({
         width: 15,
         height: 15,
         backgroundColor: "green",
-        borderRadius: 25
+        borderRadius: 25,
     },
     titleContainer: {
         borderRadius: 25,

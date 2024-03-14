@@ -1,13 +1,12 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { Tabs } from 'expo-router';
+import { TouchableOpacity } from 'react-native';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FirstTime from '@/layout/first_time/FirstTime';
 import { View, Text } from '@/components/Themed';
 import { Avatar } from 'react-native-paper';
 import { FontAwesome6 } from '@expo/vector-icons';
@@ -15,6 +14,7 @@ import { Entypo } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Foundation } from '@expo/vector-icons';
 import getCart from '@/utils/getCart';
+import FirstTime from '@/layout/first_time/FirstTime';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -26,27 +26,28 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<string | null>(null);
   const [firstTime, setFirstTime] = useState(true);
   const router = useRouter();
   const { data } = getCart()
 
-
   useEffect(() => {
     const checkFirstTime = async () => {
       const first_time = await AsyncStorage.getItem('firstTime');
       const user_name = await AsyncStorage.getItem('userName');
-      console.log(first_time, 'firstTime')
       if (first_time) {
         setFirstTime(false);
         setUsername(user_name);
       }
+      setLoading(false);
     };
 
     checkFirstTime();
   }, [AsyncStorage]);
-
-  // if (firstTime) return <FirstTime />;
+  
+  if (loading) return null;
+  if (firstTime) return <FirstTime />;
 
   return (
     <Tabs
@@ -59,7 +60,6 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: '',
           tabBarIcon: () => <Foundation name="home" size={30} color="black" />,
           headerTitle: () => (
             <View>
@@ -67,7 +67,7 @@ export default function TabLayout() {
             </View>
           ),
           headerRight: () => (
-            <TouchableOpacity style={{marginRight: '22%'}}>
+            <TouchableOpacity style={{marginRight: '22%'}} onPress={() => router.push('/profile')}>
               <Avatar.Image size={33} source={require('@/assets/images/placeholder.jpg')} />
             </TouchableOpacity>
           ),

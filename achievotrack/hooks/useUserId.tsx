@@ -7,7 +7,6 @@ export const useUserId = () => {
     useEffect(() => {
         const fetchUserId = async () => {
             const id = await AsyncStorage.getItem('userId');
-            console.log('userId: ', id)
             setUserId(id);
         };
 

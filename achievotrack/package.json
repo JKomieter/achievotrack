@@ -41,6 +41,7 @@
     "firebase": "^10.8.0",
     "native-base": "^3.4.28",
     "nativewind": "^2.0.11",
+    "pexels": "^1.4.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.50.1",

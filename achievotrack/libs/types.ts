@@ -62,5 +62,18 @@ export interface Course {
         highestScore: number,
         lowestScore: number,
         currentGrade: string,
-    }
+        scores?: number[],
+    },
+}
+
+export interface User {
+    achievements: string[],
+    completed_tasks: number,
+    grade: string,
+    study_time: number,
+    profile_pic: string,
+    username: string,
+    email: string,
+    classes: number,
+    tasks: number
 }

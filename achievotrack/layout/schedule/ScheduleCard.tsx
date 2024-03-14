@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import getSchedules from '@/utils/getSchedules';
 import { MaterialCommunityIcons, FontAwesome6, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
-
+const API_URL = process.env.DEV_BACKEND_URL;
 
 export default function ScheduleCard({
     schedule
@@ -63,9 +63,18 @@ export default function ScheduleCard({
 
     const deleteSchedule = async () => {
         try {
-            const apiUrl = process.env.DEV_BACKEND_URL;
             const userId = await AsyncStorage.getItem('userId');
-            await axios.post(`${apiUrl}/deleteSchedule`, { scheduleId: schedule.id, userId, courseId: schedule.courseId });
+            await axios.post(`${API_URL}/deleteSchedule`, { scheduleId: schedule.id, userId, courseId: schedule.courseId });
+            mutate()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const markAsDone = async () => {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            await axios.post(`${API_URL}/markAsDone`, { scheduleId: schedule.id, userId, courseId: schedule.courseId })
             mutate()
         } catch (error) {
             console.log(error)
@@ -82,8 +91,8 @@ export default function ScheduleCard({
                 <View style={styles.left}>
                     <Text style={styles.date}>Date: {formatDate(schedule.date)}</Text>
                     <Text style={styles.date}>Time: {convertTo12HourFormat(schedule.start_time)} - {convertTo12HourFormat(schedule.stop_time)}</Text>
-                    <TouchableOpacity style={styles.startBtn}>
-                        <Text style={{ ...styles.actionTxt, color: '#fff' }}>Start</Text>
+                    <TouchableOpacity style={styles.startBtn} onPress={() => markAsDone()}>
+                        <Text style={{ ...styles.actionTxt, color: '#fff' }}>Done</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.actions}>

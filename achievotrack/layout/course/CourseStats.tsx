@@ -3,29 +3,30 @@ import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 import { LineChart } from "react-native-chart-kit"
 
-export default function CourseStats() {
+export default function CourseStats({
+    scores
+}: {
+    scores: number[]
+}) {
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
+    const labelList = scores?.length > 0 ? scores?.map((_, i) => `${i + 1}`) : ["Jan"]
+    const dataList = scores?.length > 0 ? scores : [0]
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Stats Chart</Text>
             <View style={styles.box}>
-                <LineChart
+                {scores?.length > 0 && <LineChart
                     data={{
-                        labels: ["January", "February", "March", "April",],
+                        labels: labelList,
                         datasets: [
                             {
-                                data: [
-                                    Math.random() * 1,
-                                    Math.random() * 1,
-                                    Math.random() * 1,
-                                    Math.random() * 1,
-                                ]
+                                data: dataList
                             }
                         ]
                     }}
-                    width={screenWidth * 0.8} 
+                    width={screenWidth * 0.8}
                     height={230}
                     // yAxisLabel="$"
                     // yAxisSuffix="k"
@@ -50,7 +51,7 @@ export default function CourseStats() {
                     style={{
                         borderRadius: 16
                     }}
-                />
+                />}
             </View>
         </View>
     )

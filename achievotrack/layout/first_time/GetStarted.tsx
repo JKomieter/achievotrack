@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#D12323',
-        padding: 10,
-        borderRadius: 20,
+        padding: 20,
+        borderRadius: 30,
         width: '90%',
         display: 'flex',
         alignItems: 'center',
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     },
     btnText: {
         color: 'white',
-        fontSize: 15,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '700',
     }
 })

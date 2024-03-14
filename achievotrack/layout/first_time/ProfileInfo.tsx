@@ -7,7 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Majors, Minors, Year } from '@/constants/courses';
 import axios from 'axios';
-
+import DocumentPicker, { types } from 'react-native-document-picker';
+import * as FileSystem from 'expo-file-system';
 
 export default function ProfileInfo({
     setStage
@@ -19,6 +20,7 @@ export default function ProfileInfo({
     const [minor, setMinor] = useState<string | null>(null);
     const [year, setYear] = useState<string | null>(null);
     const [err, setErr] = useState("");
+    const [profile_pic, setProfilePic] = useState('')
     const [isLoading, setIsLoading] = useState(false);
     const apiUrl = process.env.DEV_BACKEND_URL as string;
 
@@ -39,7 +41,8 @@ export default function ProfileInfo({
             major,
             minor,
             year,
-            userId
+            userId,
+            profile_pic,
         })
         console.log(res.data);
         setIsLoading(false);
@@ -47,10 +50,24 @@ export default function ProfileInfo({
         setErr("Something went wrong. Please try again.")
     }, [major, minor, year]);
 
+    const handleProfilePic = useCallback(async () => {
+        try {
+            const response = await DocumentPicker.pick({
+                presentationStyle: 'fullScreen',
+                type: [types.images]
+            });
+            const fileUri = response[0].uri;
+            const base64String = await FileSystem.readAsStringAsync(fileUri, { encoding: 'base64' });
+            setProfilePic(base64String)
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Fill out your profile</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => handleProfilePic()}>
                 <Avatar.Image size={90} source={require('@/assets/images/placeholder.jpg')} />
                 <View style={styles.addIcon}>
                     <FontAwesome6 name="add" size={14} color="white" />
@@ -144,15 +161,13 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '100%',
-        padding: 10,
-        borderRadius: 20,
-        borderColor: 'white',
-        backgroundColor: 'white',
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: '#f2f2f2',
+        paddingHorizontal: 20,
         fontSize: 16,
-        shadowColor: '#171717',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
+        fontWeight: '300',
+        color: '#000000',
     },
     dropdown: {
         zIndex: 1000,

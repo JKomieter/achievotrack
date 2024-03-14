@@ -9,17 +9,16 @@ export default function CourseSchedule({
 }: {
     schedules: Schedule[] | undefined
 }) {
-    console.log('These are the schedules: ', schedules)
-  return (
-    <View style={styles.container}>
-        <Text style={styles.title}>Course Schedule</Text>
-        <View style={styles.list}>
-            {schedules && schedules?.map((sch) => (
-                <ScheduleCard key={sch.id} schedule={sch} />
-            ))}
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Course Schedule</Text>
+            <View style={styles.list}>
+                {schedules && schedules?.map((sch) => (
+                    <ScheduleCard key={sch.id} schedule={sch} />
+                ))}
+            </View>
         </View>
-    </View>
-  )
+    )
 }
 
 const styles = StyleSheet.create({

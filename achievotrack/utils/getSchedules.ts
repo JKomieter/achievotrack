@@ -8,7 +8,6 @@ export default function getSchedules() {
     const userId = useUserId();
     const { data, error, isLoading, mutate } = useSWR(userId ? `${apiUrl}/getSchedules?userId=${userId}` : null, fetcher);
     const scheduleStats = data ? groupSchedules(data) : null;
-    console.log('Schedules: ', data)
     return { scheduleStats, data, error, mutate, isLoading };
 }
 

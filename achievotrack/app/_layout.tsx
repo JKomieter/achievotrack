@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Entypo, FontAwesome6 } from '@expo/vector-icons';
+import { Entypo, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -178,6 +178,25 @@ function RootLayoutNav() {
               </TouchableOpacity>
             )
            }} />
+           <Stack.Screen name='profile' options={{
+            presentation: 'fullScreenModal',
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>Profile</Text>
+              </View>
+            ),
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesome6 name="arrow-left" size={22} color="black" />
+              </TouchableOpacity>
+            ),
+            headerRight: () => (
+              <TouchableOpacity style={{ marginRight: '0.5%' }} onPress={() => {}}>
+                <FontAwesome5 name="cog" size={22} color="black" />
+              </TouchableOpacity>
+            )
+           }} 
+           /> 
         </Stack>
       </PaperProvider>
     </ThemeProvider>

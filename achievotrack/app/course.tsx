@@ -26,7 +26,9 @@ export default function CourseDetails() {
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <CourseInformation course={course} />
-        <CourseStats />
+        <CourseStats
+          scores={course?.stats?.scores as number[]}
+        />
         <OverAll
           currentGrade={course?.stats?.currentGrade}
           avgScore={course?.stats?.averageScore}
