@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const {signup, addAcademicDetails} = require('./controllers/userController');
-const {addSchedule, updateSchedule, getSchedules, deleteSchedule} = require("./controllers/scheduleController");
+const {signup, addAcademicDetails, getUser} = require('./controllers/userController');
+const {addSchedule, updateSchedule, getSchedules, deleteSchedule, markAsDone} = require("./controllers/scheduleController");
 const { addItem, getItems, getCart, addItemToCart } = require('./controllers/marketController');
 const { addCourse, getCourses, getCourse } = require('./controllers/courseController')
 
@@ -10,11 +10,15 @@ router.post('/addAcademicDetails', addAcademicDetails);
 
 router.post('/addSchedule', addSchedule);
 
+router.get('/getUser', getUser)
+
 router.post('/updateSchedule', updateSchedule);
 
 router.post('/deleteSchedule', deleteSchedule);
 
 router.get('/getSchedules', getSchedules);
+
+router.post('/markAsDone', markAsDone)
 
 router.post('/addItem', addItem);
 

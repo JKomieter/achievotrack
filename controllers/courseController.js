@@ -14,16 +14,16 @@ const structureCourseData = (scores = []) => {
     let quizCount = 0;
     let projectCount = 0;
     let currentGrade;
-    let count = 0
-
+    let count = 0;
+    const scoresList = [...scores].sort((a, b) => a.data().createdAt - b.data().createdAt).map(score => score.data().score);
     for (const score of scores) {
-        const data = score.data()
+        const data = score.data();
         switch (data.type) {
             case 'homework':
                 homeworkTotal += data.score;
                 homeworkCount++;
                 break;
-            case 'exams':
+            case 'exam':
                 examsTotal += data.score;
                 examsCount++;
                 break;
@@ -39,7 +39,7 @@ const structureCourseData = (scores = []) => {
                 break;
         }
     }
-    
+
     let avgHomeworkGrade = homeworkCount ? (homeworkTotal / homeworkCount) : 0;
     let avgExamsGrade = examsCount ? (examsTotal / examsCount) : 0;
     let avgQuizGrade = quizCount ? (quizTotal / quizCount) : 0;
@@ -79,7 +79,7 @@ const structureCourseData = (scores = []) => {
         avgQuizGrade,
         avgProjectGrade,
     );
-    
+
     return {
         avgHomeworkGrade,
         avgExamsGrade,
@@ -89,6 +89,7 @@ const structureCourseData = (scores = []) => {
         highestScore,
         lowestScore,
         currentGrade,
+        scores: scoresList,
     }
 }
 
@@ -168,7 +169,7 @@ module.exports.getCourse = async (req, res) => {
         const scheduleCollection = collection(courseDoc, 'schedules')
         const schedulesSnapShot = await getDocs(scheduleCollection)
         const stats = structureCourseData(scores.docs)
-        
+
         const schedules = [];
         for (const sch of schedulesSnapShot.docs) {
             schedules.push(
@@ -178,14 +179,13 @@ module.exports.getCourse = async (req, res) => {
                 }
             )
         }
-        console.log(schedules)
         const course = {
             id: courseSnapshot.id,
             stats,
             ...courseSnapshot.data(), // DO NOT change the args positions
             schedules,
         };
-        
+
         res.status(200).json(course)
     } catch (error) {
         console.log(error);
