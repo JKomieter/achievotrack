@@ -75,6 +75,7 @@ module.exports.getSchedules = async (req, res) => {
             }
         }
 
+        await updateDoc(userDoc, { tasks: schedules.length }, { merge: true });
         res.json(schedules);
     } catch (error) {
         console.log(error);

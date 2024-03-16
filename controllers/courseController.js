@@ -1,8 +1,27 @@
-const { collection, addDoc, doc, getDocs, getDoc } = require('firebase/firestore');
+const { collection, addDoc, doc, getDocs, getDoc, updateDoc, setDoc } = require('firebase/firestore');
 const { db, storage } = require("../config/firebase");
 require('dotenv').config()
 const { ref, uploadString } = require('firebase/storage');
 const usersCollection = collection(db, 'users');
+
+const calculateGrade = (averageScore) => {
+    if (averageScore >= 94) {
+        return 'A';
+    } else if (averageScore >= 90) {
+        return 'B+';
+    } else if (averageScore >= 85) {
+        return 'B';
+    } else if (averageScore >= 80) {
+        return 'C+';
+    } else if (averageScore >= 75) {
+        return 'C';
+    } else if (averageScore >= 70) {
+        return 'D';
+    } else {
+        return 'E';
+    }
+
+}
 
 const structureCourseData = (scores = []) => {
     let homeworkTotal = 0;
@@ -13,7 +32,6 @@ const structureCourseData = (scores = []) => {
     let examsCount = 0;
     let quizCount = 0;
     let projectCount = 0;
-    let currentGrade;
     let count = 0;
     const scoresList = [...scores].sort((a, b) => a.data().createdAt - b.data().createdAt).map(score => score.data().score);
     for (const score of scores) {
@@ -40,40 +58,26 @@ const structureCourseData = (scores = []) => {
         }
     }
 
-    let avgHomeworkGrade = homeworkCount ? (homeworkTotal / homeworkCount) : 0;
-    let avgExamsGrade = examsCount ? (examsTotal / examsCount) : 0;
-    let avgQuizGrade = quizCount ? (quizTotal / quizCount) : 0;
-    let avgProjectGrade = projectCount ? (projectTotal / projectCount) : 0;
+    const avgHomeworkGrade = homeworkCount ? (homeworkTotal / homeworkCount) : 0;
+    const avgExamsGrade = examsCount ? (examsTotal / examsCount) : 0;
+    const avgQuizGrade = quizCount ? (quizTotal / quizCount) : 0;
+    const avgProjectGrade = projectCount ? (projectTotal / projectCount) : 0;
 
     if (avgHomeworkGrade) count++;
     if (avgExamsGrade) count++;
     if (avgProjectGrade) count++;
     if (avgQuizGrade) count++
 
-    let averageScore = (avgHomeworkGrade + avgExamsGrade + avgProjectGrade + avgQuizGrade) / count;
-    if (averageScore >= 94) {
-        currentGrade = 'A';
-    } else if (averageScore >= 90) {
-        currentGrade = 'B+';
-    } else if (averageScore >= 85) {
-        currentGrade = 'B';
-    } else if (averageScore >= 80) {
-        currentGrade = 'C+';
-    } else if (averageScore >= 75) {
-        currentGrade = 'C';
-    } else if (averageScore >= 70) {
-        currentGrade = 'D';
-    } else {
-        currentGrade = 'E';
-    }
+    const averageScore = (avgHomeworkGrade + avgExamsGrade + avgProjectGrade + avgQuizGrade) / count;
+    const currentGrade = calculateGrade(averageScore);
 
-    let highestScore = Math.max(
+    const highestScore = Math.max(
         avgHomeworkGrade,
         avgExamsGrade,
         avgQuizGrade,
         avgProjectGrade,
     )
-    let lowestScore = Math.min(
+    const lowestScore = Math.min(
         avgHomeworkGrade,
         avgExamsGrade,
         avgQuizGrade,
@@ -102,7 +106,6 @@ module.exports.addCourse = async (req, res) => {
             schedules,
             userId
         } = req.body;
-        console.log('body', req.body)
         const userDoc = doc(usersCollection, userId);
         const courseCollection = collection(userDoc, 'courses');
         await addDoc(
@@ -128,6 +131,8 @@ module.exports.getCourses = async (req, res) => {
         const courseCollection = collection(userDoc, 'courses');
         const querySnapshot = await getDocs(courseCollection);
         const courses = [];
+        let totalGrade = 0;
+        let courseCount = 0;
         for (const doc of querySnapshot.docs) {
             const scheduleCollection = collection(doc.ref, 'schedules');
             const schedulesSnapShot = await getDocs(scheduleCollection)
@@ -143,6 +148,9 @@ module.exports.getCourses = async (req, res) => {
             const scoresCollection = collection(doc.ref, 'scores');
             const scores = await getDocs(scoresCollection);
             const stats = structureCourseData(scores.docs)
+            const { averageScore } = stats;
+            totalGrade += averageScore;
+            courseCount++;
             courses.push({
                 id: doc.id,
                 ...doc.data(), // DO NOT change the args positions
@@ -150,6 +158,10 @@ module.exports.getCourses = async (req, res) => {
                 stats,
             });
         }
+
+        const overallGrade = totalGrade / courseCount;
+        const grade = calculateGrade(overallGrade);
+        await setDoc(userDoc, { grade: grade }, { merge: true });
         res.status(200).json(courses || []);
     } catch (error) {
         console.log(error);
@@ -160,24 +172,30 @@ module.exports.getCourses = async (req, res) => {
 module.exports.getCourse = async (req, res) => {
     try {
         const { courseId, userId } = req.query;
+        if (!userId) {
+            res.status(400).json({ error: "userId is required" });
+            return;
+        }
         const userDoc = doc(usersCollection, userId);
         const courseCollection = collection(userDoc, 'courses');
         const courseDoc = doc(courseCollection, courseId);
         const courseSnapshot = await getDoc(courseDoc);
         const scoresCollection = collection(courseDoc, 'scores')
         const scores = await getDocs(scoresCollection)
+        const stats = structureCourseData(scores.docs)
         const scheduleCollection = collection(courseDoc, 'schedules')
         const schedulesSnapShot = await getDocs(scheduleCollection)
-        const stats = structureCourseData(scores.docs)
 
         const schedules = [];
         for (const sch of schedulesSnapShot.docs) {
-            schedules.push(
-                {
-                    id: sch.id,
-                    ...sch.data()
-                }
-            )
+            const isCompleted = sch.data().completed === true
+            if (!isCompleted)
+                schedules.push(
+                    {
+                        id: sch.id,
+                        ...sch.data()
+                    }
+                )
         }
         const course = {
             id: courseSnapshot.id,
