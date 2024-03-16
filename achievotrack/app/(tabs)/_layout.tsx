@@ -15,6 +15,7 @@ import { useRouter } from 'expo-router';
 import { Foundation } from '@expo/vector-icons';
 import getCart from '@/utils/getCart';
 import FirstTime from '@/layout/first_time/FirstTime';
+import { placeholder } from '@/constants/placeholder';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -60,6 +61,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          title: '',
           tabBarIcon: () => <Foundation name="home" size={30} color="black" />,
           headerTitle: () => (
             <View>
@@ -68,7 +70,7 @@ export default function TabLayout() {
           ),
           headerRight: () => (
             <TouchableOpacity style={{marginRight: '22%'}} onPress={() => router.push('/profile')}>
-              <Avatar.Image size={33} source={require('@/assets/images/placeholder.jpg')} />
+              <Avatar.Image size={33} source={{ uri: placeholder }} />
             </TouchableOpacity>
           ),
           headerLeft: () => (

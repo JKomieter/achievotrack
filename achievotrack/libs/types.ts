@@ -1,5 +1,3 @@
-import { CourseScheduleProps } from "@/app/addCourse";
-
 export enum Action {
     ADD,
     EDIT,

@@ -1,6 +1,6 @@
 const { auth, db } = require("../config/firebase");
 const { createUserWithEmailAndPassword, onAuthStateChanged } = require("firebase/auth");
-const { collection, addDoc, doc, setDoc, getDoc } = require("firebase/firestore");
+const { collection, addDoc, doc, setDoc, getDoc, getDocs } = require("firebase/firestore");
 
 const usersCollection = collection(db, "users");
 
@@ -52,18 +52,26 @@ module.exports.addAcademicDetails = async (req, res) => {
 
 module.exports.getUser = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { userId } = req.query;
+        console.log('userId ', userId);
         const userDoc = doc(usersCollection, userId);
         const userRef = await getDoc(userDoc);
         const userData = userRef.data();
+        const courseCollection = collection(userDoc, 'courses');
+        const courseRef = await getDocs(courseCollection);
+        const numClasses = courseRef.docs.length;
         const data = {
             achievements: userData.achievements,
             completed_tasks: userData.completed_tasks,
             grade: userData.grade,
             study_time: userData.study_time,
             profile_pic: userData.profile_pic,
+            username: userData.username,
+            email: userData.email,
+            classes: numClasses,
+            tasks: userData.tasks
         }
-        res.status(200).send(data);
+        res.status(200).json(data);
     } catch (error) {
         console.log(error);
         res.status(400).send({ error: error.message });

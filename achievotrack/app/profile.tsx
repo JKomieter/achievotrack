@@ -10,21 +10,21 @@ import { StyleSheet, ScrollView } from 'react-native'
 export default function Profile() {
     const { data } = getUser()
     const user = data as User
-
+    
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <ProfileHero
-                    profile_pic={user.profile_pic}
-                    username={user.username}
-                    email={user.email}
+                    profile_pic={user?.profile_pic}
+                    username={user?.username}
+                    email={user?.email}
                 />
                 <ProfileStats
-                    classes={user.classes}
-                    tasks={user.tasks}
-                    grade={user.grade}
+                    classes={user?.classes}
+                    tasks={user?.tasks}
+                    grade={user?.grade}
                 />
-                <ProfileProgress completed_tasks={user.completed_tasks} study_time={user.study_time} achievements={user.achievements} />
+                <ProfileProgress completed_tasks={user?.completed_tasks} study_time={user?.study_time} achievements={user?.achievements} />
             </ScrollView>
         </View>
     )

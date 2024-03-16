@@ -9,6 +9,7 @@ import { Majors, Minors, Year } from '@/constants/courses';
 import axios from 'axios';
 import DocumentPicker, { types } from 'react-native-document-picker';
 import * as FileSystem from 'expo-file-system';
+import { placeholder } from '@/constants/placeholder';
 
 export default function ProfileInfo({
     setStage
@@ -68,7 +69,7 @@ export default function ProfileInfo({
         <View style={styles.container}>
             <Text style={styles.title}>Fill out your profile</Text>
             <TouchableOpacity onPress={() => handleProfilePic()}>
-                <Avatar.Image size={90} source={require('@/assets/images/placeholder.jpg')} />
+                <Avatar.Image size={90} source={{ uri: profile_pic ? profile_pic : placeholder }} />
                 <View style={styles.addIcon}>
                     <FontAwesome6 name="add" size={14} color="white" />
                 </View>

@@ -191,12 +191,26 @@ function RootLayoutNav() {
               </TouchableOpacity>
             ),
             headerRight: () => (
-              <TouchableOpacity style={{ marginRight: '0.5%' }} onPress={() => {}}>
+              <TouchableOpacity style={{ marginRight: '0.5%' }} onPress={() => router.push('/settings')}>
                 <FontAwesome5 name="cog" size={22} color="black" />
               </TouchableOpacity>
             )
            }} 
            /> 
+           <Stack.Screen name='settings' options={{
+            presentation: 'fullScreenModal',
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>Settings</Text>
+              </View>
+            ),
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesome6 name="arrow-left" size={22} color="black" />
+              </TouchableOpacity>
+            ),
+           }}
+            />
         </Stack>
       </PaperProvider>
     </ThemeProvider>
