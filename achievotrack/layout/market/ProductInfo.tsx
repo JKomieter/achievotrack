@@ -53,10 +53,11 @@ export default function ProductInfo({
 
 const styles = StyleSheet.create({
     container: {
-        width: '90%',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
+        paddingHorizontal: 20,
     },
     title: {
         fontWeight: '500',

@@ -11,7 +11,8 @@ export interface ViewStore {
     sellerPhone: string,
     price: number,
     category: string,
-    createdAt: Date
+    createdAt: Date,
+    keywords?: string[],
     setViewDetails: (
         id: string,
         title: string,
@@ -23,7 +24,8 @@ export interface ViewStore {
         sellerPhone: string,
         price: number,
         category: string,
-        createdAt: Date
+        createdAt: Date,
+        keywords?: string[]
     ) => void
 }
 
@@ -40,7 +42,8 @@ const viewDetailsStore = create<ViewStore>((set) => ({
     price: 0,
     category: '',
     createdAt: new Date(),
-    setViewDetails: (id, title, description, images, sellerId, sellerName, sellerEmail, sellerPhone, price, category, createdAt) => set({id, title, description, images, sellerEmail, sellerName, sellerPhone, price, category, createdAt})
+    keywords: [],
+    setViewDetails: (id, title, description, images, sellerId, sellerName, sellerEmail, sellerPhone, price, category, createdAt, keywords) => set({id, title, description, images, sellerEmail, sellerName, sellerPhone, price, category, createdAt, keywords})
 }))
 
 

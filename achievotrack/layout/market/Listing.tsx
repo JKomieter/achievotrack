@@ -1,16 +1,18 @@
 import { View, Text } from '@/components/Themed'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native'
 import { FontAwesome6 } from '@expo/vector-icons';
 import categories from '@/constants/itemCategory';
 import { Dropdown } from 'react-native-element-dropdown';
-import * as ImagePicker from "expo-image-picker";
 import { Image } from 'expo-image';
 import PhoneInput from "react-native-phone-number-input";
 import { ActivityIndicator } from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import getItems from '@/utils/getItems';
+import getItems from '@/utils/getItems'
+import DocumentPicker, { types } from 'react-native-document-picker';
+import * as FileSystem from 'expo-file-system';
+import ImageResizer from 'react-native-image-resizer';
 
 
 export default function Listing() {
@@ -30,19 +32,20 @@ export default function Listing() {
     const [step, setStep] = useState(1);
     const { mutate } = getItems()
 
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            const img = result?.assets[0].uri
-            setFiles((prev) => [...prev, img])
+    const handleDocumentSelection = useCallback(async () => {
+        try {
+            const response = await DocumentPicker.pick({
+                presentationStyle: 'fullScreen',
+                type: [types.images]
+            });
+            const fileUri = response[0].uri;
+            const resizedImage = await ImageResizer.createResizedImage(fileUri, 800, 600, 'JPEG', 80);
+            const base64String = await FileSystem.readAsStringAsync(resizedImage.uri, { encoding: 'base64' });
+            setFiles((prev) => [...prev, base64String]);
+        } catch (error) {
+            console.log(error);
         }
-    };
+    }, []);
 
 
     const handleList = async () => {
@@ -60,12 +63,12 @@ export default function Listing() {
             sellerPhone: formattedValue,
             price
         })
-        console.log(res.data);
-        if (res.status === 200) {}
-        setStep(2)
+        if (res.status === 200) {
+            setStep(3)
+            mutate()
+        } else setError('Something went wrong')
         setIsLoading(false);
-        mutate()
-    }   
+    }
 
     useEffect(() => {
         if (error) setTimeout(() => setError(''), 3000);
@@ -79,22 +82,27 @@ export default function Listing() {
                         <Text style={styles.label}>
                             Photos
                         </Text>
-                        <TouchableOpacity style={styles.photoEmpty} onPress={() => pickImage()}>
+                        <TouchableOpacity style={styles.photoEmpty}>
                             {
-                                files.length > 0 ?
-                                    <View style={styles.imgContainer}>
-                                        {
-                                            files.map((file, index) => (
-                                                <View style={styles.img} key={index}>
-                                                    <Image source={{ uri: file }} style={{ width: '100%', height: '100%', borderRadius: 25 }} />
-                                                </View>
-                                            ))
-                                        }
-                                    </View>
-                                    : <View style={styles.addPhoto}>
-                                        <FontAwesome6 name="add" size={25} color="#d12323" />
-                                    </View>
+                                <View style={styles.imgContainer}>
+                                    {
+                                        files.map((file, index) => (
+                                            <View style={styles.img} key={index}>
+                                                <Image source={{
+                                                    uri: `data:image/jpeg;base64,${file}`
+                                                }} style={{ width: '100%', height: '100%', borderRadius: 25 }} />
+                                                <TouchableOpacity style={{ position: 'absolute', right: 5, top: 5, zIndex: 1, backgroundColor: '#fff', borderRadius: 50, padding: 5 }} onPress={() => setFiles((prev) => prev.filter((_, i) => i !== index))}>
+                                                    <FontAwesome6 name="trash" size={20} color="#d12323" />
+                                                </TouchableOpacity>
+                                            </View>
+                                        ))
+                                    }
+                                        <TouchableOpacity style={styles.addPhoto} onPress={() => handleDocumentSelection()}>
+                                            <FontAwesome6 name="add" size={25} color="#d12323" />
+                                        </TouchableOpacity>
+                                </View>
                             }
+                            
                         </TouchableOpacity>
                     </View>
                     <View style={styles.context}>
@@ -116,7 +124,7 @@ export default function Listing() {
                             withDarkTheme
                             withShadow
                             autoFocus
-                            containerStyle={{ ...styles.input, backgroundColor: '#f2f2f2'}}
+                            containerStyle={{ ...styles.input, backgroundColor: '#f2f2f2' }}
                         />
                         <Dropdown
                             data={categories}
@@ -228,7 +236,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         gap: 5,
         flexWrap: 'wrap',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     img: {
         width: 106,

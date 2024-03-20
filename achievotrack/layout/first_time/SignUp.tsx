@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { View, Text } from '@/components/Themed'
-import { ActivityIndicator, TextInput, TouchableOpacity } from 'react-native'
+import { ActivityIndicator, Pressable, TextInput, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image';
 import { Checkbox } from 'react-native-paper';
 import { ScrollView } from 'native-base';
@@ -21,7 +21,7 @@ export default function SignUp({
     checked,
     setChecked,
     err,
-    setErr
+    setOpt
 }: {
     isLoading: boolean;
     handleSignUp: () => void;
@@ -37,19 +37,11 @@ export default function SignUp({
     checked: boolean;
     setChecked: (checked: boolean) => void;
     err: string;
-    setErr: (err: string) => void;
+    setOpt: Dispatch<SetStateAction<"signin" | "signup">>
 }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.imgContainer}>
-                <Image
-                    source={{ uri: 'https://images.pexels.com/photos/3762800/pexels-photo-3762800.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}
-                    contentFit="cover"
-                    placeholder={"Students"}
-                    style={styles.img}
-                />
-            </View>
             <Text style={styles.title}>Welcome to AchievoTrack!</Text>
             <View style={styles.form}>
                 <TextInput placeholder="Email" style={styles.input} keyboardType='email-address' value={email} onChangeText={setEmail} />
@@ -69,9 +61,8 @@ export default function SignUp({
                 }} />
                 <Text style={styles.remember}>Remember me</Text>
             </View>
-            {/* ToDo: When sign in is pressed changed to sign in */}
-            <View>
-                <Text>Already a member? <Text>Sign in</Text></Text>
+            <View style={{marginBottom: 20}}>
+                <Text>Already a member? <Text style={{textDecorationLine: 'underline', color: '#d12323'}} onPress={() => setOpt('signin')}>Sign in</Text></Text>
             </View>
         </View>
     )

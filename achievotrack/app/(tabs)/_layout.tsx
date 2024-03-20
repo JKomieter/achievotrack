@@ -1,61 +1,46 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { FontAwesome, Foundation, FontAwesome6, Entypo } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { TouchableOpacity } from 'react-native';
-
-import Colors from '@/constants/Colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation, useRouter } from 'expo-router';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text } from '@/components/Themed';
-import { Avatar } from 'react-native-paper';
-import { FontAwesome6 } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { Foundation } from '@expo/vector-icons';
 import getCart from '@/utils/getCart';
-import FirstTime from '@/layout/first_time/FirstTime';
 import { placeholder } from '@/constants/placeholder';
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
+import Colors from '@/constants/Colors';
+
+function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>['name']; color: string; }) {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
+  const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<string | null>(null);
-  const [firstTime, setFirstTime] = useState(true);
+  
+  const { data } = getCart();
   const router = useRouter();
-  const { data } = getCart()
 
   useEffect(() => {
     const checkFirstTime = async () => {
-      const first_time = await AsyncStorage.getItem('firstTime');
       const user_name = await AsyncStorage.getItem('userName');
-      if (first_time) {
-        setFirstTime(false);
+      if (user_name !== null) {
         setUsername(user_name);
-      }
+      } 
       setLoading(false);
     };
-
     checkFirstTime();
-  }, [AsyncStorage]);
-  
+  }, []);
+
   if (loading) return null;
-  if (firstTime) return <FirstTime />;
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen
@@ -69,8 +54,8 @@ export default function TabLayout() {
             </View>
           ),
           headerRight: () => (
-            <TouchableOpacity style={{marginRight: '22%'}} onPress={() => router.push('/profile')}>
-              <Avatar.Image size={33} source={{ uri: placeholder }} />
+            <TouchableOpacity style={{ marginRight: '22%' }} onPress={() => router.push('/profile')}>
+              <FontAwesome name="user" size={33} color="black" />
             </TouchableOpacity>
           ),
           headerLeft: () => (
@@ -86,14 +71,14 @@ export default function TabLayout() {
           title: '',
           tabBarIcon: ({ color }) => <FontAwesome name="shopping-bag" size={24} color={color} />,
           headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()} style={{marginLeft: '10%'}}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: '10%' }}>
               <FontAwesome6 name="arrow-left" size={22} color="black" />
             </TouchableOpacity>
           ),
           headerRight: () => (
             <TouchableOpacity style={{ marginRight: '10%' }}>
-              <View style={{width: 20, height: 20, borderRadius: 50, backgroundColor: "#d12323", position: 'absolute', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', left: 11 , bottom: 13}}>
-                <Text style={{color: '#fff', fontSize: 11, fontWeight: '600'}}>
+              <View style={{ width: 20, height: 20, borderRadius: 50, backgroundColor: "#d12323", position: 'absolute', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', left: 11, bottom: 13 }}>
+                <Text style={{ color: '#fff', fontSize: 11, fontWeight: '600' }}>
                   {data?.length || 0}
                 </Text>
               </View>
@@ -107,28 +92,6 @@ export default function TabLayout() {
           )
         }}
       />
-      <Tabs.Screen
-        name="focus"
-        options={{
-          title: 'Focus',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="news"
-        options={{
-          title: 'News',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
     </Tabs>
   );
 }
-

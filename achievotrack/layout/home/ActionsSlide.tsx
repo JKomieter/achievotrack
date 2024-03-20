@@ -48,7 +48,6 @@ export default function Actions() {
     }
   ] as Record<string, any>[]
 
-
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} scrollEventThrottle={16}>
       {

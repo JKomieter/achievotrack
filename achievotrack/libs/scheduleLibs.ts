@@ -37,7 +37,6 @@ export default class Schedule {
                 courseId: this.courseId as string,
                 scheduleType: this.scheduleType
             })
-            console.log('adding schedule obj: ', response)
             return response.data;
         }
 

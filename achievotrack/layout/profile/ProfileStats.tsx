@@ -15,15 +15,15 @@ export default function ProfileStats({
         <View style={styles.container}>
             <View style={styles.box}>
                 <View style={styles.info}>
-                    <Text style={styles.num}>{classes}</Text>
+                    <Text style={styles.num}>{classes || 0}</Text>
                     <Text style={styles.name}>Classes</Text>
                 </View>
                 <View style={styles.info}>
-                    <Text style={styles.num}>{tasks}</Text>
+                    <Text style={styles.num}>{tasks || 0}</Text>
                     <Text style={styles.name}>Tasks</Text>
                 </View>
                 <View style={styles.info}>
-                    <Text style={styles.num}>{grade}</Text>
+                    <Text style={styles.num}>{grade || 'A'}</Text>
                     <Text style={styles.name}>Grade</Text>
                 </View>
             </View>

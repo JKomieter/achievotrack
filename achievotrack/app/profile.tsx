@@ -4,12 +4,13 @@ import ProfileProgress from '@/layout/profile/ProfileProgress'
 import ProfileStats from '@/layout/profile/ProfileStats'
 import { User } from '@/libs/types'
 import getUser from '@/utils/getUser'
-import React from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useEffect } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 
 export default function Profile() {
     const { data } = getUser()
-    const user = data as User
+    const user = data as User;
     
     return (
         <View style={styles.container}>

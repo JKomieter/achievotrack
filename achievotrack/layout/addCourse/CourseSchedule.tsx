@@ -4,7 +4,8 @@ import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { MaterialIcons } from '@expo/vector-icons';
-import { CourseScheduleProps, time } from '@/app/addCourse';
+import { CourseScheduleProps, time } from '@/libs/types';
+
 
 
 const days = [
@@ -18,11 +19,11 @@ const days = [
 ]
 
 export default function CourseSchedule({
-    schedules,
-    setSchedules
+    meetingTimes,
+    setMeetingTimes
 }: {
-    schedules: CourseScheduleProps[],
-    setSchedules: React.Dispatch<React.SetStateAction<CourseScheduleProps[]>>
+    meetingTimes: CourseScheduleProps[],
+    setMeetingTimes: React.Dispatch<React.SetStateAction<CourseScheduleProps[]>>
 }) {
     
     const [day, setDay] = React.useState<string>('');
@@ -62,9 +63,9 @@ export default function CourseSchedule({
 
     const addSchedule = () => {
         if (day && start_time && stop_time) {
-            const hasDay = schedules.find((schedule) => schedule.day === day)
+            const hasDay = meetingTimes.find((schedule) => schedule.day === day)
             if (hasDay) {
-                const newSchedules = schedules.map((schedule) => {
+                const newSchedules = meetingTimes.map((schedule) => {
                     if (schedule.day === day) {
                         return {
                             day,
@@ -74,9 +75,9 @@ export default function CourseSchedule({
                     }
                     return schedule
                 })
-                setSchedules(newSchedules)
+                setMeetingTimes(newSchedules)
             } else {
-                setSchedules([...schedules, { day, start_time, stop_time }])
+                setMeetingTimes([...meetingTimes, { day, start_time, stop_time }])
             }
         }
     }
@@ -111,13 +112,13 @@ export default function CourseSchedule({
                     onPress={() => addSchedule()}
                 >
                     <Text style={styles.btnTxt}>
-                        Add
+                        Add Time
                     </Text>
                 </TouchableOpacity>
             </View>
-            {schedules.length > 0 && <View style={styles.scheduleContainer}>
+            {meetingTimes.length > 0 && <View style={styles.scheduleContainer}>
                 {
-                    schedules.map((schedule) => (
+                    meetingTimes.map((schedule) => (
                         <View style={styles.schedule} key={schedule.day}>
                             <Text style={styles.scheduleTxt}>{schedule.day}</Text>
                             <Text style={styles.scheduleTxt}>{schedule.start_time.hours}:{schedule.start_time.minutes} - {schedule.stop_time.hours}:{schedule.stop_time.minutes}</Text>
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 10,
         borderRadius: 30,
-        width: '40%',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

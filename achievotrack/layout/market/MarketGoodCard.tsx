@@ -30,7 +30,8 @@ export default function MarketGoodCard({
             item.sellerPhone.toString(),
             item.price,
             item.category,
-            item.createdAt
+            item.createdAt,
+            item.keywords
         )
         router.push('/itemDetails');
     }
@@ -39,7 +40,8 @@ export default function MarketGoodCard({
         <View style={styles.container}>
             <View style={styles.imgContainer}>
                 {item?.images?.length > 0 &&
-                    <Image source={{ uri: item?.images[0] || '' }} style={{ width: "100%", height: "100%" }} contentFit='cover' placeholder='' />
+                    <Image source={{
+                    uri: `data:image/jpeg;base64,${item?.images[0]}` || '' }} style={{ width: "100%", height: "100%" }} contentFit='cover' placeholder='' />
                 }
             </View>
             <View style={styles.info}>

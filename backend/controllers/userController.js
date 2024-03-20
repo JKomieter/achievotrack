@@ -1,6 +1,6 @@
 const { auth, db } = require("../config/firebase");
-const { createUserWithEmailAndPassword, onAuthStateChanged } = require("firebase/auth");
-const { collection, addDoc, doc, setDoc, getDoc, getDocs } = require("firebase/firestore");
+const { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } = require("firebase/auth");
+const { collection, addDoc, doc, setDoc, getDoc, getDocs, where, query } = require("firebase/firestore");
 
 const usersCollection = collection(db, "users");
 
@@ -17,7 +17,7 @@ module.exports.signup = async (req, res) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         const userDoc = await addDoc(usersCollection, {
-            email: email,
+            email: email.toLowerCase(),
             username: username,
             completed_tasks: 0,
             achievements: [],
@@ -74,6 +74,37 @@ module.exports.getUser = async (req, res) => {
         res.status(200).json(data);
     } catch (error) {
         console.log(error);
+        res.status(400).send({ error: error.message });
+    }
+}
+
+module.exports.login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        const q = query(usersCollection, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            const userDoc = querySnapshot.docs[0];
+            res.status(200).send({ email: user.email, username: userDoc.data().username, userId: userDoc.id });
+        } else { 
+            res.status(200).send({ message: "No user found with this email" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({ error: "Something went wrong. Please try again." });
+    }
+}
+
+module.exports.logout = async (req, res) => {
+    try {
+        await signOut(auth);
+        console.log('User logged out successfully');
+        res.status(200).send({ message: "User logged out successfully" });
+    } catch (error) {
+        console.log(error);
+        console.log('User logged out successfully');
         res.status(400).send({ error: error.message });
     }
 }

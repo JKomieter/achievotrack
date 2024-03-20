@@ -104,7 +104,7 @@ export default function CourseCard({
 
 const styles = StyleSheet.create({
     container: {
-        width: 250,
+        width: 300,
         marginLeft: 16,
         marginTop: 4,
         borderRadius: 25,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 2,
         elevation: 5,
-        maxHeight: 210,
+        maxHeight: 220,
         display: "flex",
         flexDirection: "column",
         padding: 10,

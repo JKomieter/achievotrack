@@ -15,6 +15,10 @@ import useScheduleStore from '@/store/useScheduleStore';
 import { Action, ScheduleType } from '@/libs/types';
 import getCart from '@/utils/getCart';
 import useGoToCourseStore from '@/store/useGoToCourseStore';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
+import { placeholder } from '@/constants/placeholder';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import useCourseEditStore from '@/store/useCourseEditStore';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -56,20 +60,35 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const router = useRouter();
+  const { expoPushToken } = usePushNotifications();
   const { setDetails, action } = useScheduleStore();
   const { data } = getCart();
-  const { courseName } = useGoToCourseStore()
+  const { courseName } = useGoToCourseStore();
+  const { setCourseStore } = useCourseEditStore()
+
+  console.log(expoPushToken)
 
   const openScheduleAdd = () => {
     router.push("/editSchedule");
     setDetails("", new Date, { hours: 0, minutes: 0 }, { hours: 0, minutes: 0 }, ScheduleType.HOMEWORK, "", Action.ADD);
   }
 
+  useEffect(() => {
+    const checkIfLoggedIn = async () => {
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        router.push('/(auth)');
+      }
+    };
+    checkIfLoggedIn();
+  }, []);
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <PaperProvider>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           <Stack.Screen name="schedule" options={{
             presentation: 'fullScreenModal',
@@ -132,8 +151,8 @@ function RootLayoutNav() {
               </TouchableOpacity>
             ),
             headerRight: () => (
-              <TouchableOpacity style={{ marginRight: '1%' }}>
-                <Avatar.Image size={33} source={require('@/assets/images/placeholder.jpg')} />
+              <TouchableOpacity style={{ marginRight: '1%' }} onPress={() => router.push('/profile')}>
+                <Avatar.Image size={33} source={{ uri: placeholder }} />
               </TouchableOpacity>
             ),
             headerTitle: () => (
@@ -155,12 +174,15 @@ function RootLayoutNav() {
               </TouchableOpacity>
             ),
             headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity onPress={() => {
+                setCourseStore('', { name: '', email: '' }, { name: '', base64String: '' }, { name: '', description: '', credit: '', }, [])
+                router.back()
+              }}>
                 <FontAwesome6 name="arrow-left" size={22} color="black" />
               </TouchableOpacity>
             ),
           }} />
-          <Stack.Screen name="course" options={{ 
+          <Stack.Screen name="course" options={{
             headerTitle: () => (
               <View>
                 <Text style={{ fontSize: 20, fontWeight: '300' }}>{courseName}</Text>
@@ -172,13 +194,13 @@ function RootLayoutNav() {
                 <FontAwesome6 name="arrow-left" size={22} color="black" />
               </TouchableOpacity>
             ),
-            headerRight: () => (
-              <TouchableOpacity>
-                <Entypo name="menu" size={22} color="black" />
-              </TouchableOpacity>
-            )
-           }} />
-           <Stack.Screen name='profile' options={{
+            // headerRight: () => (
+            //   <TouchableOpacity>
+            //     <Entypo name="menu" size={22} color="black" />
+            //   </TouchableOpacity>
+            // )
+          }} />
+          <Stack.Screen name='profile' options={{
             presentation: 'fullScreenModal',
             headerTitle: () => (
               <View>
@@ -195,9 +217,9 @@ function RootLayoutNav() {
                 <FontAwesome5 name="cog" size={22} color="black" />
               </TouchableOpacity>
             )
-           }} 
-           /> 
-           <Stack.Screen name='settings' options={{
+          }}
+          />
+          <Stack.Screen name='settings' options={{
             presentation: 'fullScreenModal',
             headerTitle: () => (
               <View>
@@ -209,8 +231,17 @@ function RootLayoutNav() {
                 <FontAwesome6 name="arrow-left" size={22} color="black" />
               </TouchableOpacity>
             ),
-           }}
-            />
+          }}
+          />
+          <Stack.Screen name='addScore' options={{
+            presentation: 'modal',
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>Add Score</Text>
+              </View>
+            ),
+          }}
+          />
         </Stack>
       </PaperProvider>
     </ThemeProvider>

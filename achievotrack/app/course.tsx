@@ -9,11 +9,12 @@ import CourseStats from '@/layout/course/CourseStats';
 import OverAll from '@/layout/course/OverAll';
 import GradeBreakDown from '@/layout/course/GradeBreakDown';
 import CourseSchedule from '@/layout/course/CourseSchedule';
+import { PaperProvider } from 'react-native-paper';
 
 
 export default function CourseDetails() {
   const { courseId } = useGoToCourseStore();
-  const { data, isLoading } = getCourse(courseId)
+  const { data, isLoading, mutate } = getCourse(courseId)
   const [course, setCourse] = useState<Course | null>(null)
   const { setCourseName } = useGoToCourseStore()
 
@@ -21,29 +22,32 @@ export default function CourseDetails() {
     const courseName = data?.course?.name as string
     if (data) { setCourseName(courseName); setCourse(data) }
   }, [data])
-  
+
   return (
-    <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <CourseInformation course={course} />
-        <CourseStats
-          scores={course?.stats?.scores as number[]}
-        />
-        <OverAll
-          currentGrade={course?.stats?.currentGrade}
-          avgScore={course?.stats?.averageScore}
-          highestScore={course?.stats?.highestScore}
-          lowestScore={course?.stats?.lowestScore}
-        />
-        <GradeBreakDown
-          avgHomeworkGrade={course?.stats?.avgHomeworkGrade}
-          avgExamsGrade={course?.stats?.avgExamsGrade}
-          avgQuizGrade={course?.stats?.avgQuizGrade}
-          avgProjectGrade={course?.stats?.avgProjectGrade}
-        />
-        <CourseSchedule schedules={course?.schedules} />
-      </ScrollView>
-    </View>
+    <PaperProvider>
+      <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <CourseInformation course={course} mutate={mutate} />
+          <CourseStats
+            scores={course?.stats?.scores as number[]}
+            courseId={course?.id}
+          />
+          <OverAll
+            currentGrade={course?.stats?.currentGrade}
+            avgScore={course?.stats?.averageScore}
+            highestScore={course?.stats?.highestScore}
+            lowestScore={course?.stats?.lowestScore}
+          />
+          <GradeBreakDown
+            avgHomeworkGrade={course?.stats?.avgHomeworkGrade}
+            avgExamsGrade={course?.stats?.avgExamsGrade}
+            avgQuizGrade={course?.stats?.avgQuizGrade}
+            avgProjectGrade={course?.stats?.avgProjectGrade}
+          />
+          <CourseSchedule schedules={course?.schedules} />
+        </ScrollView>
+      </View>
+    </PaperProvider>
   )
 }
 

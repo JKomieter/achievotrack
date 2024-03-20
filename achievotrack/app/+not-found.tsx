@@ -1,15 +1,19 @@
 import { Link, Stack } from 'expo-router';
 import { StyleSheet } from 'react-native';
+import { Oops } from '@/assets/svgs';
 
 import { Text, View } from '@/components/Themed';
+import { SvgXml } from 'react-native-svg';
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen options={{ title: 'Coming soon!' }} />
       <View style={styles.container}>
-        <Text style={styles.title}>This screen doesn't exist.</Text>
-
+        <SvgXml xml={Oops} width={400} height={400} />
+        <Text style={styles.soon}>
+          This feature is coming soon!
+        </Text>
         <Link href="/" style={styles.link}>
           <Text style={styles.linkText}>Go to home screen!</Text>
         </Link>
@@ -36,5 +40,9 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 14,
     color: '#2e78b7',
+  },
+  soon: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });

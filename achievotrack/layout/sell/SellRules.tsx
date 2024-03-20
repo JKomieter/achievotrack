@@ -25,22 +25,29 @@ export default function SellRules({
     return (
         <View style={styles.container}>
             <ScrollView>
-            <SellHero />
-            {
-                rules.map((rule) => (
-                    <View style={styles.rule} key={rule.num}>
-                        <View style={styles.content}>
-                            <Text style={styles.title}>{rule.title}</Text>
-                            <Text style={styles.desc}>{rule.desc}</Text>
-                        </View>
-                    </View>
-                ))
-            }
-            <View style={styles.sellBtnContainer}>
-                <TouchableOpacity style={styles.sellBtn} onPress={() => setStage(2)}>
-                    <Text style={styles.sellBtnText}>List an item</Text>
-                </TouchableOpacity>
-        </View>
+                <SellHero />
+                <View style={styles.rules}>
+                    {
+                        rules.map((rule) => (
+                            <View style={styles.rule} key={rule.num}>
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>{rule.title}</Text>
+                                    <Text style={styles.desc}>{rule.desc}</Text>
+                                </View>
+                            </View>
+                        ))
+                    }
+                </View>
+                <View style={styles.disclaimer}>
+                    <Text style={styles.disclaimerTxt}>
+                        AchievoTrack connects buyers with sellers but does not verify listings' quality or legality. Transactions are solely between users, and AchievoTrack assumes no liability. Use caution and report any issues to us.
+                    </Text>
+                </View>
+                <View style={styles.sellBtnContainer}>
+                    <TouchableOpacity style={styles.sellBtn} onPress={() => setStage(2)}>
+                        <Text style={styles.sellBtnText}>List an item</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </View>
     )
@@ -49,6 +56,13 @@ export default function SellRules({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    rules: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 20,
+        paddingHorizontal: 10,
+        marginTop: 30
     },
     rule: {
         display: 'flex',
@@ -90,7 +104,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 30,
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
         // position: 'absolute',
         bottom: 0,
         width: '100%',
@@ -98,7 +112,7 @@ const styles = StyleSheet.create({
     },
     sellBtn: {
         backgroundColor: '#d12323',
-        paddingVertical: 15,
+        paddingVertical: 20,
         paddingHorizontal: 20,
         borderRadius: 30,
         width: '100%',
@@ -109,6 +123,18 @@ const styles = StyleSheet.create({
     sellBtnText: {
         color: '#ffffff',
         fontWeight: '700',
-        fontSize: 16
+        fontSize: 18
+    },
+    disclaimer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 30,
+        paddingHorizontal: 20,
+    },
+    disclaimerTxt: {
+        fontSize: 14,
+        color: '#848383',
+        textAlign: 'center'
     }
 })

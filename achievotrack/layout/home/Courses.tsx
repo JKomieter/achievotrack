@@ -11,7 +11,9 @@ export default function Courses() {
     
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Your Courses</Text>
+            <View style={styles.top}>
+                <Text style={styles.title}>Your Courses</Text>
+            </View>
             <View style={styles.slide}>
                 {
                     hasCourses ? <CoursesSlide data={data} /> : <NoCourses />
@@ -28,15 +30,26 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     title: {
-        paddingLeft: 16,
         fontSize: 19,
         fontWeight: '500',
-        paddingBottom: 6
     },
     slide: {
         height: 240,
         display: "flex",
         alignContent: "center",
         justifyContent: "center"
-    }
+    },
+    top: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        marginBottom: 10
+    },
+    btn: {
+        backgroundColor: '#848383',
+        padding: 10,
+        borderRadius: 50,
+    },
 })

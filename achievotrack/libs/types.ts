@@ -3,6 +3,11 @@ export enum Action {
     EDIT,
 }
 
+export type time = {
+    hours: number,
+    minutes: number
+}
+
 export enum ScheduleType {
     HOMEWORK = 'Homework',
     EXAM = 'Exam',
@@ -32,6 +37,7 @@ export interface MarketItem {
     sellerEmail: string,
     sellerPhone: number,
     images: string[],
+    keywords?: string[],
 }
 
 export interface Course {
@@ -40,6 +46,7 @@ export interface Course {
     instructor: { name: string, email: string };
     syllabus: { name: string, base64String: string };
     schedules: Schedule[];
+    meetingTimes: CourseScheduleProps[]
     grades?: {
         homeworks: number[],
         quizzes: number[],
@@ -74,4 +81,10 @@ export interface User {
     email: string,
     classes: number,
     tasks: number
+}
+
+export type CourseScheduleProps = {
+    day: string,
+    start_time: time,
+    stop_time: time,
 }

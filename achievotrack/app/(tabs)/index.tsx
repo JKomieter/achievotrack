@@ -1,13 +1,11 @@
 import { StyleSheet } from 'react-native';
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import Courses from '@/layout/home/Courses';
 import QuickActons from '@/layout/home/QuickActons';
 import Schedule from '@/layout/schedule/Schedule';
 import { ScrollView } from 'react-native';
 
 export default function TabOneScreen() {
-
   return (
     <ScrollView style={{flex: 1, height: '100%'}} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>

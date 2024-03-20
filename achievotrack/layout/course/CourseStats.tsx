@@ -1,23 +1,38 @@
 import { View, Text } from '@/components/Themed'
 import React from 'react'
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, Touchable, TouchableOpacity } from 'react-native'
 import { LineChart } from "react-native-chart-kit"
+import { useRouter } from 'expo-router'
+import useAddScoreStore from '@/store/useAddScore'
 
 export default function CourseStats({
-    scores
+    scores,
+    courseId 
 }: {
-    scores: number[]
+    scores: number[],
+    courseId: string | undefined
 }) {
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
     const labelList = scores?.length > 0 ? scores?.map((_, i) => `${i + 1}`) : ["Jan"]
     const dataList = scores?.length > 0 ? scores : [0]
+    const router = useRouter()
+    const { setCourseId } = useAddScoreStore()
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Stats Chart</Text>
+            <View style={styles.top}>
+                <Text style={styles.title}>Stats Chart</Text>
+                <TouchableOpacity style={styles.noChartBtn} onPress={() => {
+                    setCourseId(courseId)
+                    router.push('/addScore')
+                }}>
+                    <Text style={styles.topTxt}>Add score</Text>
+                </TouchableOpacity>
+            </View>
+
             <View style={styles.box}>
-                {scores?.length > 0 && <LineChart
+                {scores?.length > 0 ? <LineChart
                     data={{
                         labels: labelList,
                         datasets: [
@@ -51,7 +66,9 @@ export default function CourseStats({
                     style={{
                         borderRadius: 16
                     }}
-                />}
+                /> : <View style={styles.noChart}>
+                    <Text style={styles.noChartTxt}>No Stats Available</Text>
+                </View>}
             </View>
         </View>
     )
@@ -82,5 +99,36 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
+    noChart: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: 20
+    },
+    noChartTxt: {
+        color: '#9c9c9c',
+        fontSize: 20,
+        fontWeight: '600'
+    },
+    top: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10
+    },
+    noChartBtn: {
+        backgroundColor: '#d12323',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 30
+    },
+    topTxt: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600'
+    }
 })

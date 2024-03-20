@@ -13,7 +13,7 @@ export default function ItemList({
     <View style={styles.container}>
       {
         items?.length > 0 && items?.map((item) => (
-          <MarketGoodCard item={item} key={item.description} />
+          <MarketGoodCard item={item} key={item.id} />
         ))
       }
     </View>
@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 15,
+    gap: 30,
   }
 })

@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         gap: 10,
         marginHorizontal: 16,
-        marginBottom: 16
+        marginBottom: 90
     }
 })

@@ -1,5 +1,5 @@
 import { View, Text } from '@/components/Themed'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import useScheduleStore from '@/store/useScheduleStore'
 import Schedule from '@/libs/scheduleLibs';
@@ -82,8 +82,8 @@ export default function EditSchedule() {
       router.back();
     } catch (error) {
       console.log(error);
-      setIsLoading(false)
-      setErr('Something went wrong')
+      setIsLoading(false);
+      setErr('Something went wrong');
     }
   };
 
@@ -139,11 +139,11 @@ export default function EditSchedule() {
       </View>
       {err.length > 0 && <Text style={{ color: 'red', fontSize: 14 }}>{err}</Text>}
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.actionBtn} onPress={() => handleSchedule()}>
-          {isLoading ? <ActivityIndicator size='small' color='#fff' /> : <Text style={styles.actionTxt}>Save</Text>}
-        </TouchableOpacity>
-        <TouchableOpacity style={{ ...styles.actionBtn, backgroundColor: '#d12323' }} onPress={() => router.back()}>
+        <TouchableOpacity style={styles.actionBtn} onPress={() => router.back()}>
           <Text style={styles.actionTxt}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ ...styles.actionBtn, backgroundColor: '#d12323' }} onPress={() => handleSchedule()}>
+          {isLoading ? <ActivityIndicator size='small' color='#fff' /> : <Text style={styles.actionTxt}>Save</Text>}
         </TouchableOpacity>
       </View>
     </View>

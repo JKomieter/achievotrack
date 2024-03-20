@@ -15,12 +15,12 @@ export default function ProfileProgress({
     const stats = [
         {
             name: 'Completed Tasks',
-            num: completed_tasks,
+            num: completed_tasks || 0,
             icon: <FontAwesome name="tasks" size={22} color="black" />
         },
         {
             name: 'Study Time',
-            num: `${study_time} hrs`,
+            num: `${study_time || 0} hrs`,
             icon: <Ionicons name="time-sharp" size={26} color="black" />
         },
         {
@@ -40,7 +40,7 @@ export default function ProfileProgress({
                             <Text style={styles.name}>{stat.name}</Text>
                         </View>
                         <View style={styles.right}>
-                            <Text style={styles.num}>{stat.num}</Text>
+                            <Text style={styles.num}>{stat.num }</Text>
                         </View>
                     </View>
                 ))

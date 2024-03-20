@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ProfileInfo from './ProfileInfo';
 import LoadingScreen from './LoadingScreen';
 
-export default function FillProfle() {;
+export default function FillProfile() {;
     const [stage, setStage] = useState(1);
 
     const stages = {

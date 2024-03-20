@@ -23,7 +23,7 @@ export default function OverAll({
                 </View>
                 <View style={styles.info}>
                     <Text style={styles.name}>Average Score:</Text>
-                    <Text style={styles.value}>{avgScore}%</Text>
+                    <Text style={styles.value}>{Math.floor(avgScore as number) || 0}%</Text>
                 </View>
                 <View style={styles.info}>
                     <Text style={styles.name}>Highest Score:</Text>
