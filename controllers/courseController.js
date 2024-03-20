@@ -1,4 +1,4 @@
-const { collection, addDoc, doc, getDocs, getDoc, updateDoc, setDoc } = require('firebase/firestore');
+const { collection, addDoc, doc, getDocs, getDoc, updateDoc, setDoc, deleteDoc } = require('firebase/firestore');
 const { db, storage } = require("../config/firebase");
 require('dotenv').config()
 const { ref, uploadString } = require('firebase/storage');
@@ -103,7 +103,7 @@ module.exports.addCourse = async (req, res) => {
             course,
             instructor,
             syllabus,
-            schedules,
+            meetingTimes,
             userId
         } = req.body;
         const userDoc = doc(usersCollection, userId);
@@ -111,12 +111,16 @@ module.exports.addCourse = async (req, res) => {
         await addDoc(
             courseCollection, {
             course,
-            schedules,
+            meetingTimes,
             instructor,
         }
         );
-        const syllabusRef = ref(storage, `${userId}/syllabus/${course.name}`);
-        await uploadString(syllabusRef, syllabus.base64String);
+        console.log(syllabus);
+        if (syllabus !== null) {
+            const syllabusRef = ref(storage, `${userId}/syllabus/${course.name}`);
+            await uploadString(syllabusRef, syllabus.base64String);
+        }
+
         res.status(200).json({ message: 'Succesfully added course' })
     } catch (error) {
         console.log(error);
@@ -220,12 +224,54 @@ module.exports.addScoreToCourse = async (req, res) => {
         const scoreCollection = collection(courseDoc, 'scores');
         await addDoc(
             scoreCollection, {
-            score,
+            score: Number(score),
             type,
             createdAt: new Date()
         }
         )
         res.status(200).json({ message: 'Succesfully added score' });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ error: "Something went wrong" });
+    }
+}
+
+module.exports.editCourse = async (req, res) => {
+    try {
+        const {
+            id,
+            meetingTimes,
+            syllabus,
+            instructor,
+            course,
+            userId
+        } = req.body;
+
+        const userDoc = doc(usersCollection, userId);
+        const courseCollection = collection(userDoc, 'courses');
+        const courseDoc = doc(courseCollection, id);
+        await updateDoc(courseDoc, {
+            meetingTimes,
+            syllabus,
+            instructor,
+            course
+        }, { merge: true });
+
+        res.status(200).json({ message: 'Succesfully updated course' });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ error: "Something went wrong" });
+    }
+}
+
+module.exports.deleteCourse = async (req, res) => {
+    try {
+        const { id, userId } = req.body;
+        const userDoc = doc(usersCollection, userId);
+        const courseCollection = collection(userDoc, 'courses');
+        const courseDoc = doc(courseCollection, id);
+        await deleteDoc(courseDoc);
+        res.status(200).json({ message: 'Succesfully deleted course' });
     } catch (error) {
         console.log(error);
         res.status(400).json({ error: "Something went wrong" });
