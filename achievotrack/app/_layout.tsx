@@ -19,6 +19,7 @@ import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { placeholder } from '@/constants/placeholder';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useCourseEditStore from '@/store/useCourseEditStore';
+import useCheckAuthState from '@/hooks/useCheckAuthState';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -60,28 +61,24 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const router = useRouter();
-  const { expoPushToken } = usePushNotifications();
+  const { expoPushToken, notification } = usePushNotifications();
   const { setDetails, action } = useScheduleStore();
   const { data } = getCart();
   const { courseName } = useGoToCourseStore();
-  const { setCourseStore } = useCourseEditStore()
+  const { setCourseStore } = useCourseEditStore();
+  const {isLoading} = useCheckAuthState();
 
-  console.log(expoPushToken)
-
+  console.log('expoPushToken: ', expoPushToken);
+  console.log('notification: ', notification);
+  
   const openScheduleAdd = () => {
     router.push("/editSchedule");
     setDetails("", new Date, { hours: 0, minutes: 0 }, { hours: 0, minutes: 0 }, ScheduleType.HOMEWORK, "", Action.ADD);
   }
 
-  useEffect(() => {
-    const checkIfLoggedIn = async () => {
-      const userId = await AsyncStorage.getItem('userId');
-      if (!userId) {
-        router.push('/(auth)');
-      }
-    };
-    checkIfLoggedIn();
-  }, []);
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

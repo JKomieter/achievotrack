@@ -108,3 +108,17 @@ module.exports.logout = async (req, res) => {
         res.status(400).send({ error: error.message });
     }
 }
+
+module.exports.savePushToken = async (req, res) => {
+    try {
+        const { userId, pushToken } = req.body;
+        const userDoc = doc(usersCollection, userId);
+        await setDoc(userDoc, {
+            pushToken
+        }, { merge: true });
+        res.status(200).send({ message: "Push token saved successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({ error: error.message });
+    }
+}

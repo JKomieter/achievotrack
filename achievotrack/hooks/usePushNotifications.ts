@@ -2,8 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
-import Constants from 'expo-constants';
 import { Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+
+const API_URL = process.env.DEV_BACKEND_URL;
 
 export interface pushNotificationState {
     expoPushToken?: Notifications.ExpoPushToken;
@@ -15,7 +18,7 @@ export const usePushNotifications = (): pushNotificationState => {
         handleNotification: async () => ({
             shouldPlaySound: true,
             shouldShowAlert: true,
-            shouldSetBadge: false,
+            shouldSetBadge: true,
         })
     });
 
@@ -28,7 +31,7 @@ export const usePushNotifications = (): pushNotificationState => {
     async function registerForPushNotificationsAsync() {
         let token;
 
-        if (Device.isDevice) {
+        if (!Device.isDevice) {
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
             if (existingStatus !== 'granted') {
@@ -40,9 +43,9 @@ export const usePushNotifications = (): pushNotificationState => {
                 return
             }
             token = await Notifications.getExpoPushTokenAsync({
-                projectId: Constants.expoConfig?.extra?.eas.projectId,
+                projectId: process.env.EXPO_PROJECT_ID,
             });
-            console.log(token);
+            console.log('token: ', token);
         } else {
             alert('Must use physical device for Push Notifications');
         }
@@ -60,18 +63,27 @@ export const usePushNotifications = (): pushNotificationState => {
     }
 
     useEffect(() => {
-        registerForPushNotificationsAsync().then((token) => {
+        registerForPushNotificationsAsync().then(async (token) => {
+            const userId = await AsyncStorage.getItem('userId');
+            if (userId) {
+                const res = await axios.post(`${API_URL}/savePushToken`, { pushToken: token, userId });
+                if (res.status === 200) {
+                    console.log('Push Token Saved');
+                }
+            }
             setExpoPushToken(token);
         });
 
         notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+            console.log('notificationHere: ', notification)
             setNotification(notification);
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+            console.log('listened')
             console.log(response);
         });
-
+        
         return () => {
             Notifications.removeNotificationSubscription(notificationListener.current!);
             Notifications.removeNotificationSubscription(responseListener.current!);

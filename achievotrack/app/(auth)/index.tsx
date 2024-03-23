@@ -7,7 +7,7 @@ import FillProfile from '../../layout/first_time/FillProfile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Index() {
-  const [stage, setStage] = useState(4);
+  const [stage, setStage] = useState(2);
 
   const stages = {
     1: <GetStarted setStage={setStage} />,
@@ -19,6 +19,7 @@ export default function Index() {
     const isFirstTime = async () => {
       try {
         const firstTime = await AsyncStorage.getItem('firstTime');
+        console.log('First time:', firstTime);
         if (firstTime) {
           setStage(2);
         } else {
