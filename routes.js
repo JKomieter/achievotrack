@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {signup, addAcademicDetails, getUser, login, logout} = require('./controllers/userController');
+const {signup, addAcademicDetails, getUser, login, logout, savePushToken} = require('./controllers/userController');
 const {addSchedule, updateSchedule, getSchedules, deleteSchedule, markAsDone} = require("./controllers/scheduleController");
 const { addItem, getItems, getCart, addItemToCart, searchItem, getRelatedItems } = require('./controllers/marketController');
 const { addCourse, getCourses, getCourse, addScoreToCourse, editCourse, deleteCourse } = require('./controllers/courseController')
@@ -9,6 +9,8 @@ router.post('/signup', signup);
 router.post('/login', login);
 
 router.post('/logout', logout);
+
+router.post('/savePushToken', savePushToken)
 
 router.post('/addAcademicDetails', addAcademicDetails);
 

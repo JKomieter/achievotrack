@@ -38,7 +38,6 @@ module.exports.getItems = async (req, res) => {
                 ...i.data()
             }
         })
-        console.log(items)
         res.status(200).json(items || [])
     } catch (error) {
         console.log(error);

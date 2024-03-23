@@ -1,5 +1,14 @@
 const { db } = require("../config/firebase");
 const { doc, addDoc, collection, getDocs, getDoc, updateDoc, deleteDoc, query, where, increment } = require("firebase/firestore");
+const { Expo } = require('expo-server-sdk');
+require('dotenv').config();
+const cron = require('node-cron');
+const moment = require('moment');
+
+let expo = new Expo({
+    accessToken: process.env.EXPO_ACCESS_TOKEN,
+    useFcmV1: false
+});
 
 module.exports.addSchedule = async (req, res) => {
     console.log('adding...')
@@ -20,7 +29,8 @@ module.exports.addSchedule = async (req, res) => {
             start_time,
             stop_time,
             scheduleType,
-            completed: false
+            completed: false,
+            sent: false
         })
 
         res.status(200).json({ message: "Successfully added schedule" });
@@ -56,32 +66,84 @@ module.exports.updateSchedule = async (req, res) => {
     }
 }
 
+async function sendPushNotification(pushToken, task, startDate) {
+    const message = {
+        to: pushToken,
+        sound: 'default',
+        title: task,
+        body: `You have a task to do by ${startDate.toLocaleTimeString()}`
+    };
+    const result = await expo.sendPushNotificationsAsync([message]);
+    console.log('Push notification result:', result);
+
+    return result;
+}
+
 module.exports.getSchedules = async (req, res) => {
-    console.log('getting...')
     try {
         const { userId } = req.query;
-        const userCollection = collection(db, 'users');
-        const userDoc = doc(userCollection, userId);
-        const courseCollection = collection(userDoc, 'courses')
-        const courseQuerySnapshot = await getDocs(courseCollection);
-        const schedules = [];
 
-        for (const courseDoc of courseQuerySnapshot.docs) {
-            const scheduleCollection = collection(courseDoc.ref, 'schedules');
-            const q = query(scheduleCollection, where("completed", "==", false));
-            const scheduleQuerySnapshot = await getDocs(q);
-            for (const scheduleDoc of scheduleQuerySnapshot.docs) {
-                schedules.push({ id: scheduleDoc.id, ...scheduleDoc.data(), courseId: courseDoc.id });
+        // Retrieve user document
+        const userDocRef = doc(db, 'users', userId);
+        const userDocSnap = await getDoc(userDocRef);
+        if (!userDocSnap.exists()) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const userData = userDocSnap.data();
+        const userPushToken = userData.pushToken;
+        console.log('pushToken: ', userPushToken)
+        // Retrieve schedules for each course
+        const schedules = [];
+        const courseDocsSnapshot = await getDocs(collection(userDocRef, 'courses'));
+        for (const courseDoc of courseDocsSnapshot.docs) {
+            const scheduleDocsSnapshot = await getDocs(collection(courseDoc.ref, 'schedules'));
+            for (const scheduleDoc of scheduleDocsSnapshot.docs) {
+                const scheduleData = scheduleDoc.data();
+                schedules.push({ id: scheduleDoc.id, ...scheduleData, courseId: courseDoc.id });
+                // if (!scheduleData.completed && !scheduleData.sent) {
+                    const startDate = moment(scheduleData.date)
+                        .hours(scheduleData.start_time.hours)
+                        .minutes(scheduleData.start_time.minutes);
+                    // if (startDate > new Date()) {
+                        // Schedule push notification
+                        const notificationTime = startDate.clone().subtract(1, 'hour');
+                        // cron.schedule(notificationTime.format('mm HH * * *'), async () => {
+                            // console.log('Scheduling push notification for:', scheduleData.task);
+                            try {
+                                const tickets = await sendPushNotification(userPushToken.data, scheduleData.task, new Date(startDate));
+                                let receiptIds = [];
+                                for (let ticket of tickets) {
+                                    // NOTE: Not all tickets have IDs; for example, tickets for notifications
+                                    // that could not be enqueued will have error information and no receipt ID.
+                                    if (ticket.id) {
+                                        receiptIds.push(ticket.id);
+                                    }
+                                }
+                                let receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
+                                for (let chunk of receiptIdChunks) {
+                                    setTimeout(async () => {
+                                        let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
+                                        console.log('receipts: ', receipts);
+                                    }, 5000); // Delay of 5 seconds
+                                }
+                                await updateDoc(scheduleDoc.ref, { sent: true }, { merge: true });
+                            } catch (error) {
+                                console.error('Failed to send push notification:', error);
+                            }
+                        // });
+                    // }
+                // }
             }
         }
 
-        await updateDoc(userDoc, { tasks: schedules.length }, { merge: true });
-        res.json(schedules);
+        // Update user document with the total number of schedules
+        await updateDoc(userDocRef, { tasks: schedules.length }, { merge: true });
+        res.status(200).json(schedules);
     } catch (error) {
-        console.log(error);
-        res.status(400).json({ error: error.message });
+        console.error('Error fetching schedules:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
 
 module.exports.deleteSchedule = async (req, res) => {
     console.log('deleting...')
@@ -97,7 +159,7 @@ module.exports.deleteSchedule = async (req, res) => {
         res.status(200).json({ message: "Successfully deleted schedule" })
     } catch (error) {
         console.log(error);
-        res.status(400).json({ error: error.message })
+        res.status(400).json({ error })
     }
 }
 
