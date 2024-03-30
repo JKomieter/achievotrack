@@ -1,8 +1,7 @@
 const { db } = require("../config/firebase");
-const { doc, addDoc, collection, getDocs, getDoc, updateDoc, deleteDoc, query, where, increment } = require("firebase/firestore");
+const { doc, addDoc, collection, getDocs, getDoc, updateDoc, deleteDoc, increment } = require("firebase/firestore");
 const { Expo } = require('expo-server-sdk');
 require('dotenv').config();
-const cron = require('node-cron');
 const moment = require('moment');
 
 let expo = new Expo({
@@ -62,7 +61,7 @@ module.exports.updateSchedule = async (req, res) => {
         res.status(200).json({ message: "Successfully updated schedule" })
     } catch (error) {
         console.log(error);
-        res.status(400).json({ error: error.message })
+        res.status(400).json({ error })
     }
 }
 
@@ -106,7 +105,6 @@ module.exports.getSchedules = async (req, res) => {
                         .minutes(scheduleData.start_time.minutes);
                     // if (startDate > new Date()) {
                         // Schedule push notification
-                        const notificationTime = startDate.clone().subtract(1, 'hour');
                         // cron.schedule(notificationTime.format('mm HH * * *'), async () => {
                             // console.log('Scheduling push notification for:', scheduleData.task);
                             try {

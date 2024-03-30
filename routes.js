@@ -2,7 +2,8 @@ const router = require('express').Router();
 const {signup, addAcademicDetails, getUser, login, logout, savePushToken} = require('./controllers/userController');
 const {addSchedule, updateSchedule, getSchedules, deleteSchedule, markAsDone} = require("./controllers/scheduleController");
 const { addItem, getItems, getCart, addItemToCart, searchItem, getRelatedItems } = require('./controllers/marketController');
-const { addCourse, getCourses, getCourse, addScoreToCourse, editCourse, deleteCourse } = require('./controllers/courseController')
+const { addCourse, getCourses, getCourse, addScoreToCourse, editCourse, deleteCourse } = require('./controllers/courseController');
+const { addReview, getReviews, likeReview, commentOnReview, getReviewComments, likeReviewComment, searchReviews } = require('./controllers/reviewController');
 
 router.post('/signup', signup);
 
@@ -49,5 +50,19 @@ router.post('/addScore', addScoreToCourse);
 router.post('/editCourse', editCourse);
 
 router.post('/deleteCourse', deleteCourse);
+
+router.post('/addReview', addReview);
+
+router.get('/getReviews', getReviews);
+
+router.post('/likeReview', likeReview);
+
+router.post('/commentOnReview', commentOnReview);
+
+router.get('/getReviewComments', getReviewComments)
+
+router.post('/likeReviewComment', likeReviewComment);
+
+router.get('/searchReviews', searchReviews);
 
 module.exports = router;
