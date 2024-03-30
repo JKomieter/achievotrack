@@ -3,9 +3,9 @@ import { StyleSheet, ScrollView } from 'react-native'
 import axios from 'axios';
 import SignUp from './SignUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import userDetailsStore from '@/store/userDetailsStore';
+import userDetailsStore from '../../store/userDetailsStore';
 import Signin from './Signin';
-import { View } from '@/components/Themed';
+import { View } from '../../components/Themed';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 
@@ -22,7 +22,7 @@ export default function Sign({
     const [checked, setChecked] = useState(true);
     const [err, setErr] = useState('');
     const { setUserDetails } = userDetailsStore();
-    const apiUrl = process.env.DEV_BACKEND_URL as string;
+    const apiUrl = process.env.EXPO_PUBLIC_DEV_BACKEND_URL as string;
     const [opt, setOpt] = useState<'signin' | 'signup'>('signin');
     const router = useRouter()
 

@@ -1,11 +1,14 @@
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+// import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { Tabs } from 'expo-router';
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { View, Text } from '@/components/Themed';
+// import Colors from '@/constants/Colors';
+// import { useColorScheme } from '@/components/useColorScheme';
+import { View, Text } from '../../components/Themed';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+import { useColorScheme } from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { useClientOnlyValue } from '../../components/useClientOnlyValue';
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();

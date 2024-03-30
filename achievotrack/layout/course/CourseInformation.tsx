@@ -1,38 +1,34 @@
-import { Text, View } from '@/components/Themed'
-import { Course } from '@/libs/types'
+import { Text, View } from '../../components/Themed'
+import { Course } from '../../libs/types'
 import React from 'react'
 import { Pressable, StyleSheet, TouchableOpacity } from 'react-native'
 import { Entypo } from '@expo/vector-icons'
-import useCourseEditStore from '@/store/useCourseEditStore'
+import useCourseEditStore from '../../store/useCourseEditStore'
 import { useRouter } from 'expo-router'
-import { Button, Dialog, Portal } from 'react-native-paper';
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const API_URL = process.env.DEV_BACKEND_URL;
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
 
-const DialogComponent = ({
+const MenuComponent = ({
     visible,
-    showDialog,
-    hideDialog,
+    showMenu,
+    hideMenu,
     openEditCourse,
     deleteCourse
 }: {
     visible: boolean,
-    showDialog: () => void,
-    hideDialog: () => void,
+    showMenu: () => void,
+    hideMenu: () => void,
     openEditCourse: () => void,
     deleteCourse: () => void
 }) => {
+
     return (
-        <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor: '#fff'}}>
-                <Dialog.Actions>
-                    <Button onPress={() => deleteCourse()}>Delete</Button>
-                    <Button onPress={() => openEditCourse()}>Edit</Button>
-                </Dialog.Actions>
-            </Dialog>
-        </Portal>
+        visible && 
+        <View style={styles.menu}>
+            
+        </View>
     );
 }
 
@@ -47,8 +43,8 @@ export default function CourseInformation({
     const router = useRouter()
     const [visible, setVisible] = React.useState(false);
 
-    const showDialog = () => setVisible(true);
-    const hideDialog = () => setVisible(false);
+    const showMenu = () => setVisible(true);
+    const hideMenu = () => setVisible(false);
 
     const openEditCourse = () => {
         setCourseStore(
@@ -87,14 +83,14 @@ export default function CourseInformation({
 
     return (
         <View style={styles.container}>
-            <DialogComponent visible={visible} showDialog={showDialog} hideDialog={hideDialog} openEditCourse={openEditCourse} deleteCourse={deleteCourse} />
             <Text style={styles.title}>Course Information</Text>
             <View style={styles.box}>
                 <View style={styles.top}>
                     <Text style={styles.name}>{course?.course?.name}</Text>
-                    <TouchableOpacity onPress={showDialog}>
+                    <TouchableOpacity onPress={showMenu}>
                         <Entypo name="dots-three-vertical" size={24} color="black" />
                     </TouchableOpacity>
+                    <MenuComponent visible={visible} showMenu={showMenu} hideMenu={hideMenu} openEditCourse={openEditCourse} deleteCourse={deleteCourse} />
                 </View>
                 <View style={styles.inst}>
                     <Text style={styles.instructor}>Instructor: {course?.instructor?.name}, </Text>
@@ -157,5 +153,16 @@ const styles = StyleSheet.create({
     email: {
         textDecorationLine: 'underline',
         color: '#417aff'
+    },
+    menu: {
+        position: 'absolute',
+        right: 10,
+        top: 40,
+        width: 70,
+        height: 60,
+        borderRadius: 25,
+        borderColor: '#fff',
+        borderWidth: 0.2,
+        zIndex: 1000
     }
 })

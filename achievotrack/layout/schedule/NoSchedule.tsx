@@ -1,4 +1,4 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import { Image } from 'expo-image'
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'

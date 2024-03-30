@@ -1,4 +1,4 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import React from 'react'
 import { ColorValue, DimensionValue, StyleSheet } from 'react-native'
 

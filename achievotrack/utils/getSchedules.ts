@@ -1,10 +1,10 @@
 import useSWR from 'swr'
 import fetcher from './fetcher';
-import { Schedule } from '@/libs/types';
+import { Schedule } from '../libs/types';
 import { useUserId } from '../hooks/useUserId';
 
 export default function getSchedules() {
-    const apiUrl = process.env.DEV_BACKEND_URL;
+    const apiUrl = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
     const userId = useUserId();
     const { data, error, isLoading, mutate } = useSWR(userId ? `${apiUrl}/getSchedules?userId=${userId}` : null, fetcher);
     const scheduleStats = data ? groupSchedules(data) : null;

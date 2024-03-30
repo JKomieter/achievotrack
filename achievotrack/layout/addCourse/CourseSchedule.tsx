@@ -1,10 +1,10 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import React, { useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { MaterialIcons } from '@expo/vector-icons';
-import { CourseScheduleProps, time } from '@/libs/types';
+import { CourseScheduleProps, time } from '../../libs/types';
 
 
 

@@ -1,4 +1,4 @@
-import { View } from '@/components/Themed'
+import { View } from '../../components/Themed'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import ScheduleBox from './ScheduleBox';

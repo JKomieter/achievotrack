@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import { StyleSheet } from 'react-native'
 import ScheduleList from './ScheduleList'
-import getSchedules from '@/utils/getSchedules'
+import getSchedules from '../../utils/getSchedules'
 import NoSchedule from './NoSchedule'
 
 export default function Schedule() {

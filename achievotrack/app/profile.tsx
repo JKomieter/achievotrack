@@ -1,12 +1,11 @@
-import { View } from '@/components/Themed'
-import ProfileHero from '@/layout/profile/ProfileHero'
-import ProfileProgress from '@/layout/profile/ProfileProgress'
-import ProfileStats from '@/layout/profile/ProfileStats'
-import { User } from '@/libs/types'
-import getUser from '@/utils/getUser'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { useEffect } from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet, ScrollView,  } from 'react-native'
+import ProfileHero from '../layout/profile/ProfileHero';
+import ProfileProgress from '../layout/profile/ProfileProgress';
+import ProfileStats from '../layout/profile/ProfileStats';
+import { User } from '../libs/types';
+import getUser from '../utils/getUser';
+import { View } from '../components/Themed';
 
 export default function Profile() {
     const { data } = getUser()

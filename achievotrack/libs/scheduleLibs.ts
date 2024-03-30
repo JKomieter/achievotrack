@@ -1,8 +1,8 @@
-import { Action } from "@/libs/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
+import { Action } from './types';
 
-const apiUrl = process.env.DEV_BACKEND_URL
+const apiUrl = process.env.EXPO_PUBLIC_DEV_BACKEND_URL
 
 export default class Schedule {
     id: string;

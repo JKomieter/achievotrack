@@ -1,12 +1,12 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../components/Themed';
 import axios from 'axios';
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { TextInput } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import { useRouter } from 'expo-router';
-import useAddScoreStore from '@/store/useAddScore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useAddScoreStore from '../store/useAddScore';
 
 const coursework = [
     { label: 'Homework', value: 'homework' },
@@ -15,9 +15,9 @@ const coursework = [
     { label: 'Exam', value: 'exam' }
 ]
 
-const API_URL = process.env.DEV_BACKEND_URL
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL
 
-export default function addScore() {
+export default function AddScore() {
     const [score, setScore] = React.useState('')
     const [type, setType] = React.useState<{ label: string, value: string } | null>(coursework[0])
     const router = useRouter()

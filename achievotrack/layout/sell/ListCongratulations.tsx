@@ -1,8 +1,8 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { SvgXml } from 'react-native-svg'
-import { ListCongratsSvg } from '@/assets/svgs'
+import { ListCongratsSvg } from '../../assets/svgs'
 
 export default function ListCongratulations() {
   return (

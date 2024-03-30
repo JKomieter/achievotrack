@@ -4,7 +4,7 @@ import { Feather, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-const API_URL = process.env.DEV_BACKEND_URL;
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
 
 export default function Settings() {
   const router = useRouter()

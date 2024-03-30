@@ -119,6 +119,18 @@ module.exports.savePushToken = async (req, res) => {
         res.status(200).send({ message: "Push token saved successfully" });
     } catch (error) {
         console.log(error);
-        res.status(400).send({ error: error.message });
+        res.status(400).send({ error: "Something went wrong" });
+    }
+}
+
+module.exports.updateProfilePic = async (req, res) => {
+    try {
+        const { profile_pic, userId } = req.body;
+        const userDoc = doc(usersCollection, userId);
+        await updateDoc(userDoc, { profile_pic }, { merge: true });
+        res.status(200).send({ message: "Successfully changed profile pic" });
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({ error: "Something went wrong" });
     }
 }

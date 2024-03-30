@@ -6,7 +6,7 @@ import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const API_URL = process.env.DEV_BACKEND_URL;
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
 
 export interface pushNotificationState {
     expoPushToken?: Notifications.ExpoPushToken;
@@ -43,7 +43,7 @@ export const usePushNotifications = (): pushNotificationState => {
                 return
             }
             token = await Notifications.getExpoPushTokenAsync({
-                projectId: process.env.EXPO_PROJECT_ID,
+                projectId: process.env.EXPO_PUBLIC_EXPO_PROJECT_ID,
             });
             console.log('token: ', token);
         } else {

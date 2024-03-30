@@ -1,16 +1,16 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router';
-import useScheduleStore from '@/store/useScheduleStore';
-import { Action, Schedule, ScheduleType } from '@/libs/types';
-import { formatDate, convertTo12HourFormat } from '@/utils/formatDate';
+import useScheduleStore from '../../store/useScheduleStore';
+import { Action, Schedule, ScheduleType } from '../../libs/types';
+import { formatDate, convertTo12HourFormat } from '../../utils/formatDate';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import getSchedules from '@/utils/getSchedules';
+import getSchedules from '../../utils/getSchedules';
 import { MaterialCommunityIcons, FontAwesome6, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
-const API_URL = process.env.DEV_BACKEND_URL;
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
 
 export default function ScheduleCard({
     schedule

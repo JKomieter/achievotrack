@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { ActivityIndicator, Avatar } from 'react-native-paper';
 import { FontAwesome6 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dropdown } from 'react-native-element-dropdown';
-import { Majors, Minors, Year } from '@/constants/courses';
+import { Majors, Minors, Year } from '../../constants/courses';
 import axios from 'axios';
-import DocumentPicker, { types } from 'react-native-document-picker';
+import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import { placeholder } from '@/constants/placeholder';
+import { placeholder } from '../../constants/placeholder';
 
 export default function ProfileInfo({
     setStage
@@ -23,7 +23,7 @@ export default function ProfileInfo({
     const [err, setErr] = useState("");
     const [profile_pic, setProfilePic] = useState('')
     const [isLoading, setIsLoading] = useState(false);
-    const apiUrl = process.env.DEV_BACKEND_URL as string;
+    const apiUrl = process.env.EXPO_PUBLIC_DEV_BACKEND_URL as string;
 
     useEffect(() => {
         const getUsername = async () => {
@@ -53,11 +53,9 @@ export default function ProfileInfo({
 
     const handleProfilePic = useCallback(async () => {
         try {
-            const response = await DocumentPicker.pick({
-                presentationStyle: 'fullScreen',
-                type: [types.images]
-            });
-            const fileUri = response[0].uri;
+            const response = await DocumentPicker.getDocumentAsync({ type: 'image/*' });
+            if (response.canceled) return;
+            const fileUri = response.assets[0].uri;
             const base64String = await FileSystem.readAsStringAsync(fileUri, { encoding: 'base64' });
             setProfilePic(base64String)
         } catch (error) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from '@/components/Themed';
+import { View } from '../../components/Themed';
 import { StyleSheet } from 'react-native';
 import GetStarted from '../../layout/first_time/GetStarted';
 import Sign from '../../layout/first_time/Sign';

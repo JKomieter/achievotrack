@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { View } from '@/components/Themed';
-import Courses from '@/layout/home/Courses';
-import QuickActons from '@/layout/home/QuickActons';
-import Schedule from '@/layout/schedule/Schedule';
+import { View } from '../../components/Themed';
 import { ScrollView } from 'react-native';
+import Courses from '../../layout/home/Courses';
+import QuickActons from '../../layout/home/QuickActons';
+import Schedule from '@/layout/schedule/Schedule';
 
 export default function TabOneScreen() {
   return (

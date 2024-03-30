@@ -1,13 +1,13 @@
-import { View, Text } from '@/components/Themed'
-import MarketGoods from '@/layout/market/MarketGoods'
-import SearchSection from '@/layout/market/SearchSection'
-import { MarketItem } from '@/libs/types'
-import getItems from '@/utils/getItems'
-import searchItem from '@/utils/searchItem'
+import { View } from '../../components/Themed';
 import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
+import MarketGoods from '../../layout/market/MarketGoods';
+import SearchSection from '../../layout/market/SearchSection';
+import { MarketItem } from '../../libs/types';
+import getItems from '../../utils/getItems';
+import searchItem from '../../utils/searchItem';
 
-export default function market() {
+export default function Market() {
   const { data, isLoading } = getItems();
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<MarketItem[]>([]);

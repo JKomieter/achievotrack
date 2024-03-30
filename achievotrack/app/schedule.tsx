@@ -1,9 +1,9 @@
-import { View } from '@/components/Themed'
-import ScheduleGroup from '@/layout/schedule/ScheduleGroup'
-import ScheduleList from '@/layout/schedule/ScheduleList'
-import getSchedules from '@/utils/getSchedules'
+import { View } from '../components/Themed'
 import React from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
+import ScheduleGroup from '../layout/schedule/ScheduleGroup'
+import ScheduleList from '../layout/schedule/ScheduleList'
+import getSchedules from '../utils/getSchedules'
 
 export default function Schedule() {
   const { scheduleStats, data } = getSchedules()
