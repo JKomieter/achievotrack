@@ -2,21 +2,23 @@ import { View, Text } from '@/components/Themed'
 import { placeholder } from '@/constants/placeholder'
 import React from 'react'
 import { Pressable, StyleSheet, TouchableOpacity } from 'react-native'
-import { Avatar } from 'react-native-paper'
+import { Avatar } from 'react-native-paper';
 
 export default function ProfileHero({
     profile_pic,
     username,
-    email
+    email,
+    handleDocumentSelection,
 }: {
     profile_pic: string,
     username: string,
     email: string,
+    handleDocumentSelection: () => Promise<void>
 }) {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.avatar}>
-                <Avatar.Image size={120} source={{ uri: profile_pic ? `data:image/jpeg;base64,${profile_pic}` : placeholder }} />
+            <TouchableOpacity style={styles.avatar} onPress={() => handleDocumentSelection()}>
+                <Avatar.Image size={120} source={{ uri: profile_pic?.length > 0 ? `data:image/jpeg;base64,${profile_pic}` : placeholder }} />
             </TouchableOpacity>
             <View style={styles.bottom}>
                 <Text style={styles.name}>{username}</Text>
