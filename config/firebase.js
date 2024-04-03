@@ -2,16 +2,17 @@ const { initializeApp } = require("firebase/app");
 const { getFirestore } = require("firebase/firestore");
 const { getAuth } = require("firebase/auth");
 const { getStorage } = require("firebase/storage");
-require('dotenv').config()
+require("dotenv").config();
+
 
 const firebaseConfig = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID,
-    measurementId: process.env.MEASUREMENT_ID
+    apiKey: "AIzaSyDTK7PwzIpfnBT3sethvp3O0ruwfxJFfiQ",
+    authDomain: "achtrack-dd321.firebaseapp.com",
+    projectId: "achtrack-dd321",
+    storageBucket: "achtrack-dd321.appspot.com",
+    messagingSenderId: "531425135944",
+    appId: "1:531425135944:web:8d4c4f3c6e68b45b26b77d",
+    measurementId: "G-9VBYNGCN5Z"
 };
 
 const app = initializeApp(firebaseConfig);
