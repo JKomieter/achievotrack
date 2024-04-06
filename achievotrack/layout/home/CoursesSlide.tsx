@@ -4,6 +4,7 @@ import CourseCard from './CourseCard'
 import { Course } from '@/libs/types'
 import { Entypo } from '@expo/vector-icons'
 import { router } from 'expo-router'
+import { View } from '@/components/Themed'
 
 export default function CoursesSlide({
     data
@@ -11,16 +12,17 @@ export default function CoursesSlide({
     data: Course[]
 }) {
     return (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} scrollEventThrottle={16} contentContainerStyle={styles.container}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} >
             {
                 data && data?.map((course) => (
                     <CourseCard key={course.id} course={course} />
                 ))
             }
-
-            <TouchableOpacity style={styles.btn} onPress={() => router.push('/addCourse')}>
-                <Entypo name="plus" size={24} color="white" />
-            </TouchableOpacity>
+            <View style={styles.add}>
+                <TouchableOpacity style={styles.btn} onPress={() => router.push('/addCourse')}>
+                    <Entypo name="plus" size={24} color="white" />
+                </TouchableOpacity>
+            </View>
         </ScrollView>
     )
 }
@@ -45,4 +47,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    add: {
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 'auto',
+    }
 })

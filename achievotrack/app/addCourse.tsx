@@ -11,11 +11,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import useCourseEditStore from '@/store/useCourseEditStore'
 import { CourseScheduleProps } from '@/libs/types'
 
-const API_URL = process.env.DEV_BACKEND_URL;
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
 
-const SubmitButton = ({ 
-  onPress, 
-  color, 
+const SubmitButton = ({
+  onPress,
+  color,
   isLoading,
   txt
 }: {
@@ -68,10 +68,8 @@ export default function AddCourse() {
         return;
       }
       mutate();
-      setTimeout(() => {
-        setIsLoading(false);
-        router.back()
-      }, 2000)
+      setIsLoading(false);
+      router.back()
     } catch (error) {
       console.log(error);
       setError('Something went wrong');
@@ -131,10 +129,10 @@ export default function AddCourse() {
         <CourseSchedule meetingTimes={meetingTimes} setMeetingTimes={setMeetingTimes} />
         <Text style={{ color: 'red', textAlign: 'center', marginBottom: 15 }}>{error}</Text>
         <View style={styles.btnContainer}>
-          <TouchableOpacity style={{ ...styles.submitBtn, backgroundColor: '#848383'}} onPress={() => {
+          <TouchableOpacity style={{ ...styles.submitBtn, backgroundColor: '#848383' }} onPress={() => {
             setCourseStore('', { name: '', email: '' }, { name: '', base64String: '' }, { name: '', description: '', credit: '', }, [])
             router.back()
-            }}>
+          }}>
             <Text style={styles.submitBtnText}>
               Cancel
             </Text>

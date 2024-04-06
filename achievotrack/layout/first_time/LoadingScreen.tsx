@@ -10,15 +10,19 @@ export default function LoadingScreen() {
 
   useEffect(() => {
     const loadingScreen = async () => {
-      await AsyncStorage.setItem('firstTime', 'false');
-      console.log('firstTime set to false');
-      router.push('/');
+      try {
+        await AsyncStorage.setItem('firstTime', 'false');
+        console.log('firstTime set to false');
+        router.push('/');
+      } catch (error) {
+        console.error('Failed to set item in AsyncStorage:', error);
+      }
     }
 
-    setTimeout(async () => {
-      await loadingScreen();
-    }, 4000);
-  }, [AsyncStorage]);
+    const timerId = setTimeout(loadingScreen, 3000);
+
+    return () => clearTimeout(timerId);
+  }, []);
 
   return (
     <View style={styles.container}>

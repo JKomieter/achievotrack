@@ -1,8 +1,8 @@
 import React from 'react'
-import { View } from '@/components/Themed'
+import { View } from '../../components/Themed'
 import { StyleSheet } from 'react-native'
 import ScheduleCard from './ScheduleCard'
-import { Schedule } from '@/libs/types'
+import { Schedule } from '../../libs/types'
 
 export default function ScheduleList({
     schedules
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        gap: 10,
+        gap: 20,
         marginHorizontal: 16,
         marginBottom: 90
     }

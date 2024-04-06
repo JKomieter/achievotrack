@@ -1,38 +1,82 @@
-import { Text, View } from '@/components/Themed'
-import { Course } from '@/libs/types'
+import { Text, View } from '../../components/Themed'
+import { Course } from '../../libs/types'
 import React from 'react'
 import { Pressable, StyleSheet, TouchableOpacity } from 'react-native'
 import { Entypo } from '@expo/vector-icons'
-import useCourseEditStore from '@/store/useCourseEditStore'
+import useCourseEditStore from '../../store/useCourseEditStore'
 import { useRouter } from 'expo-router'
-import { Button, Dialog, Portal } from 'react-native-paper';
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Dialog, Menu, Portal } from 'react-native-paper'
 
-const API_URL = process.env.DEV_BACKEND_URL;
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
 
 const DialogComponent = ({
-    visible,
-    showDialog,
-    hideDialog,
-    openEditCourse,
+    d_visible,
+    d_hideDialog,
+    d_showDialog,
     deleteCourse
 }: {
-    visible: boolean,
-    showDialog: () => void,
-    hideDialog: () => void,
-    openEditCourse: () => void,
+    d_visible: boolean,
+    d_hideDialog: () => void,
+    d_showDialog: () => void,
     deleteCourse: () => void
 }) => {
     return (
         <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor: '#fff'}}>
-                <Dialog.Actions>
-                    <Button onPress={() => deleteCourse()}>Delete</Button>
-                    <Button onPress={() => openEditCourse()}>Edit</Button>
+            <Dialog
+                visible={d_visible}
+                onDismiss={d_hideDialog}
+            >
+                <Dialog.Title>Delete Course</Dialog.Title>
+                <Dialog.Content>
+                    <Text>Are you sure you want to delete this course?</Text>
+                </Dialog.Content>
+                <Dialog.Actions style={{display: 'flex', gap: 10}}>
+                    <Pressable onPress={d_hideDialog}>
+                        <Text>Cancel</Text>
+                    </Pressable>
+                    <Pressable onPress={() => deleteCourse()}>
+                        <Text>Delete</Text>
+                    </Pressable>
                 </Dialog.Actions>
             </Dialog>
         </Portal>
+    )
+}
+
+const MenuComponent = ({
+    visible,
+    showMenu,
+    hideMenu,
+    openEditCourse,
+    deleteCourse,
+    d_showDialog
+}: {
+    visible: boolean,
+    showMenu: () => void,
+    hideMenu: () => void,
+    openEditCourse: () => void,
+    deleteCourse: () => void,
+    d_showDialog: () => void
+}) => {
+
+    return (
+        <Menu
+            visible={visible}
+            onDismiss={hideMenu}
+            anchor={
+                <TouchableOpacity onPress={showMenu}>
+                    <Entypo name="dots-three-vertical" size={24} color="black" />
+                </TouchableOpacity>
+            }
+            style={styles.menu}
+        >
+            <View style={styles.innerMenu}>
+                <Menu.Item onPress={openEditCourse} title="Edit" />
+                <Menu.Item onPress={() => { hideMenu(); d_showDialog(); }} title="Delete" />
+            </View>
+        </Menu>
     );
 }
 
@@ -44,11 +88,15 @@ export default function CourseInformation({
     mutate: () => Promise<any>
 }) {
     const { setCourseStore } = useCourseEditStore();
-    const router = useRouter()
-    const [visible, setVisible] = React.useState(false);
+    const router = useRouter();
 
-    const showDialog = () => setVisible(true);
-    const hideDialog = () => setVisible(false);
+    const [visible, setVisible] = React.useState(false);
+    const showMenu = () => setVisible(true);
+    const hideMenu = () => setVisible(false);
+
+    const [d_visible, setDVisible] = React.useState(false);
+    const d_showDialog = () => setDVisible(true);
+    const d_hideDialog = () => setDVisible(false);
 
     const openEditCourse = () => {
         setCourseStore(
@@ -84,17 +132,13 @@ export default function CourseInformation({
         }
     }
 
-
     return (
         <View style={styles.container}>
-            <DialogComponent visible={visible} showDialog={showDialog} hideDialog={hideDialog} openEditCourse={openEditCourse} deleteCourse={deleteCourse} />
             <Text style={styles.title}>Course Information</Text>
             <View style={styles.box}>
                 <View style={styles.top}>
                     <Text style={styles.name}>{course?.course?.name}</Text>
-                    <TouchableOpacity onPress={showDialog}>
-                        <Entypo name="dots-three-vertical" size={24} color="black" />
-                    </TouchableOpacity>
+                    <MenuComponent visible={visible} showMenu={showMenu} hideMenu={hideMenu} openEditCourse={openEditCourse} deleteCourse={deleteCourse} d_showDialog={d_showDialog} />
                 </View>
                 <View style={styles.inst}>
                     <Text style={styles.instructor}>Instructor: {course?.instructor?.name}, </Text>
@@ -104,6 +148,7 @@ export default function CourseInformation({
                 </View>
                 <Text style={styles.instructor}>Description: {course?.course?.description}</Text>
             </View>
+            <DialogComponent d_visible={d_visible} d_hideDialog={d_hideDialog} d_showDialog={d_showDialog} deleteCourse={deleteCourse} />
         </View>
     )
 }
@@ -157,5 +202,11 @@ const styles = StyleSheet.create({
     email: {
         textDecorationLine: 'underline',
         color: '#417aff'
+    },
+    menu: {
+        top: 110
+    },
+    innerMenu: {
+        height: '100%'
     }
 })

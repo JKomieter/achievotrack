@@ -8,7 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/student.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,16 +17,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.achievotrack.achievotrack"
+      "bundleIdentifier": "com.jkomieter.achievotrack"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "package": "com.jkomieter.achievotrack"
     },
     "web": {
       "bundler": "metro",
@@ -36,15 +34,9 @@
     "plugins": [
       "expo-router",
       [
-        "expo-image-picker",
+        "expo-document-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
-        }
-      ],
-      [
-        "expo-dev-launcher",
-        {
-          "launchModeExperimental": "most-recent"
+          "iCloudContainerEnvironment": "Production"
         }
       ]
     ],

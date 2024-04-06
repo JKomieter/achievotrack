@@ -1,7 +1,5 @@
 import { View, Text } from '@/components/Themed'
 import React, { Dispatch, SetStateAction } from 'react'
-import { Image } from 'expo-image';
-import { isLoading } from 'expo-font';
 import { TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 

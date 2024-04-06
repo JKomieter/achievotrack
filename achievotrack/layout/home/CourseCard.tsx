@@ -1,14 +1,14 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Image } from 'expo-image'
 import { Avatar } from 'react-native-paper'
 import CourseUpdates from './CourseUpdates'
-import { Course, Schedule } from '@/libs/types'
+import { Course, Schedule } from '../../libs/types'
 import { useRouter } from 'expo-router'
-import useGoToCourseStore from '@/store/useGoToCourseStore'
-import { formatDate } from '@/utils/formatDate'
-import fetchPhoto from '@/utils/getPhoto'
+import useGoToCourseStore from '../../store/useGoToCourseStore'
+import { formatDate } from '../../utils/formatDate'
+import fetchPhoto from '../../utils/getPhoto'
 
 
 const Status = ({
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
         width: 300,
         marginLeft: 16,
         marginTop: 4,
+        marginRight: 2,
         borderRadius: 25,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },

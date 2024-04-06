@@ -1,0 +1,5 @@
+build:
+  languages:
+    nodejs: true
+  packages:
+    - path: backend

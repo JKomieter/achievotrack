@@ -1,10 +1,10 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import React, { useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { MaterialIcons } from '@expo/vector-icons';
-import { CourseScheduleProps, time } from '@/libs/types';
+import { CourseScheduleProps, time } from '../../libs/types';
 
 
 
@@ -122,7 +122,9 @@ export default function CourseSchedule({
                         <View style={styles.schedule} key={schedule.day}>
                             <Text style={styles.scheduleTxt}>{schedule.day}</Text>
                             <Text style={styles.scheduleTxt}>{schedule.start_time.hours}:{schedule.start_time.minutes} - {schedule.stop_time.hours}:{schedule.stop_time.minutes}</Text>
-                            <MaterialIcons name="cancel" size={20} color="black" />
+                            <TouchableOpacity onPress={() => setMeetingTimes(meetingTimes.filter((item) => item.day !== schedule.day))}>
+                                <MaterialIcons name="cancel" size={20} color="black" />
+                            </TouchableOpacity>
                         </View>
                     ))
                 }

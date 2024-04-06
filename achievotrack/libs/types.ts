@@ -88,3 +88,29 @@ export type CourseScheduleProps = {
     start_time: time,
     stop_time: time,
 }
+
+export interface Comment {
+    id: string,
+    body: string,
+    userId: string,
+    userName: string,
+    userProfilePic: string,
+    createdAt: Date
+    likes: string[],
+    comments: Comment[],
+}
+
+export interface Review {
+    id: string,
+    userId: string,
+    userName: string,
+    userProfilePic: string,
+    createdAt: Date,
+    body: string,
+    stars: number,
+    course: string,
+    instructor: string,
+    likes: string[],
+    commentNum: number,
+    shares: string[]
+}

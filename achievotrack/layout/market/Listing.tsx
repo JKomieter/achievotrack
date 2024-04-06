@@ -1,19 +1,18 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native'
 import { FontAwesome6 } from '@expo/vector-icons';
-import categories from '@/constants/itemCategory';
+import categories from '../../constants/itemCategory';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Image } from 'expo-image';
 import PhoneInput from "react-native-phone-number-input";
 import { ActivityIndicator } from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import getItems from '@/utils/getItems'
-import DocumentPicker, { types } from 'react-native-document-picker';
+import getItems from '../../utils/getItems'
 import * as FileSystem from 'expo-file-system';
-import ImageResizer from 'react-native-image-resizer';
-
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function Listing() {
     const [category, setCategory] = useState<{ label: string, value: string }>({ label: '', value: '' })
@@ -28,17 +27,15 @@ export default function Listing() {
     const [value, setValue] = useState("");
     const [formattedValue, setFormattedValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const apiUrl = process.env.DEV_BACKEND_URL;
+    const apiUrl = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
     const [step, setStep] = useState(1);
     const { mutate } = getItems()
 
     const handleDocumentSelection = useCallback(async () => {
         try {
-            const response = await DocumentPicker.pick({
-                presentationStyle: 'fullScreen',
-                type: [types.images]
-            });
-            const fileUri = response[0].uri;
+            const response = await DocumentPicker.getDocumentAsync({ type: 'image/*' });
+            if (response.canceled) return;
+            const fileUri = response.assets[0].uri;
             const resizedImage = await ImageResizer.createResizedImage(fileUri, 800, 600, 'JPEG', 80);
             const base64String = await FileSystem.readAsStringAsync(resizedImage.uri, { encoding: 'base64' });
             setFiles((prev) => [...prev, base64String]);

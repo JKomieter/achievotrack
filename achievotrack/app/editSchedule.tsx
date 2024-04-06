@@ -1,15 +1,15 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../components/Themed'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import useScheduleStore from '@/store/useScheduleStore'
-import Schedule from '@/libs/scheduleLibs';
+import useScheduleStore from '../store/useScheduleStore'
+import Schedule from '../libs/scheduleLibs';
 import { TimePickerModal, DatePickerModal } from 'react-native-paper-dates';
 import { useRouter } from 'expo-router';
 import { Dropdown } from 'react-native-element-dropdown';
-import { Course, ScheduleType } from '@/libs/types';
+import { Course, ScheduleType } from '../libs/types';
 import { ActivityIndicator } from 'react-native-paper';
-import getSchedules from '@/utils/getSchedules';
-import getCourses from '@/utils/getCourses';
+import getSchedules from '../utils/getSchedules';
+import getCourses from '../utils/getCourses';
 
 
 export default function EditSchedule() {

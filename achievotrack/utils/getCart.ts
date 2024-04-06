@@ -5,7 +5,7 @@ import fetcher from "./fetcher";
 
 export default function getCart() {
     const userId = useUserId();
-    const apiUrl = process.env.DEV_BACKEND_URL;
+    const apiUrl = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
     const { data, error, isLoading, mutate } = useSWR(userId ? `${apiUrl}/getCart?userId=${userId}` : null, fetcher);
     return { data, error, isLoading, mutate };
 }

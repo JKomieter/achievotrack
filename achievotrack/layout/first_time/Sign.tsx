@@ -3,11 +3,13 @@ import { StyleSheet, ScrollView } from 'react-native'
 import axios from 'axios';
 import SignUp from './SignUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import userDetailsStore from '@/store/userDetailsStore';
+import userDetailsStore from '../../store/userDetailsStore';
 import Signin from './Signin';
-import { View } from '@/components/Themed';
+import { View } from '../../components/Themed';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
 
 export default function Sign({
     setStage
@@ -22,7 +24,6 @@ export default function Sign({
     const [checked, setChecked] = useState(true);
     const [err, setErr] = useState('');
     const { setUserDetails } = userDetailsStore();
-    const apiUrl = process.env.DEV_BACKEND_URL as string;
     const [opt, setOpt] = useState<'signin' | 'signup'>('signin');
     const router = useRouter()
 
@@ -33,7 +34,7 @@ export default function Sign({
             setIsLoading(false);
             return setErr('Passwords do not match');
         }
-        const res = await axios.post(`${apiUrl}/signup`, {
+        const res = await axios.post(`${API_URL}/signup`, {
             email: email.toLocaleLowerCase(),
             username,
             password,
@@ -56,7 +57,7 @@ export default function Sign({
         }
         setIsLoading(true);
         try {
-            const res = await axios.post(`${apiUrl}/login`, {
+            const res = await axios.post(`${API_URL}/login`, {
                 email: email.toLowerCase(),
                 password,
             }, {
@@ -64,7 +65,7 @@ export default function Sign({
                     return status < 500; 
                 }
             });
-
+    
             if (res.status >= 400) {
                 if (res.status === 401) {
                     setErr('Invalid credentials');

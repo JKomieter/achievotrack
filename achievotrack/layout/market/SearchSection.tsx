@@ -34,15 +34,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     input: {
-        padding: 13,
         paddingLeft: 35,
-        borderRadius: 20,
-        backgroundColor: 'white',
         fontSize: 16,
-        shadowColor: '#171717',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
+        height: 50,
+        borderRadius: 30,
+        backgroundColor: '#f2f2f2',
+        paddingHorizontal: 20,
+        fontWeight: '300',
+        color: '#000000',
         flex: 1,
         width: '100%'
     },

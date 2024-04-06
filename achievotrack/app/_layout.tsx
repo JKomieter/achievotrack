@@ -5,21 +5,19 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import { Avatar, PaperProvider } from 'react-native-paper';
+import React, { useEffect } from 'react';
 
-import { useColorScheme } from '@/components/useColorScheme';
-import { TouchableOpacity, Alert } from 'react-native';
-import { View, Text } from '@/components/Themed';
-import useScheduleStore from '@/store/useScheduleStore';
-import { Action, ScheduleType } from '@/libs/types';
-import getCart from '@/utils/getCart';
-import useGoToCourseStore from '@/store/useGoToCourseStore';
+import { TouchableOpacity, useColorScheme } from 'react-native';
+import useCheckAuthState from '../hooks/useCheckAuthState';
+import { ScheduleType, Action } from '../libs/types';
+import useCourseEditStore from '../store/useCourseEditStore';
+import useGoToCourseStore from '../store/useGoToCourseStore';
+import useScheduleStore from '../store/useScheduleStore';
+import getCart from '../utils/getCart';
+import { Avatar, PaperProvider } from 'react-native-paper';
+import { View, Text } from '../components/Themed';
+import { placeholder } from '../constants/placeholder';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
-import { placeholder } from '@/constants/placeholder';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import useCourseEditStore from '@/store/useCourseEditStore';
-import useCheckAuthState from '@/hooks/useCheckAuthState';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -66,18 +64,14 @@ function RootLayoutNav() {
   const { data } = getCart();
   const { courseName } = useGoToCourseStore();
   const { setCourseStore } = useCourseEditStore();
-  const {isLoading} = useCheckAuthState();
+  const {} = useCheckAuthState();
 
   console.log('expoPushToken: ', expoPushToken);
   console.log('notification: ', notification);
-  
+
   const openScheduleAdd = () => {
     router.push("/editSchedule");
     setDetails("", new Date, { hours: 0, minutes: 0 }, { hours: 0, minutes: 0 }, ScheduleType.HOMEWORK, "", Action.ADD);
-  }
-
-  if (isLoading) {
-    return null;
   }
 
   return (
@@ -165,11 +159,6 @@ function RootLayoutNav() {
                 <Text style={{ fontSize: 20, fontWeight: '300' }}>Add Course</Text>
               </View>
             ),
-            headerRight: () => (
-              <TouchableOpacity style={{ marginRight: '0.0%' }}>
-                <Avatar.Image size={33} source={require('@/assets/images/placeholder.jpg')} />
-              </TouchableOpacity>
-            ),
             headerLeft: () => (
               <TouchableOpacity onPress={() => {
                 setCourseStore('', { name: '', email: '' }, { name: '', base64String: '' }, { name: '', description: '', credit: '', }, [])
@@ -235,6 +224,29 @@ function RootLayoutNav() {
             headerTitle: () => (
               <View>
                 <Text style={{ fontSize: 20, fontWeight: '300' }}>Add Score</Text>
+              </View>
+            ),
+          }}
+          />
+          <Stack.Screen name='addReview' options={{
+            presentation: 'fullScreenModal',
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>Add Review</Text>
+              </View>
+            ),
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesome6 name="arrow-left" size={22} color="black" />
+              </TouchableOpacity>
+            ),
+          }}
+          />
+          <Stack.Screen name='comments' options={{
+            presentation: 'modal',
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>Comments</Text>
               </View>
             ),
           }}

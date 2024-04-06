@@ -6,7 +6,7 @@ import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const API_URL = process.env.DEV_BACKEND_URL;
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL;
 
 export interface pushNotificationState {
     expoPushToken?: Notifications.ExpoPushToken;
@@ -31,7 +31,7 @@ export const usePushNotifications = (): pushNotificationState => {
     async function registerForPushNotificationsAsync() {
         let token;
 
-        if (!Device.isDevice) {
+        if (Device.isDevice) {
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
             if (existingStatus !== 'granted') {
@@ -43,9 +43,8 @@ export const usePushNotifications = (): pushNotificationState => {
                 return
             }
             token = await Notifications.getExpoPushTokenAsync({
-                projectId: process.env.EXPO_PROJECT_ID,
+                projectId: process.env.EXPO_PUBLIC_EXPO_PROJECT_ID,
             });
-            console.log('token: ', token);
         } else {
             alert('Must use physical device for Push Notifications');
         }
@@ -75,7 +74,6 @@ export const usePushNotifications = (): pushNotificationState => {
         });
 
         notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
-            console.log('notificationHere: ', notification)
             setNotification(notification);
         });
 

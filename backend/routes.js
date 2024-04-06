@@ -1,53 +1,70 @@
-const router = require('express').Router();
-const {signup, addAcademicDetails, getUser, login, logout, savePushToken} = require('./controllers/userController');
+const router = require("express").Router();
+const { signup, addAcademicDetails, getUser, login, logout, savePushToken, updateProfilePic } = require("./controllers/userController");
 const {addSchedule, updateSchedule, getSchedules, deleteSchedule, markAsDone} = require("./controllers/scheduleController");
-const { addItem, getItems, getCart, addItemToCart, searchItem, getRelatedItems } = require('./controllers/marketController');
-const { addCourse, getCourses, getCourse, addScoreToCourse, editCourse, deleteCourse } = require('./controllers/courseController')
+const { addItem, getItems, getCart, addItemToCart, searchItem, getRelatedItems } = require("./controllers/marketController");
+const { addCourse, getCourses, getCourse, addScoreToCourse, editCourse, deleteCourse } = require("./controllers/courseController");
+const { addReview, getReviews, likeReview, commentOnReview, getReviewComments, likeReviewComment, searchReviews } = require("./controllers/reviewController");
 
-router.post('/signup', signup);
+router.post("/signup", signup);
 
-router.post('/login', login);
+router.post("/login", login);
 
-router.post('/logout', logout);
+router.post("/logout", logout);
 
-router.post('/savePushToken', savePushToken)
+router.post("/savePushToken", savePushToken)
 
-router.post('/addAcademicDetails', addAcademicDetails);
+router.post("/addAcademicDetails", addAcademicDetails);
 
-router.post('/addSchedule', addSchedule);
+router.post("/addSchedule", addSchedule);
 
-router.get('/getUser', getUser)
+router.get("/getUser", getUser);
 
-router.post('/updateSchedule', updateSchedule);
+router.post("/updateProfilePic", updateProfilePic);
 
-router.post('/deleteSchedule', deleteSchedule);
+router.post("/updateSchedule", updateSchedule);
 
-router.get('/getSchedules', getSchedules);
+router.post("/deleteSchedule", deleteSchedule);
 
-router.post('/markAsDone', markAsDone)
+router.get("/getSchedules", getSchedules);
 
-router.post('/addItem', addItem);
+router.post("/markAsDone", markAsDone)
 
-router.get('/getItems', getItems);
+router.post("/addItem", addItem);
 
-router.get('/getCart', getCart);
+router.get("/getItems", getItems);
 
-router.post('/addItemToCart', addItemToCart);
+router.get("/getCart", getCart);
 
-router.post('/getRelatedItems', getRelatedItems);
+router.post("/addItemToCart", addItemToCart);
 
-router.get('/searchItem', searchItem);
+router.post("/getRelatedItems", getRelatedItems);
 
-router.post('/addCourse', addCourse);
+router.get("/searchItem", searchItem);
 
-router.get('/getCourses', getCourses);
+router.post("/addCourse", addCourse);
 
-router.get('/getCourse', getCourse);
+router.get("/getCourses", getCourses);
 
-router.post('/addScore', addScoreToCourse);
+router.get("/getCourse", getCourse);
 
-router.post('/editCourse', editCourse);
+router.post("/addScore", addScoreToCourse);
 
-router.post('/deleteCourse', deleteCourse);
+router.post("/editCourse", editCourse);
+
+router.post("/deleteCourse", deleteCourse);
+
+router.post("/addReview", addReview);
+
+router.get("/getReviews", getReviews);
+
+router.post("/likeReview", likeReview);
+
+router.post("/commentOnReview", commentOnReview);
+
+router.get("/getReviewComments", getReviewComments)
+
+router.post("/likeReviewComment", likeReviewComment);
+
+router.get("/searchReviews", searchReviews);
 
 module.exports = router;

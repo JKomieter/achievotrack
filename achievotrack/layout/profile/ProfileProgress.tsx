@@ -16,17 +16,17 @@ export default function ProfileProgress({
         {
             name: 'Completed Tasks',
             num: completed_tasks || 0,
-            icon: <FontAwesome name="tasks" size={22} color="black" />
+            icon: <FontAwesome name="tasks" size={22} color="#28a745" />
         },
         {
             name: 'Study Time',
             num: `${study_time || 0} hrs`,
-            icon: <Ionicons name="time-sharp" size={26} color="black" />
+            icon: <Ionicons name="time-sharp" size={26} color="#007bff" />
         },
         {
             name: 'Achievements',
             num: achievements?.length || 0,
-            icon: <AntDesign name="star" size={24} color="black" />
+            icon: <AntDesign name="star" size={24} color="#ffd700" />
         }
     ]
 

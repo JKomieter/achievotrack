@@ -1,8 +1,8 @@
-import { View, Text } from '@/components/Themed'
+import { View, Text } from '../../components/Themed'
 import React, { useCallback } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
-import DocumentPicker, { types } from 'react-native-document-picker';
+import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 
 export default function CourseDescription({
@@ -19,13 +19,11 @@ export default function CourseDescription({
 
     const handleDocumentSelection = useCallback(async () => {
         try {
-            const response = await DocumentPicker.pick({
-                presentationStyle: 'fullScreen',
-                type: [types.pdf, types.docx, types.pptx]
-            });
-            const fileUri = response[0].uri;
+            const response = await DocumentPicker.getDocumentAsync({ type: 'application/pdf' });
+            if (response.canceled) return;
+            const fileUri = response.assets[0].uri;
             const base64String = await FileSystem.readAsStringAsync(fileUri, { encoding: 'base64' });
-            setSyllabus({ name: response[0].name as string, base64String });
+            setSyllabus({ name: response.assets[0].name as string, base64String });
         } catch (error) {
             console.log(error);
         }
@@ -56,7 +54,7 @@ export default function CourseDescription({
                 onPress={handleDocumentSelection}
             >
                 {
-                    syllabus ? <Text style={styles.fileName}>{syllabus.name}</Text> : (
+                    syllabus?.name ? <Text style={styles.fileName}>{syllabus.name}</Text> : (
                         <>
                             <AntDesign name="upload" size={24} color="black" />
                             <Text style={styles.add}>
