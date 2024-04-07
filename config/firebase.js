@@ -4,7 +4,6 @@ const { getAuth } = require("firebase/auth");
 const { getStorage } = require("firebase/storage");
 require("dotenv").config();
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyDTK7PwzIpfnBT3sethvp3O0ruwfxJFfiQ",
     authDomain: "achtrack-dd321.firebaseapp.com",
