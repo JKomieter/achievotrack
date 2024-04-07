@@ -1,6 +1,6 @@
 const { auth, db } = require("../config/firebase");
 const { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } = require("firebase/auth");
-const { collection, addDoc, doc, setDoc, getDoc, getDocs, where, query } = require("firebase/firestore");
+const { collection, addDoc, doc, setDoc, getDoc, getDocs, where, query, updateDoc } = require("firebase/firestore");
 
 const usersCollection = collection(db, "users");
 
@@ -126,6 +126,19 @@ module.exports.savePushToken = async (req, res) => {
 module.exports.updateProfilePic = async (req, res) => {
     try {
         const { profile_pic, userId } = req.body;
+        const userDoc = doc(usersCollection, userId);
+        await updateDoc(userDoc, { profile_pic }, { merge: true });
+        res.status(200).send({ message: "Successfully changed profile pic" });
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({ error: "Something went wrong" });
+    }
+}
+
+module.exports.updateProfilePic = async (req, res) => {
+    try {
+        const { profile_pic, userId } = req.body;
+        console.log('changing profile pic')
         const userDoc = doc(usersCollection, userId);
         await updateDoc(userDoc, { profile_pic }, { merge: true });
         res.status(200).send({ message: "Successfully changed profile pic" });

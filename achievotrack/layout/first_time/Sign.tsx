@@ -24,6 +24,7 @@ export default function Sign({
     const [checked, setChecked] = useState(true);
     const [err, setErr] = useState('');
     const { setUserDetails } = userDetailsStore();
+
     const [opt, setOpt] = useState<'signin' | 'signup'>('signin');
     const router = useRouter()
 

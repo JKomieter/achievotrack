@@ -1,4 +1,4 @@
-const { collection, addDoc, doc, updateDoc, arrayUnion, getDocs, orderBy, limit, getDoc, query, arrayRemove, where, increment } = require("firebase/firestore");
+const { collection, addDoc, doc, updateDoc, arrayUnion, getDocs, orderBy, limit, getDoc, query, arrayRemove, where } = require("firebase/firestore");
 const { db } = require("../config/firebase");
 const reviewCollection = collection(db, "reviews");
 

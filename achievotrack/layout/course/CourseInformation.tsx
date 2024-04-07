@@ -22,6 +22,7 @@ const DialogComponent = ({
     d_showDialog: () => void,
     deleteCourse: () => void
 }) => {
+
     return (
         <Portal>
             <Dialog
