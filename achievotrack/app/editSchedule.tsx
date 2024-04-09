@@ -70,7 +70,6 @@ export default function EditSchedule() {
     },
     [setOpen, setDate]
   );
-  console.log("the action is :", action)
   const handleSchedule = async () => {
     if (!task || !start_time_ || !stop_time_ || !course) return setErr('Missing fields')
     setIsLoading(true)

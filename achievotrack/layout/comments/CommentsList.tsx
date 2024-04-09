@@ -35,7 +35,7 @@ export default function CommentsList({
                         {
                             comments?.map((comment) => (
                                 <View key={comment.id} style={styles.comment}>
-                                    <Avatar.Image source={{ uri: `data:image/png;base64,${comment.userProfilePic}` || placeholder}} size={30} />
+                                    <Avatar.Image source={{ uri: placeholder}} size={30} />
                                     <View style={styles.body}>
                                         <Text style={styles.date}>{handleDuration(comment.createdAt)}</Text>
                                         <Text style={styles.bodyText}>{comment.body}</Text>

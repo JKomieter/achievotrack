@@ -37,7 +37,7 @@ export default function Listing() {
             if (response.canceled) return;
             const fileUri = response.assets[0].uri;
             const resizedImage = await ImageResizer.createResizedImage(fileUri, 800, 600, 'JPEG', 80);
-            const base64String = await FileSystem.readAsStringAsync(resizedImage.uri, { encoding: 'base64' });
+            const base64String = await FileSystem.readAsStringAsync(fileUri, { encoding: 'base64' });
             setFiles((prev) => [...prev, base64String]);
         } catch (error) {
             console.log(error);

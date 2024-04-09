@@ -953,7 +953,7 @@ PODS:
     - React-Core
   - react-native-image-resizer (3.0.7):
     - React-Core
-  - react-native-safe-area-context (4.8.2):
+  - react-native-safe-area-context (4.9.0):
     - React-Core
   - React-nativeconfig (0.73.6)
   - React-NativeModulesApple (0.73.6):
@@ -1431,7 +1431,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
   react-native-document-picker: 3599b238843369026201d2ef466df53f77ae0452
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
-  react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
+  react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   React-nativeconfig: b4d4e9901d4cabb57be63053fd2aa6086eb3c85f
   React-NativeModulesApple: cd26e56d56350e123da0c1e3e4c76cb58a05e1ee
   React-perflogger: 5f49905de275bac07ac7ea7f575a70611fa988f2

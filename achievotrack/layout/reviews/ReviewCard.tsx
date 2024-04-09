@@ -8,7 +8,8 @@ import ReviewActions from './ReviewActions'
 import { Review } from '@/libs/types'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
-import { formatDistanceToNow }  from 'date-fns';
+import { formatDistanceToNow, set }  from 'date-fns';
+import fetchPhoto from '@/utils/getPhoto'
 
 export default function ReviewCard({
     review
@@ -16,6 +17,8 @@ export default function ReviewCard({
     review: Review
 }) {
     const [liked, setLiked] = useState(false);
+    const [photo, setPhoto] = useState('');
+    const [user, setUser] = useState('');
 
     const handleLike = async () => {
         const userId = await AsyncStorage.getItem('userId');
@@ -40,13 +43,25 @@ export default function ReviewCard({
         hasLiked().then((res) => setLiked(res));
     }, [])
 
+    useEffect(() => {
+        fetchPhoto(
+            ''
+        ).then((res) => {
+            if ('photos' in res) {
+                setPhoto(res.photos[0]?.src?.large)
+            }
+        }
+        )
+        setUser('user ' + Math.random().toString(36).substring(7))
+    }, [])
+
     return (
         <View style={styles.container}>
             <View style={styles.top}>
                 <View style={styles.user}>
-                    <Avatar.Image size={33} source={{ uri: `data:image/jpeg;base64,${review.userProfilePic}` || placeholder }} />
+                    <Avatar.Image size={33} source={{ uri: photo || placeholder }} />
                     <View style={styles.userInfo}>
-                        <Text style={styles.name}>{review.userName}</Text>
+                        <Text style={styles.name}>{user}</Text>
                         <Text style={styles.time}>{formatTime(review.createdAt)}</Text>
                     </View>
                 </View>

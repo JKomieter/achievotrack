@@ -66,9 +66,6 @@ function RootLayoutNav() {
   const { setCourseStore } = useCourseEditStore();
   const {} = useCheckAuthState();
 
-  console.log('expoPushToken: ', expoPushToken);
-  console.log('notification: ', notification);
-
   const openScheduleAdd = () => {
     router.push("/editSchedule");
     setDetails("", new Date, { hours: 0, minutes: 0 }, { hours: 0, minutes: 0 }, ScheduleType.HOMEWORK, "", Action.ADD);

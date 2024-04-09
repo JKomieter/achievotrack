@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import { Action } from './types';
 
-const apiUrl = process.env.EXPO_PUBLIC_DEV_BACKEND_URL
+const API_URL = process.env.EXPO_PUBLIC_DEV_BACKEND_URL
 
 export default class Schedule {
     id: string;
@@ -28,7 +28,7 @@ export default class Schedule {
     async set() {
         const userId = await AsyncStorage.getItem("userId")
         if (this.action === 0) {
-            const response = await axios.post(`${apiUrl}/addSchedule`, {
+            const response = await axios.post(`${API_URL}/addSchedule`, {
                 userId: userId,
                 task: this.task,
                 date: this.date,
@@ -40,7 +40,7 @@ export default class Schedule {
             return response.data;
         }
 
-        const response = await axios.post(`${apiUrl}/updateSchedule`, {
+        const response = await axios.post(`${API_URL}/updateSchedule`, {
             id: this.id,
             userId: userId,
             task: this.task,
@@ -50,7 +50,7 @@ export default class Schedule {
             courseId: this.courseId,
             scheduleType: this.scheduleType.toLowerCase()
         })
-        console.log('updating schedule obj: ', response);
+        console.log(response)
         return response.data;
     }
 }
