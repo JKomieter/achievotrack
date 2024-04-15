@@ -19,7 +19,7 @@
     "@react-navigation/native": "^6.0.2",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
-    "expo": "~50.0.14",
+    "expo": "~50.0.15",
     "expo-device": "^5.9.3",
     "expo-document-picker": "~11.10.1",
     "expo-font": "~11.10.3",

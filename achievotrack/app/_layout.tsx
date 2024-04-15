@@ -248,6 +248,20 @@ function RootLayoutNav() {
             ),
           }}
           />
+          <Stack.Screen name='feedback' options={{
+            presentation: 'fullScreenModal',
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>Feedback</Text>
+              </View>
+            ),
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesome6 name="arrow-left" size={22} color="black" />
+              </TouchableOpacity>
+            ),
+          }}
+          />
         </Stack>
       </PaperProvider>
     </ThemeProvider>

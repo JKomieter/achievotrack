@@ -17,6 +17,11 @@ export default function Actions() {
       link: "/stats"
     },
     {
+      title: "Feedback",
+      icon: <FontAwesome5 name="comment" size={22} color="black" />,
+      link: "/feedback"
+    },
+    {
       title: "Resources",
       icon: <MaterialCommunityIcons name="bookshelf" size={24} color="black" />,
       link: "/resources"
@@ -35,11 +40,6 @@ export default function Actions() {
       title: "Support",
       icon: <FontAwesome5 name="headset" size={22} color="#fff" />,
       link: "/support"
-    },
-    {
-      title: "Feedback",
-      icon: <FontAwesome5 name="comment" size={22} color="black" />,
-      link: "/feedback"
     },
     {
       title: "About",

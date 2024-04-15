@@ -23,13 +23,13 @@ export default function Reviews() {
             return () => {
                 clearTimeout(timerId);
             };
-        }
+        } else setReviews([]);
     }, [query]);
-
+    
     return (
         <View style={styles.container}>
             <ReviewSearch query={query} setQuery={setQuery} />
-            <ReviewContent reviews={reviews.length > 0 ? reviews : data} />
+            <ReviewContent reviews={reviews?.length > 0 ? reviews : data} />
             <WriteReview />
         </View>
     )

@@ -9,6 +9,7 @@ import { useRouter } from 'expo-router'
 import useGoToCourseStore from '../../store/useGoToCourseStore'
 import { formatDate } from '../../utils/formatDate'
 import fetchPhoto from '../../utils/getPhoto'
+import { placeholder } from '@/constants/placeholder'
 
 
 const Status = ({
@@ -30,14 +31,16 @@ const Status = ({
 }
 
 const CourseTitle = ({
-    name
+    name,
+    avatar
 }: {
-    name: string
+    name: string,
+    avatar: string
 }) => {
     return (
         <View style={styles.titleContainer}>
             <View>
-                <Avatar.Image size={30} source={require('@/assets/images/placeholder.jpg')} />
+                <Avatar.Image size={30} source={{uri: avatar || placeholder}} />
             </View>
             <Text style={styles.coursename}>{name.slice(0, 13)}</Text>
         </View>
@@ -51,7 +54,8 @@ export default function CourseCard({
 }) {
     const router = useRouter();
     const { setCourseId } = useGoToCourseStore();
-    const [courseImage, setCourseImage] = useState('')
+    const [courseImage, setCourseImage] = useState('');
+    const [avatar, setAvatar] = useState('');
 
     const goToCourse = () => {
         setCourseId(course.id)
@@ -78,6 +82,7 @@ export default function CourseCard({
             .then((res) => {
                 if ('photos' in res) {
                     setCourseImage(res.photos[0]?.src?.large)
+                    setAvatar(res.photos[0]?.src?.large)
                 } else {
                     console.error("Error fetching photo: ", res.error);
                 }
@@ -94,7 +99,7 @@ export default function CourseCard({
                     <Image source={{ uri: courseImage }} style={{ width: "100%", height: "100%" }} contentFit='cover' />
                     <Status avgScore={course.stats?.averageScore} />
                 </View>
-                <CourseTitle name={course.course.name} />
+                <CourseTitle name={course.course.name} avatar={avatar} />
                 <CourseUpdates due={course.schedules.length} currentGrade={course?.stats?.currentGrade} deadline={getClosestSchedule(course?.schedules)} />
             </TouchableOpacity>
         </View>
