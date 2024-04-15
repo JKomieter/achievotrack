@@ -8,7 +8,7 @@ export default function Sell() {
 
     const stages = {
         1: <SellRules setStage={setStage} />,
-        2: <Listing />,
+        2: <Listing setStage={setStage} />,
         3: <ListCongratulations />
     } as Record<number, React.JSX.Element>
 

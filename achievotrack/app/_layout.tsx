@@ -9,7 +9,7 @@ import React, { useEffect } from 'react';
 
 import { TouchableOpacity, useColorScheme } from 'react-native';
 import useCheckAuthState from '../hooks/useCheckAuthState';
-import { ScheduleType, Action } from '../libs/types';
+import { ScheduleType, Action, User } from '../libs/types';
 import useCourseEditStore from '../store/useCourseEditStore';
 import useGoToCourseStore from '../store/useGoToCourseStore';
 import useScheduleStore from '../store/useScheduleStore';
@@ -18,6 +18,7 @@ import { Avatar, PaperProvider } from 'react-native-paper';
 import { View, Text } from '../components/Themed';
 import { placeholder } from '../constants/placeholder';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import getUser from '@/utils/getUser';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -65,6 +66,7 @@ function RootLayoutNav() {
   const { courseName } = useGoToCourseStore();
   const { setCourseStore } = useCourseEditStore();
   const {} = useCheckAuthState();
+  const { data: user } = getUser() as { data: User }
 
   const openScheduleAdd = () => {
     router.push("/editSchedule");
@@ -140,7 +142,7 @@ function RootLayoutNav() {
             ),
             headerRight: () => (
               <TouchableOpacity style={{ marginRight: '1%' }} onPress={() => router.push('/profile')}>
-                <Avatar.Image size={33} source={{ uri: placeholder }} />
+                <Avatar.Image size={33} source={{ uri: `data:image/jpeg;base64,${user?.profile_pic}` || placeholder }} />
               </TouchableOpacity>
             ),
             headerTitle: () => (
@@ -177,11 +179,6 @@ function RootLayoutNav() {
                 <FontAwesome6 name="arrow-left" size={22} color="black" />
               </TouchableOpacity>
             ),
-            // headerRight: () => (
-            //   <TouchableOpacity>
-            //     <Entypo name="menu" size={22} color="black" />
-            //   </TouchableOpacity>
-            // )
           }} />
           <Stack.Screen name='profile' options={{
             presentation: 'fullScreenModal',
