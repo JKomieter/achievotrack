@@ -62,7 +62,6 @@ export default function Listing({
                 sellerPhone: formattedValue,
                 price
             })
-            console.log(res);
             setStage(3)
             mutate()
         } catch (error) {
