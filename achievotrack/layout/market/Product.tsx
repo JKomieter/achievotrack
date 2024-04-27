@@ -6,17 +6,21 @@ import React from 'react'
 
 export default function Product({
     item,
-    addItemToCart,
-    isLoading
+    addItemToWishlist,
+    showInterest,
+    addLoading,
+    interestLoading
 }: {
     item: ViewStore,
-    addItemToCart: (item: MarketItem) => Promise<void>,
-    isLoading: boolean
+    addItemToWishlist: (item: MarketItem) => Promise<void>,
+    showInterest: (item: MarketItem) => Promise<void>,
+    addLoading: boolean,
+    interestLoading: boolean
 }) {
     return (
         <>
             <DetailsImage images={item.images} />
-            <ProductInfo item={item} addItemToCart={addItemToCart} isLoading={isLoading} />
+            <ProductInfo item={item} addItemToWishlist={addItemToWishlist} addLoading={addLoading} interestLoading={interestLoading} showInterest={showInterest} />
         </>
     )
 }

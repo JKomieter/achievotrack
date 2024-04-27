@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { FontAwesome, FontAwesome6, Entypo } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome6, Entypo, AntDesign } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRouter } from 'expo-router';
 import { useColorScheme } from '../../components/useColorScheme';
 import { useClientOnlyValue } from '../../components/useClientOnlyValue';
-import getCart from '../../utils/getCart';
 import { Avatar, PaperProvider } from 'react-native-paper';
 
 import Colors from '../../constants/Colors';
 import getUser from '@/utils/getUser';
 import { placeholder } from '@/constants/placeholder';
 import { User } from '@/libs/types';
+import getWishlist from '../../utils/getWishlist';
 
 
 function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>['name']; color: string; }) {
@@ -25,7 +25,7 @@ export default function TabLayout() {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<string | null>(null);
   
-  const { data } = getCart();
+  const { data } = getWishlist();
   const { data: user } = getUser() as {data: User}
   const router = useRouter();
 
@@ -86,7 +86,7 @@ export default function TabLayout() {
                   {data?.length || 0}
                 </Text>
               </View>
-              <Entypo name="shopping-cart" size={24} color="black" />
+              <AntDesign name="star" size={24} color="black" />
             </TouchableOpacity>
           ),
           headerTitle: () => (

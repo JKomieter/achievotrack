@@ -7,12 +7,16 @@ import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native'
 
 export default function ProductInfo({
     item,
-    addItemToCart,
-    isLoading
+    addItemToWishlist,
+    showInterest,
+    addLoading,
+    interestLoading
 }: {
     item: ViewStore,
-    addItemToCart: (item: MarketItem) => Promise<void>,
-    isLoading: boolean
+    addItemToWishlist: (item: MarketItem) => Promise<void>,
+    showInterest: (item: MarketItem) => Promise<void>,
+    addLoading: boolean,
+    interestLoading: boolean
 }) {
     const i = {
         id: item.id,
@@ -37,13 +41,13 @@ export default function ProductInfo({
             <Text style={styles.seller}>Email: <Text style={{ fontWeight: '500' }}>{item.sellerEmail}</Text></Text>
             <Text style={styles.seller}>Phone: <Text style={{ fontWeight: '500' }}>{item.sellerPhone}</Text></Text>
             <View style={styles.actions}>
-                <TouchableOpacity style={styles.action} onPress={() => addItemToCart(i)}>
-                    {isLoading ? <ActivityIndicator color='#fff' size={24} /> :
-                        <Text style={styles.actionTxt}>Add to Cart</Text>
+                <TouchableOpacity style={styles.action} onPress={() => addItemToWishlist(i)}>
+                    {addLoading ? <ActivityIndicator color='#fff' size={20} /> :
+                        <Text style={styles.actionTxt}>Add to Wishlist</Text>
                     }
                 </TouchableOpacity>
-                <TouchableOpacity style={{ ...styles.action, backgroundColor: '#d12323' }}>
-                    <Text style={styles.actionTxt}>Show Interest</Text>
+                <TouchableOpacity style={{ ...styles.action, backgroundColor: '#d12323' }} onPress={() => showInterest(i)}>
+                    {interestLoading ? <ActivityIndicator color='#fff' size={20} /> : <Text style={styles.actionTxt}>Show Interest</Text>}
                 </TouchableOpacity>
             </View>
         </View>

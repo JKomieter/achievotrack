@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Entypo, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
+import { Entypo, FontAwesome5, FontAwesome6, AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -13,12 +13,12 @@ import { ScheduleType, Action, User } from '../libs/types';
 import useCourseEditStore from '../store/useCourseEditStore';
 import useGoToCourseStore from '../store/useGoToCourseStore';
 import useScheduleStore from '../store/useScheduleStore';
-import getCart from '../utils/getCart';
 import { Avatar, PaperProvider } from 'react-native-paper';
 import { View, Text } from '../components/Themed';
 import { placeholder } from '../constants/placeholder';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import getUser from '@/utils/getUser';
+import getWishlist from '../utils/getWishlist';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -62,7 +62,7 @@ function RootLayoutNav() {
   const router = useRouter();
   const { expoPushToken, notification } = usePushNotifications();
   const { setDetails, action } = useScheduleStore();
-  const { data } = getCart();
+  const { data } = getWishlist();
   const { courseName } = useGoToCourseStore();
   const { setCourseStore } = useCourseEditStore();
   const {} = useCheckAuthState();
@@ -124,7 +124,7 @@ function RootLayoutNav() {
                     {data?.length || 0}
                   </Text>
                 </View>
-                <Entypo name="shopping-cart" size={24} color="black" />
+                <AntDesign name="star" size={24} color="black" />
               </TouchableOpacity>
             ),
             headerTitle: () => (
