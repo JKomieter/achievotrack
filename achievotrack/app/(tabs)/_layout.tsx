@@ -80,7 +80,7 @@ export default function TabLayout() {
             </TouchableOpacity>
           ),
           headerRight: () => (
-            <TouchableOpacity style={{ marginRight: '10%' }}>
+            <TouchableOpacity onPress={() => router.push("/wishlist")} style={{ marginRight: '10%' }} >
               <View style={{ width: 20, height: 20, borderRadius: 50, backgroundColor: "#d12323", position: 'absolute', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', left: 11, bottom: 13 }}>
                 <Text style={{ color: '#fff', fontSize: 11, fontWeight: '600' }}>
                   {data?.length || 0}

@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Entypo, FontAwesome5, FontAwesome6, AntDesign } from '@expo/vector-icons';
+import { FontAwesome5, FontAwesome6, AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -65,7 +65,7 @@ function RootLayoutNav() {
   const { data } = getWishlist();
   const { courseName } = useGoToCourseStore();
   const { setCourseStore } = useCourseEditStore();
-  const {} = useCheckAuthState();
+  const { } = useCheckAuthState();
   const { data: user } = getUser() as { data: User }
 
   const openScheduleAdd = () => {
@@ -118,7 +118,7 @@ function RootLayoutNav() {
               </TouchableOpacity>
             ),
             headerRight: () => (
-              <TouchableOpacity style={{ marginRight: '1%' }}>
+              <TouchableOpacity style={{ marginRight: '1%' }} onPress={() => router.push('/wishlist')}>
                 <View style={{ width: 20, height: 20, borderRadius: 50, backgroundColor: "#d12323", position: 'absolute', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', left: 11, bottom: 13 }}>
                   <Text style={{ color: '#fff', fontSize: 11, fontWeight: '600' }}>
                     {data?.length || 0}
@@ -250,6 +250,20 @@ function RootLayoutNav() {
             headerTitle: () => (
               <View>
                 <Text style={{ fontSize: 20, fontWeight: '300' }}>Feedback</Text>
+              </View>
+            ),
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesome6 name="arrow-left" size={22} color="black" />
+              </TouchableOpacity>
+            ),
+          }}
+          />
+          <Stack.Screen name='wishlist' options={{
+            presentation:'fullScreenModal',
+            headerTitle: () => (
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: '300' }}>Wishlist</Text>
               </View>
             ),
             headerLeft: () => (
