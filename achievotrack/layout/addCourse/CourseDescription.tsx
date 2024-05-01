@@ -38,7 +38,8 @@ export default function CourseDescription({
                 onChangeText={(e) => setCourse({ ...course, name: e, description: course?.description || '', credit: course?.credit || '' })}
             />
             <TextInput
-                style={styles.input}
+                style={{...styles.input, height: 100}}
+                multiline
                 placeholder="Course Description"
                 value={course?.description}
                 onChangeText={(e) => setCourse({ ...course, description: e, name: course?.name || '', credit: course?.credit || '' })}

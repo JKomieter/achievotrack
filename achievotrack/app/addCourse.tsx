@@ -98,10 +98,8 @@ export default function AddCourse() {
         return;
       }
       mutate();
-      setTimeout(() => {
-        setIsLoading(false);
-        router.back()
-      }, 2000)
+      setIsLoading(false);
+      router.back()
     } catch (error) {
       console.log(error);
       setError('Something went wrong');

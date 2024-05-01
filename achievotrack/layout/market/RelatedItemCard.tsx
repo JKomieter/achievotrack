@@ -6,6 +6,8 @@ import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import viewDetailsStore from '@/store/viewDetailsStore'
 
+const placeholder = 'https://archive.org/download/placeholder-image//placeholder-image.jpg'
+
 export default function RelatedItemCard({
     item
 }: {
@@ -36,7 +38,8 @@ export default function RelatedItemCard({
     <View style={styles.container}>
           <View style={styles.imgContainer}>
               {item?.images?.length > 0 &&
-                  <Image source={{ uri: item?.images[0] || '' }} style={{ width: "100%", height: "100%" }} contentFit='cover' placeholder='' />
+                  <Image source={{
+                      uri: `data:image/jpeg;base64,${item?.images[0]}` || placeholder }} style={{ width: "100%", height: "100%" }} contentFit='cover' placeholder='' />
               }
           </View>
           <View style={styles.info}>
@@ -58,6 +61,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         borderColor: '#f2f2f2',
         borderWidth: 3,
+        marginLeft: 20
     },
     imgContainer: {
         width: '100%',

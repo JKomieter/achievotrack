@@ -10,11 +10,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { formatDistanceToNow, set }  from 'date-fns';
 import fetchPhoto from '@/utils/getPhoto'
+import { KeyedMutator } from 'swr'
 
 export default function ReviewCard({
-    review
+    review,
+    mutate
 }: {
-    review: Review
+    review: Review,
+    mutate: KeyedMutator<any>
 }) {
     const [liked, setLiked] = useState(false);
     const [photo, setPhoto] = useState('');
@@ -27,6 +30,7 @@ export default function ReviewCard({
             userId,
             reviewId: review.id
         });
+        mutate();
     }
 
     const formatTime = (timestamp: any) => {

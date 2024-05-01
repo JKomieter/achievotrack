@@ -44,11 +44,9 @@ const styles = StyleSheet.create({
   },
   scroll: {
     width: '100%',
-    gap: 10,
   },
   related: {
     width: '100%',
     gap: 10,
-    paddingHorizontal: 20
   }
 })

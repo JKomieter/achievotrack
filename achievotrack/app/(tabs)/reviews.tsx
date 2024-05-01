@@ -10,7 +10,7 @@ import searchReviews from '@/utils/searchReviews'
 
 export default function Reviews() {
     const [ query, setQuery ] = useState('');
-    const { data } = getReviews();
+    const { data, mutate } = getReviews();
     const [ reviews, setReviews ] = useState<Review[]>([]);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function Reviews() {
     return (
         <View style={styles.container}>
             <ReviewSearch query={query} setQuery={setQuery} />
-            <ReviewContent reviews={reviews?.length > 0 ? reviews : data} />
+            <ReviewContent reviews={reviews?.length > 0 ? reviews : data} mutate={mutate} />
             <WriteReview />
         </View>
     )
