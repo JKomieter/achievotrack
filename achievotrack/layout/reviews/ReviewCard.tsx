@@ -8,7 +8,7 @@ import ReviewActions from './ReviewActions'
 import { Review } from '@/libs/types'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
-import { formatDistanceToNow, set }  from 'date-fns';
+import { formatDistanceToNow }  from 'date-fns';
 import fetchPhoto from '@/utils/getPhoto'
 import { KeyedMutator } from 'swr'
 
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         display: "flex",
         flexDirection: "column",
-        marginBottom: 20
+        marginVertical: 15
     },
     top: {
         display: "flex",

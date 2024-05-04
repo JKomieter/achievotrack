@@ -53,7 +53,7 @@ const Product = ({ item, mutate }: { item: MarketItem, mutate: KeyedMutator<any>
           </View>
           <View style={styles.info}>
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.desc}>{item.description.slice(0, 50)}{item.description?.length > 50 && '...'}</Text>
+            <Text style={styles.desc}>{item.description.slice(0, 30)}{item.description?.length > 30 && '...'}</Text>
             <Text style={styles.price}>${item.price}</Text>
           </View>
         </View>

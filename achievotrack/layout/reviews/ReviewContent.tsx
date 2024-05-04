@@ -24,10 +24,8 @@ export default function ReviewContent({
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 20,
         paddingTop: 5,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 20
+        height: '100%',
+        paddingHorizontal: 10
     }
 })
